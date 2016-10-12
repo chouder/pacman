@@ -1,0 +1,5 @@
+sdlanim:	sdlanim.c
+	g++ `sdl-config --cflags --libs` sdlanim.c -o sdlanim
+
+clean:
+	rm sdlanim
