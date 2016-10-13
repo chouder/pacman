@@ -12,7 +12,7 @@
 #define SPRITE_HEIGHT 32
 
 int gameover, previousTime, currentTime; // entier qui stocke le temps
-
+int move; //gere le déplacement du pacman
 
 /* source and destination rectangles */
 SDL_Rect rcSrc, rcSprite;
@@ -33,11 +33,13 @@ void HandleEvent(SDL_Event event)
 					gameover = 1;
 					break;
 				case SDLK_LEFT:
-					rcSrc.y = SPRITE_HEIGHT;
-					rcSrc.x = rcSrc.x - SPRITE_WIDTH;
-					if (rcSrc.x < 0) {
-						rcSrc.x = 5 * SPRITE_WIDTH;
-					}
+					
+						rcSrc.y = SPRITE_HEIGHT;
+						rcSrc.x = rcSrc.x - SPRITE_WIDTH;
+						if (rcSrc.x < 0) {
+							rcSrc.x = 5 * SPRITE_WIDTH;
+						}
+					
 					rcSprite.x -= 5;
 					break;
 				case SDLK_RIGHT:
@@ -78,7 +80,10 @@ int main(int argc, char* argv[])
 	SDL_Surface *screen, *temp, *sprite, *map;
 	SDL_Rect rcmap;
 	int colorkey;
-
+	
+	/*initialize move of pacman */
+	move=0;
+	
 	/* initialize SDL */
 	SDL_Init(SDL_INIT_VIDEO);
 
