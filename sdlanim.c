@@ -11,11 +11,20 @@
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
 
+#define BOARD_LEFT 100 //test
+
+#define PAC_NY 67 //division par 12 pour connaitre la dim du tab | verti
+#define PAC_NX 60 // horiz = width
+
+
 int gameover, previousTime, currentTime; // entier qui stocke le temps
 int move; //gere le déplacement du pacman
 
+int pac_array[PAC_NY][PAC_NX]; // tab pour les possibilités du move du pac
+float dirX, dirY,x,y;
+
 /* source and destination rectangles */
-SDL_Rect rcSrc, rcSprite;
+SDL_Rect rcSrc, rcSprite, rcPac;
 
 void HandleEvent(SDL_Event event)
 {
@@ -33,19 +42,18 @@ void HandleEvent(SDL_Event event)
 					gameover = 1;
 					break;
 				case SDLK_LEFT:
-					
-						rcSrc.y = SPRITE_HEIGHT;
-						rcSrc.x = rcSrc.x - SPRITE_WIDTH;
-						if (rcSrc.x < 0) {
-							rcSrc.x = 5 * SPRITE_WIDTH;
-						}
-					
+					rcSrc.y = SPRITE_HEIGHT;
+					rcSrc.x = rcSrc.x - SPRITE_WIDTH;
+					if (rcSrc.x < 0) {
+						rcSrc.x = 5 * SPRITE_WIDTH;
+					}
 					rcSprite.x -= 5;
+
 					break;
 				case SDLK_RIGHT:
 					rcSrc.y = 0;
-					currentTime = SDL_GetTicks();
-					//if(currentTime - previousTime > 50 ){ // temps en ms entre chaque animation				
+			//		currentTime = SDL_GetTicks();
+			//if(currentTime - previousTime > 50 ){ //temps en ms entre chq animation				
 						rcSrc.x = rcSrc.x + SPRITE_WIDTH;
 						if(rcSrc.x > 5 * SPRITE_WIDTH){
 						rcSrc.x = 0;
@@ -53,6 +61,7 @@ void HandleEvent(SDL_Event event)
 					//previousTime = currentTime;
 					//}
 					rcSprite.x += 5;
+
 					break;
 				case SDLK_UP:
 					rcSrc.y = 2 * SPRITE_HEIGHT;
@@ -61,6 +70,7 @@ void HandleEvent(SDL_Event event)
 						rcSrc.x = 0;
 					}
 					rcSprite.y -= 5;
+
 					break;
 				case SDLK_DOWN:
 					rcSrc.y = 3 * SPRITE_HEIGHT;
@@ -69,6 +79,7 @@ void HandleEvent(SDL_Event event)
 						rcSrc.x = 0;
 					}
 					rcSprite.y += 5;
+
 					break;
 			}
 			break;
@@ -80,6 +91,23 @@ int main(int argc, char* argv[])
 	SDL_Surface *screen, *temp, *sprite, *map;
 	SDL_Rect rcmap;
 	int colorkey;
+	int i,j;
+	//int PAC_NY,PAC_NX;
+
+	
+
+	/* initialize tab for the move */
+	for (i=0; i<21; i++) {
+		for (j=0;j<PAC_NX;j++) {
+		pac_array[i][j] =0;
+		}	
+	}
+	
+	for (i=0; i>20; i++) {
+		for (j=0;j<PAC_NX;j++) {
+		pac_array[i][j] =1;
+		}	
+	}
 	
 	/*initialize move of pacman */
 	move=0;
@@ -88,13 +116,13 @@ int main(int argc, char* argv[])
 	SDL_Init(SDL_INIT_VIDEO);
 
 	/* set the title bar */
-	SDL_WM_SetCaption("SDL Animation", "SDL Animation");
+	SDL_WM_SetCaption("Pacman", "Pacman");
 
 	/* create window */
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
 
 	/* set keyboard repeat */
-	SDL_EnableKeyRepeat(70,70);
+	SDL_EnableKeyRepeat(30,30);
 
 	/* load sprite */
 	temp   = SDL_LoadBMP("pacman.bmp");
@@ -111,8 +139,8 @@ int main(int argc, char* argv[])
 	SDL_FreeSurface(temp);
 
 	/* set sprite position */
-	rcSprite.x = SCREEN_WIDTH/2 - 16; //position of pacman | 16 = decalage pour atteindre la moitie du screen
-	rcSprite.y = SCREEN_HEIGHT/2 + 35; // 19 pour atteindre le bon milieu du screen
+	x = rcSprite.x = SCREEN_WIDTH/2 - 16; //position of pacman | 16 = decalage pour atteindre la moitie du screen
+	y = rcSprite.y = SCREEN_HEIGHT/2 + 35; // 19 pour atteindre le bon milieu du screen
 
 	/* set animation frame */
 	rcSrc.x = 0; //modif
@@ -124,12 +152,31 @@ int main(int argc, char* argv[])
 	rcmap.y = 0;
 
 	gameover = 0;
-
-	previousTime = currentTime = 0;
+	
+	//previousTime = currentTime = 0;
 	/* message pump */
 	while (!gameover)
 	{
 		SDL_Event event;
+
+		if (move) {
+			
+			x += dirX;
+		       	y += dirY;
+			if (rcSprite.x < BOARD_LEFT){
+				move =0;
+			}
+		       	rcPac.x = x;
+		       	rcPac.y = y; 
+			/*if (rcPac.x < BOARD_LEFT){
+				dirX = -dirX;
+				move=0;	
+			}*/
+		}
+
+		//si le pacman dépasse le haut, alors le pacman se stoppe
+		
+
 		
 		/* look for an event */
 		if (SDL_PollEvent(&event)) {
@@ -170,8 +217,10 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
+
+
 /*****************/
-/* Regle du Jeu***/
+/**Regle du Jeu***/
 /*****************/
 /*
 C'est un pacman, les règles sont bien connues.
@@ -186,10 +235,4 @@ Si le pacman rencontre un fantôme en état "effrayé", le fantôme est mangé.
 Ce fantôme retourne alors au centre (on ne voit que ses yeux durant ce retour) et redevient à l'état "normal".
 La partie est gagnée lorsque le pacman a mangé toutes les pastilles du jeu.
 */
-
-
-
-
-
-
 
