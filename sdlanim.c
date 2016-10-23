@@ -12,6 +12,9 @@
 #define SPRITE_HEIGHT 32
 
 #define BOARD_LEFT 100 //test
+#define BOARD_TOP  0
+#define BOARD_RIGHT 720
+#define BOARD_BOTTOM 797
 
 #define PAC_NY 67 //division par 12 pour connaitre la dim du tab | verti
 #define PAC_NX 60 // horiz = width
@@ -24,7 +27,7 @@ int pac_array[PAC_NY][PAC_NX]; // tab pour les possibilités du move du pac
 float dirX, dirY,x,y;
 
 /* source and destination rectangles */
-SDL_Rect rcSrc, rcSprite, rcPac;
+SDL_Rect rcSrc, rcSprite;
 
 void HandleEvent(SDL_Event event)
 {
@@ -47,7 +50,9 @@ void HandleEvent(SDL_Event event)
 					if (rcSrc.x < 0) {
 						rcSrc.x = 5 * SPRITE_WIDTH;
 					}
-					rcSprite.x -= 5;
+					 rcSprite.x -= 5;
+					move=1;
+				
 
 					break;
 				case SDLK_RIGHT:
@@ -61,7 +66,8 @@ void HandleEvent(SDL_Event event)
 					//previousTime = currentTime;
 					//}
 					rcSprite.x += 5;
-
+					move=1;
+			        
 					break;
 				case SDLK_UP:
 					rcSrc.y = 2 * SPRITE_HEIGHT;
@@ -70,7 +76,7 @@ void HandleEvent(SDL_Event event)
 						rcSrc.x = 0;
 					}
 					rcSprite.y -= 5;
-
+					move=1;
 					break;
 				case SDLK_DOWN:
 					rcSrc.y = 3 * SPRITE_HEIGHT;
@@ -79,7 +85,7 @@ void HandleEvent(SDL_Event event)
 						rcSrc.x = 0;
 					}
 					rcSprite.y += 5;
-
+					move=1;
 					break;
 			}
 			break;
@@ -99,13 +105,13 @@ int main(int argc, char* argv[])
 	/* initialize tab for the move */
 	for (i=0; i<21; i++) {
 		for (j=0;j<PAC_NX;j++) {
-		pac_array[i][j] =0;
+		pac_array[i][j] = 0;
 		}	
 	}
 	
-	for (i=0; i>20; i++) {
+	for (i=20; i<PAC_NY; i++) {
 		for (j=0;j<PAC_NX;j++) {
-		pac_array[i][j] =1;
+		pac_array[i][j] = 1;
 		}	
 	}
 	
@@ -139,8 +145,8 @@ int main(int argc, char* argv[])
 	SDL_FreeSurface(temp);
 
 	/* set sprite position */
-	x = rcSprite.x = SCREEN_WIDTH/2 - 16; //position of pacman | 16 = decalage pour atteindre la moitie du screen
-	y = rcSprite.y = SCREEN_HEIGHT/2 + 35; // 19 pour atteindre le bon milieu du screen
+	rcSprite.x = SCREEN_WIDTH/2 - 16; //position of pacman | 16 = decalage pour atteindre la moitie du screen
+	rcSprite.y = SCREEN_HEIGHT/2 + 35; // 19 pour atteindre le bon milieu du screen
 
 	/* set animation frame */
 	rcSrc.x = 0; //modif
@@ -160,24 +166,21 @@ int main(int argc, char* argv[])
 		SDL_Event event;
 
 		if (move) {
-			
-			x += dirX;
-		       	y += dirY;
+			//printf("x=%f et y=%f ",x,y);
+			//Cette partie de l'algorithme fonctionne
 			if (rcSprite.x < BOARD_LEFT){
-				move =0;
+			rcSprite.x = BOARD_LEFT ;
+			move=0;	
 			}
-		       	rcPac.x = x;
-		       	rcPac.y = y; 
-			/*if (rcPac.x < BOARD_LEFT){
-				dirX = -dirX;
-				move=0;	
+			// Je cherche à bloquer le pacman quand il tombe sur une casse = 0
+			/*if (rcSprite.x == (pac_array[i][j]==0)){
+			rcSprite.x = 0;
+			rcSprite.y = 0;
 			}*/
+
+
 		}
 
-		//si le pacman dépasse le haut, alors le pacman se stoppe
-		
-
-		
 		/* look for an event */
 		if (SDL_PollEvent(&event)) {
 			HandleEvent(event);
@@ -235,4 +238,3 @@ Si le pacman rencontre un fantôme en état "effrayé", le fantôme est mangé.
 Ce fantôme retourne alors au centre (on ne voit que ses yeux durant ce retour) et redevient à l'état "normal".
 La partie est gagnée lorsque le pacman a mangé toutes les pastilles du jeu.
 */
-
