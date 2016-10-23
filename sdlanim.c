@@ -45,17 +45,17 @@ void HandleEvent(SDL_Event event)
 					gameover = 1;
 					break;
 				case SDLK_LEFT:
+					move=1;
 					rcSrc.y = SPRITE_HEIGHT;
 					rcSrc.x = rcSrc.x - SPRITE_WIDTH;
 					if (rcSrc.x < 0) {
 						rcSrc.x = 5 * SPRITE_WIDTH;
 					}
-					 rcSprite.x -= 5;
-					move=1;
-				
+					 rcSprite.x -= 5;	
 
 					break;
 				case SDLK_RIGHT:
+					move=1;
 					rcSrc.y = 0;
 			//		currentTime = SDL_GetTicks();
 			//if(currentTime - previousTime > 50 ){ //temps en ms entre chq animation				
@@ -66,26 +66,25 @@ void HandleEvent(SDL_Event event)
 					//previousTime = currentTime;
 					//}
 					rcSprite.x += 5;
-					move=1;
-			        
+		        
 					break;
 				case SDLK_UP:
+					move=1;
 					rcSrc.y = 2 * SPRITE_HEIGHT;
 					rcSrc.x = rcSrc.x + SPRITE_WIDTH;
 					if ( rcSrc.x > 5 * SPRITE_WIDTH) {
 						rcSrc.x = 0;
 					}
 					rcSprite.y -= 5;
-					move=1;
 					break;
 				case SDLK_DOWN:
+					move=1;
 					rcSrc.y = 3 * SPRITE_HEIGHT;
 					rcSrc.x = rcSrc.x + SPRITE_WIDTH;
 					if ( rcSrc.x > 5 * SPRITE_WIDTH) {
 						rcSrc.x = 0;
 					}
 					rcSprite.y += 5;
-					move=1;
 					break;
 			}
 			break;
@@ -98,9 +97,7 @@ int main(int argc, char* argv[])
 	SDL_Rect rcmap;
 	int colorkey;
 	int i,j;
-	//int PAC_NY,PAC_NX;
-
-	
+		
 
 	/* initialize tab for the move */
 	for (i=0; i<21; i++) {
@@ -169,8 +166,8 @@ int main(int argc, char* argv[])
 			//printf("x=%f et y=%f ",x,y);
 			//Cette partie de l'algorithme fonctionne
 			if (rcSprite.x < BOARD_LEFT){
-			rcSprite.x = BOARD_LEFT ;
-			move=0;	
+				rcSprite.x = BOARD_LEFT ;
+				move=0;	
 			}
 			// Je cherche à bloquer le pacman quand il tombe sur une casse = 0
 			/*if (rcSprite.x == (pac_array[i][j]==0)){
@@ -178,7 +175,7 @@ int main(int argc, char* argv[])
 			rcSprite.y = 0;
 			}*/
 
-
+		move = 0;
 		}
 
 		/* look for an event */
