@@ -21,7 +21,7 @@
 #define PAC_NX 60 // horiz = width
 
 
-int gameover, previousTime, currentTime; // entier qui stocke le temps
+int gameover;// previousTime, currentTime entier qui stocke le temps
 int move; //gere le déplacement du pacman
 
 int pac_array[PAC_NY][PAC_NX]; // tab pour les possibilités du move du pac
@@ -101,18 +101,27 @@ int main(int argc, char* argv[])
 		
 
 	/* initialize tab for the move */
-	for (i=0; i<21; i++) {
+	for (i=0; i<2; i++) {
 		for (j=0;j<PAC_NX;j++) {
 		pac_array[i][j] = 0;
 		}	
 	}
 	
-	for (i=20; i<PAC_NY; i++) {
+	for (i=3; i<PAC_NY; i++) {
 		for (j=0;j<PAC_NX;j++) {
 		pac_array[i][j] = 1;
 		}	
 	}
 	
+	//boucle pour afficher le tableau a 2 dimensions pour vérifier que le tab fonctionne correctement sans bug
+	//boucle d'affichage, boucle test réussi
+
+	/*for (i=0; i< PAC_NY; i++){
+		for (j=0; j< PAC_NX; j++) {
+			printf("%d ",pac_array[i][j]);
+		}
+	}
+	*/
 	/*initialize move of pacman */
 	move=0;
 	
@@ -165,12 +174,13 @@ int main(int argc, char* argv[])
 
 		if (move) {
 			//printf("x=%f et y=%f ",x,y);
-			//Cette partie de l'algorithme fonctionne
+			
 			if (rcSprite.x < BOARD_LEFT){
 				rcSprite.x = BOARD_LEFT ;
 				move=0;	
 			}
-			// Je cherche à bloquer le pacman quand il tombe sur une casse = 0
+			// Je cherche à bloquer le pacman quand il tombe sur une casse = 0    
+
 			/*if (rcSprite.x == (pac_array[i][j]==0)){
 			rcSprite.x = 0;
 			rcSprite.y = 0;
