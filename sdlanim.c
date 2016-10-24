@@ -1,12 +1,12 @@
 //test github
 #include "SDL.h"
-/*
+
 #include <math.h>
 #include <time.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include <SDL/SDL_mixer.h>
-*/
+//#include <SDL/SDL_mixer.h>
+
 #define SCREEN_WIDTH  720	
 #define SCREEN_HEIGHT 797
 #define SPRITE_WIDTH 32
@@ -17,8 +17,8 @@
 #define BOARD_RIGHT 720
 #define BOARD_BOTTOM 797
 
-#define PAC_NY 67 //division par 12 pour connaitre la dim du tab | verti
-#define PAC_NX 60 // horiz = width
+#define PAC_NY 23 
+#define PAC_NX 24 
 
 
 int gameover;// previousTime, currentTime entier qui stocke le temps
@@ -29,6 +29,14 @@ float dirX, dirY,x,y;
 
 /* source and destination rectangles */
 SDL_Rect rcSrc, rcSprite;
+
+int a;
+
+int Convertir(float nb) {
+	nb += 0.5;
+	int a = (int) nb;
+	return a;
+}
 
 void HandleEvent(SDL_Event event)
 {
@@ -98,7 +106,6 @@ int main(int argc, char* argv[])
 	SDL_Rect rcmap;
 	int colorkey;
 	int i,j;
-		
 
 	/* initialize tab for the move */
 	for (i=0; i<2; i++) {
@@ -112,6 +119,10 @@ int main(int argc, char* argv[])
 		pac_array[i][j] = 1;
 		}	
 	}
+	
+	pac_array[11][12] = 0;
+	pac_array[11][13] = 1;
+	pac_array[11][14] = 0;
 	
 	//boucle pour afficher le tableau a 2 dimensions pour vérifier que le tab fonctionne correctement sans bug
 	//boucle d'affichage, boucle test réussi
@@ -153,7 +164,32 @@ int main(int argc, char* argv[])
 
 	/* set sprite position */
 	rcSprite.x = SCREEN_WIDTH/2 - 16; //position of pacman | 16 = decalage pour atteindre la moitie du screen
-	rcSprite.y = SCREEN_HEIGHT/2 + 35; // 19 pour atteindre le bon milieu du screen
+	rcSprite.y = SCREEN_HEIGHT/2 + 32; // 19 pour atteindre le bon milieu du screen
+	
+	x = SCREEN_WIDTH / 2;
+	y = SCREEN_HEIGHT / 2;
+	
+	y += 0.5; // y tronque la valeur du coup je dois la rajouter mannuellement ( à corriger) facile à faire !
+
+	
+
+	
+	// conversion pour avoir 12.0 en entier cad 12 | afin de l'insérer dans le pac_array pck il n'accepte que des entiers
+	int m = (y/797)*24;
+	Convertir(m);
+	/*
+	float f = (y/797)*24;
+	int m = (int) f;
+	*/
+	printf("y=%.1f \n",y); // afficher avec un seul décimal
+
+	
+	if ( 12 == (y/797)*24 ) {
+		printf("\nOK\n");
+	}
+	else{
+		printf("PAS BON\n" );
+	}
 
 	/* set animation frame */
 	rcSrc.x = 0; //modif
@@ -175,18 +211,19 @@ int main(int argc, char* argv[])
 		if (move) {
 			//printf("x=%f et y=%f ",x,y);
 			
-			if (rcSprite.x < BOARD_LEFT){
+			/*if (rcSprite.x < BOARD_LEFT){
 				rcSprite.x = BOARD_LEFT ;
 				move=0;	
-			}
-			// Je cherche à bloquer le pacman quand il tombe sur une casse = 0    
-
-			/*if (rcSprite.x == (pac_array[i][j]==0)){
-			rcSprite.x = 0;
-			rcSprite.y = 0;
 			}*/
 
-		move = 0;
+			// Je cherche à bloquer le pacman quand il tombe sur une case = 0    
+			
+			if (pac_array[11][m] == 0){
+				rcSprite.y -= -5 ;
+				//rcSprite.x = 0;
+			}
+  
+			move = 0;
 		}
 
 		/* look for an event */
