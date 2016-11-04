@@ -1,4 +1,3 @@
-//test github
 #include "SDL.h"
 
 #include <math.h>
@@ -28,7 +27,7 @@ int pac_array[PAC_NY][PAC_NX]; // tab pour les possibilités du move du pac
 float dirX, dirY,x,y;
 
 /* source and destination rectangles */
-SDL_Rect rcSrc, rcSprite;
+SDL_Rect rcSrc, rcSprite, rcCandy;
 
 int a;
 
@@ -38,7 +37,14 @@ int Convertir(float nb) {
 	return a;
 }
 
-void HandleEvent(SDL_Event event)
+Uint32 getpixel(SDL_Surface *map, int x, int y) {
+    if (x<0 || y<0 || x>=map->w || y>=map->h) return 0;
+    Uint8 *p = (Uint8 *)map->pixels + y*map->pitch + x*map->format->BytesPerPixel;
+    return p[0] | p[1] << 8 | p[2] << 16; // TODO if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+}
+
+
+void HandleEvent(SDL_Surface *map, SDL_Event event)
 {
 	switch (event.type) {
 		/* close button clicked */
@@ -60,7 +66,9 @@ void HandleEvent(SDL_Event event)
 					if (rcSrc.x < 0) {
 						rcSrc.x = 5 * SPRITE_WIDTH;
 					}
-					 rcSprite.x -= 5;	
+					if (!getpixel(map, rcSprite.x-1, rcSprite.y)) {
+					 	rcSprite.x -= 1;
+					}
 
 					break;
 				case SDLK_RIGHT:
@@ -74,7 +82,10 @@ void HandleEvent(SDL_Event event)
 						}
 					//previousTime = currentTime;
 					//}
-					rcSprite.x += 5;
+					if (!getpixel(map, rcSprite.x+33, rcSprite.y)) {
+					 	rcSprite.x += 1;
+					}
+					
 		        
 					break;
 				case SDLK_UP:
@@ -84,7 +95,11 @@ void HandleEvent(SDL_Event event)
 					if ( rcSrc.x > 5 * SPRITE_WIDTH) {
 						rcSrc.x = 0;
 					}
-					rcSprite.y -= 5;
+					if (!getpixel(map, rcSprite.x-1, rcSprite.y-1)) {
+					 	rcSprite.y -= 1;
+					}
+
+
 					break;
 				case SDLK_DOWN:
 					move=1;
@@ -93,7 +108,10 @@ void HandleEvent(SDL_Event event)
 					if ( rcSrc.x > 5 * SPRITE_WIDTH) {
 						rcSrc.x = 0;
 					}
-					rcSprite.y += 5;
+					if (!getpixel(map, rcSprite.x, rcSprite.y+33)) {
+					 	rcSprite.y += 1;
+					}
+					
 					break;
 			}
 			break;
@@ -102,37 +120,21 @@ void HandleEvent(SDL_Event event)
 
 int main(int argc, char* argv[])
 {
-	SDL_Surface *screen, *temp, *sprite, *map;
+	SDL_Surface *screen, *temp, *sprite, *candy, *map;
 	SDL_Rect rcmap;
 	int colorkey;
 	int i,j;
 
-	/* initialize tab for the move */
-	for (i=0; i<2; i++) {
-		for (j=0;j<PAC_NX;j++) {
-		pac_array[i][j] = 0;
-		}	
-	}
-	
-	for (i=3; i<PAC_NY; i++) {
-		for (j=0;j<PAC_NX;j++) {
-		pac_array[i][j] = 1;
-		}	
-	}
-	
-	pac_array[11][12] = 0;
-	pac_array[11][13] = 1;
-	pac_array[11][14] = 0;
-	
-	//boucle pour afficher le tableau a 2 dimensions pour vérifier que le tab fonctionne correctement sans bug
-	//boucle d'affichage, boucle test réussi
+	/* print candy */
 
-	/*for (i=0; i< PAC_NY; i++){
-		for (j=0; j< PAC_NX; j++) {
-			printf("%d ",pac_array[i][j]);
-		}
+	/*
+	for (i=0; i<5; i++) {
+		for (j=0;j<5;j++) {
+		pac_array[i][j] = candy;
+		}	
 	}
 	*/
+	
 	/*initialize move of pacman */
 	move=0;
 	
@@ -146,16 +148,25 @@ int main(int argc, char* argv[])
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
 
 	/* set keyboard repeat */
-	SDL_EnableKeyRepeat(30,30);
+	SDL_EnableKeyRepeat(10,10);
 
 	/* load sprite */
 	temp   = SDL_LoadBMP("pacman.bmp");
 	sprite = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 
+	/* load candy */
+	temp   = SDL_LoadBMP("bonbon.bmp");
+	candy = SDL_DisplayFormat(temp);
+	SDL_FreeSurface(temp);
+
 	/* setup sprite colorkey and turn on RLE*/ 
 	colorkey = SDL_MapRGB(screen->format, 0,0,0);	//for eviter d'avoir le carré noir
 	SDL_SetColorKey(sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+	
+	/* setup candy colorkey and turn on RLE*/ 
+	colorkey = SDL_MapRGB(screen->format, 0,0,0);	
+	SDL_SetColorKey(candy, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	
 	/* load map */
 	temp  = SDL_LoadBMP("map.bmp");
@@ -165,32 +176,12 @@ int main(int argc, char* argv[])
 	/* set sprite position */
 	rcSprite.x = SCREEN_WIDTH/2 - 16; //position of pacman | 16 = decalage pour atteindre la moitie du screen
 	rcSprite.y = SCREEN_HEIGHT/2 + 32; // 19 pour atteindre le bon milieu du screen
-	
-	x = SCREEN_WIDTH / 2;
-	y = SCREEN_HEIGHT / 2;
-	
-	y += 0.5; // y tronque la valeur du coup je dois la rajouter mannuellement ( à corriger) facile à faire !
+
+	/* set candy positon */
+	rcCandy.x = 40;
+	rcCandy.y = 40;
 
 	
-
-	
-	// conversion pour avoir 12.0 en entier cad 12 | afin de l'insérer dans le pac_array pck il n'accepte que des entiers
-	int m = (y/797)*24;
-	Convertir(m);
-	/*
-	float f = (y/797)*24;
-	int m = (int) f;
-	*/
-	printf("y=%.1f \n",y); // afficher avec un seul décimal
-
-	
-	if ( 12 == (y/797)*24 ) {
-		printf("\nOK\n");
-	}
-	else{
-		printf("PAS BON\n" );
-	}
-
 	/* set animation frame */
 	rcSrc.x = 0; //modif
 	rcSrc.y = 0;
@@ -217,25 +208,25 @@ int main(int argc, char* argv[])
 			}*/
 
 			// Je cherche à bloquer le pacman quand il tombe sur une case = 0    
-			
-			if (pac_array[11][m] == 0){
-				rcSprite.y -= -5 ;
-				//rcSprite.x = 0;
+			/*
+			if (pac_array[11][12] == 0){
+				rcSprite.y += 5;			
 			}
-  
+			*/
+  		
 			move = 0;
 		}
 
 		/* look for an event */
 		if (SDL_PollEvent(&event)) {
-			HandleEvent(event);
+			HandleEvent(map, event);
 		}
 
 		/* collide with edges of screen */
 		if (rcSprite.x <= 0)
-			rcSprite.x = 0;
-		if (rcSprite.x >= SCREEN_WIDTH - SPRITE_WIDTH) 
 			rcSprite.x = SCREEN_WIDTH - SPRITE_WIDTH;
+		if (rcSprite.x >= SCREEN_WIDTH - SPRITE_WIDTH) 
+			rcSprite.x = 0;
 
 		if (rcSprite.y <= 0)
 			rcSprite.y = 0;
@@ -254,12 +245,16 @@ int main(int argc, char* argv[])
 		/* draw the sprite */
 		SDL_BlitSurface(sprite, &rcSrc, screen, &rcSprite);
 
+		/* draw the candy */
+		SDL_BlitSurface(candy, NULL, screen, &rcCandy);
+
 		/* update the screen */
 		SDL_UpdateRect(screen, 0, 0, 0, 0);
 	}
 
 	/* clean up */
 	SDL_FreeSurface(sprite);
+	SDL_FreeSurface(candy);
 	SDL_FreeSurface(map);
 	SDL_Quit();
 
