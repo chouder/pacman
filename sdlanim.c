@@ -10,6 +10,9 @@
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
 
+#define H 797
+#define J 720
+
 
 int gameover;// previousTime, currentTime entier qui stocke le temps
 int move; //gere le déplacement du pacman
@@ -266,6 +269,19 @@ int main(int argc, char* argv[])
 
 	gameover = 0;
 	
+	float pos_candy[H][J];
+	for (i=0;i<H;i++){
+		for(j=0;j<J;j++){
+			pos_candy[i][j]=0;
+		}
+	}
+	pos_candy[rcCandy.x][rcCandy.y]=1;
+	pos_candy[rcCandy2.x][rcCandy2.y]=1;
+	pos_candy[rcCandy3.x][rcCandy3.y]=1;
+	pos_candy[rcCandy4.x][rcCandy4.y]=1;
+
+
+
 	//previousTime = currentTime = 0;
 	/* message pump */
 	while (!gameover)
@@ -273,12 +289,23 @@ int main(int argc, char* argv[])
 		SDL_Event event;
 
 		if (move) {
-		
-			SDL_FillRect(candy, NULL , SDL_MapRGB(candy->format,0,0,0));
-			//SDL_Fill(screen);
+			for (i=0;i<H;i++){
+				for(j=0;j<J;j++){
+					if(pos_candy[i][j]=1){
+					pos_candy[i][j]=0;
+					//rcCandy2.x=0;
+					//rcCandy2.y=0;
+					//printf("OK\n");
+					
+					//SDL_Flip(screen);
+					}
+				}
+			}
+		SDL_FillRect(candy2, NULL , SDL_MapRGB(candy2->format,0,0,0));
 
 
-			move = 0;
+			
+		move = 0;
 		}
 
 		/* look for an event */
