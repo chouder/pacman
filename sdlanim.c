@@ -38,6 +38,41 @@ Uint32 getpixel(SDL_Surface *map, int x, int y) {
     return p[0] | p[1] << 8 | p[2] << 16; // TODO if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
 }
 
+void chercherchemin(int N, Matrice mat, int ldep,int cdep,int larriv,int carriv, bool trouve, Liste chem)
+{
+	trouve = false;
+	mat[ldep][cdep]= false;
+	if( ldep == larriv && cdep==c){
+		trouve = true;
+		chem = cons((ldep,cdep),l_vide());
+	}
+	if(cdep != N-1 ) {
+		if ( mat[ldep][cdep+1]){
+			chercherchemin(N,mat,ldep,cdep+1,larriv,carriv,trouve,chem);	
+		}
+	}
+	if(ldep != N-1 && !(trouve) ) {
+		if (mat[ldep+1][cdep]) {
+			chercherchemin(N,mat,ldep+1,cdep,larriv,carriv,trouve,chem);
+		}
+	}
+	if(ldep != N-1 && !(trouve) ) {	//gauche
+		if (mat[ldep+1][cdep]) {
+			chercherchemin(N,mat,ldep+1,cdep,larriv,carriv,trouve,chem);
+		}
+	}
+	if(ldep != N-1 && !(trouve) ) {	//dessus
+		if (mat[ldep+1][cdep]) {
+			chercherchemin(N,mat,ldep+1,cdep,larriv,carriv,trouve,chem);
+		}
+	}
+
+	if(trouve){
+		chemin=cons((ldep,cdep),chem);
+	}
+
+
+}
 
 
 void HandleEvent(SDL_Surface *map, SDL_Event event)
