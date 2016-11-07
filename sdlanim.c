@@ -1,5 +1,4 @@
 #include "SDL.h"
-
 #include <math.h>
 #include <time.h>
 #include <stdio.h>
@@ -11,22 +10,15 @@
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
 
-#define BOARD_LEFT 100 //test
-#define BOARD_TOP  0
-#define BOARD_RIGHT 720
-#define BOARD_BOTTOM 797
-
-#define PAC_NY 23 
-#define PAC_NX 24 
-
 
 int gameover;// previousTime, currentTime entier qui stocke le temps
 int move; //gere le déplacement du pacman
 
-int pac_array[PAC_NY][PAC_NX]; // tab pour les possibilités du move du pac
+
 float dirX, dirY,x,y;
 
 /* source and destination rectangles */
+int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color);
 SDL_Rect rcSrc, rcSprite, rcCandy, rcCandy2, rcCandy3, rcCandy4, rcG1, rcG2,rcG3;
 
 int a;
@@ -42,6 +34,7 @@ Uint32 getpixel(SDL_Surface *map, int x, int y) {
     Uint8 *p = (Uint8 *)map->pixels + y*map->pitch + x*map->format->BytesPerPixel;
     return p[0] | p[1] << 8 | p[2] << 16; // TODO if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
 }
+
 
 
 void HandleEvent(SDL_Surface *map, SDL_Event event)
@@ -69,6 +62,7 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					if (!getpixel(map, rcSprite.x-1, rcSprite.y)) {
 					 	rcSprite.x -= 5;
 					}
+					
 					
 					break;
 				case SDLK_RIGHT:
@@ -279,20 +273,11 @@ int main(int argc, char* argv[])
 		SDL_Event event;
 
 		if (move) {
-			//printf("x=%f et y=%f ",x,y);
-			
-			/*if (rcSprite.x < BOARD_LEFT){
-				rcSprite.x = BOARD_LEFT ;
-				move=0;	
-			}*/
+		
+			SDL_FillRect(candy, NULL , SDL_MapRGB(candy->format,0,0,0));
+			//SDL_Fill(screen);
 
-			// Je cherche à bloquer le pacman quand il tombe sur une case = 0    
-			/*
-			if (pac_array[11][12] == 0){
-				rcSprite.y += 5;			
-			}
-			*/
-  		
+
 			move = 0;
 		}
 
@@ -363,9 +348,16 @@ int main(int argc, char* argv[])
 /**Regle du Jeu***/
 /*****************/
 /*
-C'est un pacman, les règles sont bien connues.
-Le pacman se déplace avec les touches ou avec un joypad et mange des pastilles.
-Les fantômes ont deux états :
+J'hésite entre faire 2 choses lorsque le pacman meurt :
+-soit il clignote et il devient invincible
+-soit il repart à sa place comme au début
+
+
+
+
+
+
+(les fantômes)
 En état "normal" il sont en couleurs et se déplacent de manière à se rapprocher du pacman.
 Si le pacman rencontre un fantôme en état "normal", la partie est perdue.
 Il y a une super-pastille à chaque coin de l'écran. Si le pacman en mange une, les fantômes passent à l'état "effrayé" pendant une durée déterminée.
