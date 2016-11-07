@@ -30,7 +30,8 @@ float dirX, dirY,x,y;
 SDL_Rect rcSrc, rcSprite, rcCandy, rcCandy2, rcCandy3, rcCandy4, rcG1, rcG2,rcG3;
 
 int a;
-int Convertir(float nb) {
+int Convertir(float nb)
+{
 	nb += 0.5;
 	int a = (int) nb;
 	return a;
