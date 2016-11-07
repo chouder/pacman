@@ -27,10 +27,9 @@ int pac_array[PAC_NY][PAC_NX]; // tab pour les possibilités du move du pac
 float dirX, dirY,x,y;
 
 /* source and destination rectangles */
-SDL_Rect rcSrc, rcSprite, rcCandy, rcG1, rcG2,rcG3;
+SDL_Rect rcSrc, rcSprite, rcCandy, rcCandy2, rcCandy3, rcCandy4, rcG1, rcG2,rcG3;
 
 int a;
-
 int Convertir(float nb) {
 	nb += 0.5;
 	int a = (int) nb;
@@ -74,8 +73,8 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 				case SDLK_RIGHT:
 					move=1;
 					rcSrc.y = 0;
-			//		currentTime = SDL_GetTicks();
-			//if(currentTime - previousTime > 50 ){ //temps en ms entre chq animation				
+					//currentTime = SDL_GetTicks();
+					//if(currentTime - previousTime > 50 ){ //temps en ms entre chq animation				
 						rcSrc.x = rcSrc.x + SPRITE_WIDTH;
 						if(rcSrc.x > 5 * SPRITE_WIDTH){
 						rcSrc.x = 0;
@@ -120,7 +119,7 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 
 int main(int argc, char* argv[])
 {
-	SDL_Surface *screen, *temp, *sprite, *candy, *map, *g1, *g2, *g3;
+	SDL_Surface *screen, *temp, *sprite, *candy, *candy2, *candy3, *candy4, *map, *g1, *g2, *g3;
 	SDL_Rect rcmap;
 	int colorkey;
 	int i,j;
@@ -154,7 +153,7 @@ int main(int argc, char* argv[])
 	temp   = SDL_LoadBMP("pacman.bmp");
 	sprite = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
-/* setup sprite colorkey and turn on RLE*/ 
+	/* setup sprite colorkey and turn on RLE*/ 
 	colorkey = SDL_MapRGB(screen->format, 0,0,0);	
 	SDL_SetColorKey(sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	
@@ -162,9 +161,37 @@ int main(int argc, char* argv[])
 	temp   = SDL_LoadBMP("bonbon.bmp");
 	candy = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
+
 	/* setup candy colorkey and turn on RLE*/ 
 	colorkey = SDL_MapRGB(screen->format, 0,0,0);	
 	SDL_SetColorKey(candy, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+
+	/* load candy 2*/
+	temp   = SDL_LoadBMP("bonbon.bmp");
+	candy2 = SDL_DisplayFormat(temp);
+	SDL_FreeSurface(temp);
+
+	/* setup candy2 colorkey and turn on RLE*/ 
+	colorkey = SDL_MapRGB(screen->format, 0,0,0);	
+	SDL_SetColorKey(candy2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+	
+	/* load candy 3 */
+	temp   = SDL_LoadBMP("bonbon.bmp");
+	candy3 = SDL_DisplayFormat(temp);
+	SDL_FreeSurface(temp);
+
+	/* setup candy3 colorkey and turn on RLE*/ 
+	colorkey = SDL_MapRGB(screen->format, 0,0,0);	
+	SDL_SetColorKey(candy3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+
+	/* load candy 4 */
+	temp   = SDL_LoadBMP("bonbon.bmp");
+	candy4 = SDL_DisplayFormat(temp);
+	SDL_FreeSurface(temp);
+
+	/* setup candy4 colorkey and turn on RLE*/ 
+	colorkey = SDL_MapRGB(screen->format, 0,0,0);	
+	SDL_SetColorKey(candy4, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 
 	/* load G1 */
 	temp   = SDL_LoadBMP("g1.bmp");
@@ -207,16 +234,28 @@ int main(int argc, char* argv[])
 	/* set candy positon */
 	rcCandy.x = SCREEN_WIDTH/2 - 80;
 	rcCandy.y = SCREEN_HEIGHT/2 + 40;
+
+	/* set candy 2 positon */
+	rcCandy2.x = SCREEN_WIDTH/2 - 40;
+	rcCandy2.y = SCREEN_HEIGHT/2 + 40;
+
+	/* set candy 3 positon */
+	rcCandy3.x = SCREEN_WIDTH/2 + 40;
+	rcCandy3.y = SCREEN_HEIGHT/2 + 40;
+
+	/* set candy 4 positon */
+	rcCandy4.x = SCREEN_WIDTH/2 + 80;
+	rcCandy4.y = SCREEN_HEIGHT/2 + 40;
 	
-	/* set G1 position */		//red
+	/* set G1 position */		//r
 	rcG1.x = SCREEN_WIDTH/2 -64; 
 	rcG1.y = SCREEN_HEIGHT/2 -40; 
 
-	/* set G2 positon */		//blue
+	/* set G2 positon */		//b
 	rcG2.x = SCREEN_WIDTH/2-16;
 	rcG2.y = SCREEN_HEIGHT/2 -40;
 
-	/* set  positon */		//white
+	/* set  positon */		//w
 	rcG3.x = SCREEN_WIDTH/2+32;
 	rcG3.y = SCREEN_HEIGHT/2 -40;
 
@@ -274,11 +313,21 @@ int main(int argc, char* argv[])
 
 		/* draw the map */
 		SDL_BlitSurface(map,NULL,screen,&rcmap);
+
 		/* draw the sprite */
 		SDL_BlitSurface(sprite, &rcSrc, screen, &rcSprite);
 
 		/* draw the candy */
 		SDL_BlitSurface(candy, NULL, screen, &rcCandy);
+
+		/* draw the candy 2 */
+		SDL_BlitSurface(candy2, NULL, screen, &rcCandy2);
+
+		/* draw the candy 3 */
+		SDL_BlitSurface(candy3, NULL, screen, &rcCandy3);
+		
+		/* draw the candy 4 */
+		SDL_BlitSurface(candy4, NULL, screen, &rcCandy4);
 		
 		/* draw the GHOST 1 */
 		SDL_BlitSurface(g1, NULL, screen, &rcG1);
@@ -296,6 +345,9 @@ int main(int argc, char* argv[])
 	/* clean up */
 	SDL_FreeSurface(sprite);
 	SDL_FreeSurface(candy);
+	SDL_FreeSurface(candy2);
+	SDL_FreeSurface(candy3);
+	SDL_FreeSurface(candy4);
 	SDL_FreeSurface(g1);
 	SDL_FreeSurface(g2);
 	SDL_FreeSurface(g3);
@@ -321,4 +373,10 @@ Ils se déplacent de manière à s'éloigner du pacman.
 Si le pacman rencontre un fantôme en état "effrayé", le fantôme est mangé.
 Ce fantôme retourne alors au centre (on ne voit que ses yeux durant ce retour) et redevient à l'état "normal".
 La partie est gagnée lorsque le pacman a mangé toutes les pastilles du jeu.
+
+Chaque fantôme a un comportement qui lui est propre :
+
+    Blinky attaque directement Pac Man. Il suit Pac-Man comme son ombre.
+    Pinky a tendance à se mettre en embuscade. Elle vise l'endroit où va se trouver Pac-Man.
+    Inky est capricieux. De temps en temps, il part dans la direction opposée à Pac-Man.
 */
