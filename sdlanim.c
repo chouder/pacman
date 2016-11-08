@@ -10,6 +10,9 @@
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
 
+#define G1_WIDTH 32
+#define G1_HEIGHT 34
+
 #define H 797
 #define J 720
 
@@ -21,8 +24,11 @@ int move; //gere le déplacement du pacman
 float dirX, dirY,x,y;
 
 /* source and destination rectangles */
-int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color);
-SDL_Rect rcSrc, rcSprite, rcCandy, rcCandy2, rcCandy3, rcCandy4, rcG1, rcG2,rcG3;
+//int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color);
+SDL_Rect rcSrc, rcSprite,rcG1, rcSG1, rcG2,rcG3;// rcCandy, rcCandy2, rcCandy3, rcCandy4, 
+
+
+		//rcSG1 -> ghost param
 
 int a;
 int Convertir(float nb)
@@ -37,7 +43,7 @@ Uint32 getpixel(SDL_Surface *map, int x, int y) {
     Uint8 *p = (Uint8 *)map->pixels + y*map->pitch + x*map->format->BytesPerPixel;
     return p[0] | p[1] << 8 | p[2] << 16; // TODO if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
 }
-
+/*
 void chercherchemin(int N, Matrice mat, int ldep,int cdep,int larriv,int carriv, bool trouve, Liste chem)
 {
 	trouve = false;
@@ -74,7 +80,7 @@ void chercherchemin(int N, Matrice mat, int ldep,int cdep,int larriv,int carriv,
 
 }
 
-
+*/
 void HandleEvent(SDL_Surface *map, SDL_Event event)
 {
 	switch (event.type) {
@@ -137,7 +143,7 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					move=1;
 					rcSrc.y = 3 * SPRITE_HEIGHT;
 					rcSrc.x = rcSrc.x + SPRITE_WIDTH;
-					if ( rcSrc.x > 5 * SPRITE_WIDTH) {
+					if ( rcSrc.x >= 5 * SPRITE_WIDTH) {
 						rcSrc.x = 0;
 					}
 					if (!getpixel(map, rcSprite.x, rcSprite.y+33)) {
@@ -145,14 +151,60 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					}
 					
 					break;
+				/*
+				case SDLK_w:	// LEFT
+					move=1;
+					rcSG1.y = 0;
+					rcSG1.x = rcSG1.x - 32;
+					if (rcSG1.x <= 0) {
+						rcSG1.x = 32;
+					}	
+					if (!getpixel(map, rcG1.x-1, rcG1.y)) {
+					 	rcG1.x -= 5;
+					}
+
+									
+					break;
+				case SDLK_c:	//RIGHT
+					move=1;
+					rcSG1.y = G1_HEIGHT;								
+					rcSG1.x =  G1_WIDTH;
+					if(rcSG1.x >= G1_WIDTH){
+						rcSG1.x = 0;
+					}				
+					 rcG1.x += 5;
+					break;
+				case SDLK_s:	//UP
+					move=1;
+					rcSG1.y = 3 * G1_HEIGHT;
+					rcSG1.x =  G1_WIDTH;
+					if ( rcSG1.x >= G1_WIDTH) {
+						rcSG1.x = 0;
+					}
+				 	rcG1.y -= 5;
+					break;
+				case SDLK_x:	//DOWN
+					move=1;
+					rcSG1.y = 4 * G1_HEIGHT;
+					rcSG1.x = G1_WIDTH;
+					if ( rcSG1.x >= G1_WIDTH) {
+						rcSG1.x = 0;
+					}
+					 rcG1.y += 5;	
+					
+					break;
+				*/
 			}
 			break;
+			
+
+		
 	}
 }
 
 int main(int argc, char* argv[])
 {
-	SDL_Surface *screen, *temp, *sprite, *candy, *candy2, *candy3, *candy4, *map, *g1, *g2, *g3;
+	SDL_Surface *screen, *temp, *sprite, *map, *g1, *g2, *g3; //*candy, *candy2, *candy3, *candy4, 
 	SDL_Rect rcmap;
 	int colorkey;
 	int i,j;
@@ -191,41 +243,41 @@ int main(int argc, char* argv[])
 	SDL_SetColorKey(sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	
 	/* load candy */
-	temp   = SDL_LoadBMP("bonbon.bmp");
+	/*temp   = SDL_LoadBMP("bonbon.bmp");
 	candy = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
-
+*/
 	/* setup candy colorkey and turn on RLE*/ 
-	colorkey = SDL_MapRGB(screen->format, 0,0,0);	
+	/*colorkey = SDL_MapRGB(screen->format, 0,0,0);	
 	SDL_SetColorKey(candy, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-
+*/
 	/* load candy 2*/
-	temp   = SDL_LoadBMP("bonbon.bmp");
+	/*temp   = SDL_LoadBMP("bonbon.bmp");
 	candy2 = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
-
+*/
 	/* setup candy2 colorkey and turn on RLE*/ 
-	colorkey = SDL_MapRGB(screen->format, 0,0,0);	
+	/*colorkey = SDL_MapRGB(screen->format, 0,0,0);	
 	SDL_SetColorKey(candy2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-	
+	*/
 	/* load candy 3 */
-	temp   = SDL_LoadBMP("bonbon.bmp");
+	/*temp   = SDL_LoadBMP("bonbon.bmp");
 	candy3 = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
-
+*/
 	/* setup candy3 colorkey and turn on RLE*/ 
-	colorkey = SDL_MapRGB(screen->format, 0,0,0);	
+	/*colorkey = SDL_MapRGB(screen->format, 0,0,0);	
 	SDL_SetColorKey(candy3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-
+*/
 	/* load candy 4 */
-	temp   = SDL_LoadBMP("bonbon.bmp");
+	/*temp   = SDL_LoadBMP("bonbon.bmp");
 	candy4 = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
-
+*/
 	/* setup candy4 colorkey and turn on RLE*/ 
-	colorkey = SDL_MapRGB(screen->format, 0,0,0);	
+	/*colorkey = SDL_MapRGB(screen->format, 0,0,0);	
 	SDL_SetColorKey(candy4, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-
+*/
 	/* load G1 */
 	temp   = SDL_LoadBMP("g1.bmp");
 	g1 = SDL_DisplayFormat(temp);
@@ -256,7 +308,7 @@ int main(int argc, char* argv[])
 	SDL_SetColorKey(g3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	
 	/* load map */
-	temp  = SDL_LoadBMP("map.bmp");
+	temp  = SDL_LoadBMP("map2.bmp");
 	map = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 
@@ -265,21 +317,21 @@ int main(int argc, char* argv[])
 	rcSprite.y = SCREEN_HEIGHT/2 + 32; 
 
 	/* set candy positon */
-	rcCandy.x = SCREEN_WIDTH/2 - 80;
+	/*rcCandy.x = SCREEN_WIDTH/2 - 80;
 	rcCandy.y = SCREEN_HEIGHT/2 + 40;
-
+*/
 	/* set candy 2 positon */
-	rcCandy2.x = SCREEN_WIDTH/2 - 40;
+	/*rcCandy2.x = SCREEN_WIDTH/2 - 40;
 	rcCandy2.y = SCREEN_HEIGHT/2 + 40;
-
+*/
 	/* set candy 3 positon */
-	rcCandy3.x = SCREEN_WIDTH/2 + 40;
+	/*rcCandy3.x = SCREEN_WIDTH/2 + 40;
 	rcCandy3.y = SCREEN_HEIGHT/2 + 40;
-
+*/
 	/* set candy 4 positon */
-	rcCandy4.x = SCREEN_WIDTH/2 + 80;
+	/*rcCandy4.x = SCREEN_WIDTH/2 + 80;
 	rcCandy4.y = SCREEN_HEIGHT/2 + 40;
-	
+	*/
 	/* set G1 position */		//r
 	rcG1.x = SCREEN_WIDTH/2 -64; 
 	rcG1.y = SCREEN_HEIGHT/2 -40; 
@@ -299,6 +351,12 @@ int main(int argc, char* argv[])
 	rcSrc.w = SPRITE_WIDTH;
 	rcSrc.h = SPRITE_HEIGHT;
 
+	/* set animation frame */
+	rcSG1.x = 0; 
+	rcSG1.y = 0;
+	rcSG1.w = G1_WIDTH;
+	rcSG1.h = G1_HEIGHT;
+
 	rcmap.x = 0;
 	rcmap.y = 0;
 
@@ -310,11 +368,11 @@ int main(int argc, char* argv[])
 			pos_candy[i][j]=0;
 		}
 	}
-	pos_candy[rcCandy.x][rcCandy.y]=1;
+	/*pos_candy[rcCandy.x][rcCandy.y]=1;
 	pos_candy[rcCandy2.x][rcCandy2.y]=1;
 	pos_candy[rcCandy3.x][rcCandy3.y]=1;
 	pos_candy[rcCandy4.x][rcCandy4.y]=1;
-
+*/
 
 
 	//previousTime = currentTime = 0;
@@ -336,7 +394,7 @@ int main(int argc, char* argv[])
 					}
 				}
 			}
-		SDL_FillRect(candy2, NULL , SDL_MapRGB(candy2->format,0,0,0));
+		//SDL_FillRect(candy2, NULL , SDL_MapRGB(candy2->format,0,0,0));
 
 
 			
@@ -366,16 +424,16 @@ int main(int argc, char* argv[])
 		SDL_BlitSurface(sprite, &rcSrc, screen, &rcSprite);
 
 		/* draw the candy */
-		SDL_BlitSurface(candy, NULL, screen, &rcCandy);
+		//SDL_BlitSurface(candy, NULL, screen, &rcCandy);
 
 		/* draw the candy 2 */
-		SDL_BlitSurface(candy2, NULL, screen, &rcCandy2);
+		//SDL_BlitSurface(candy2, NULL, screen, &rcCandy2);
 
 		/* draw the candy 3 */
-		SDL_BlitSurface(candy3, NULL, screen, &rcCandy3);
+		//SDL_BlitSurface(candy3, NULL, screen, &rcCandy3);
 		
 		/* draw the candy 4 */
-		SDL_BlitSurface(candy4, NULL, screen, &rcCandy4);
+		//SDL_BlitSurface(candy4, NULL, screen, &rcCandy4);
 		
 		/* draw the GHOST 1 */
 		SDL_BlitSurface(g1, NULL, screen, &rcG1);
@@ -392,10 +450,10 @@ int main(int argc, char* argv[])
 
 	/* clean up */
 	SDL_FreeSurface(sprite);
-	SDL_FreeSurface(candy);
+	/*SDL_FreeSurface(candy);
 	SDL_FreeSurface(candy2);
 	SDL_FreeSurface(candy3);
-	SDL_FreeSurface(candy4);
+	SDL_FreeSurface(candy4);*/
 	SDL_FreeSurface(g1);
 	SDL_FreeSurface(g2);
 	SDL_FreeSurface(g3);
