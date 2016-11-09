@@ -13,9 +13,10 @@
 #define G1_WIDTH 32
 #define G1_HEIGHT 34
 
+/*
 #define H 797
 #define J 720
-
+*/
 
 int gameover;// previousTime, currentTime entier qui stocke le temps
 int move; //gere le déplacement du pacman
@@ -28,7 +29,7 @@ int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color);
 SDL_Rect rcSrc, rcSprite,rcG1, rcSG1, rcG2,rcG3;// rcCandy, rcCandy2, rcCandy3, rcCandy4, 
 
 
-		//rcSG1 -> ghost param
+		//rcSG1 -> ghost param image
 
 int a;
 int Convertir(float nb)
@@ -361,14 +362,14 @@ int main(int argc, char* argv[])
 	rcmap.y = 0;
 
 	gameover = 0;
-	
+	/*
 	float pos_candy[H][J];
 	for (i=0;i<H;i++){
 		for(j=0;j<J;j++){
 			pos_candy[i][j]=0;
 		}
 	}
-	/*pos_candy[rcCandy.x][rcCandy.y]=1;
+pos_candy[rcCandy.x][rcCandy.y]=1;
 	pos_candy[rcCandy2.x][rcCandy2.y]=1;
 	pos_candy[rcCandy3.x][rcCandy3.y]=1;
 	pos_candy[rcCandy4.x][rcCandy4.y]=1;
