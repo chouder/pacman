@@ -24,7 +24,7 @@ int move; //gere le déplacement du pacman
 float dirX, dirY,x,y;
 
 /* source and destination rectangles */
-//int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color);
+int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color);
 SDL_Rect rcSrc, rcSprite,rcG1, rcSG1, rcG2,rcG3;// rcCandy, rcCandy2, rcCandy3, rcCandy4, 
 
 
@@ -382,19 +382,7 @@ int main(int argc, char* argv[])
 		SDL_Event event;
 
 		if (move) {
-			for (i=0;i<H;i++){
-				for(j=0;j<J;j++){
-					if(pos_candy[i][j]=1){
-					pos_candy[i][j]=0;
-					//rcCandy2.x=0;
-					//rcCandy2.y=0;
-					//printf("OK\n");
-					
-					//SDL_Flip(screen);
-					}
-				}
-			}
-		//SDL_FillRect(candy2, NULL , SDL_MapRGB(candy2->format,0,0,0));
+			//SDL_FillRect(candy2, NULL , SDL_MapRGB(candy2->format,0,0,0));
 
 
 			
@@ -469,7 +457,7 @@ int main(int argc, char* argv[])
 /*****************/
 /*
 J'hésite entre faire 2 choses lorsque le pacman meurt :
--soit il clignote et il devient invincible
+-soit il clignote et il devient invincible pendant une courte période
 -soit il repart à sa place comme au début
 
 
