@@ -38,12 +38,23 @@ int Convertir(float nb)
 	int a = (int) nb;
 	return a;
 }
+SDL_Surface *map;
 
 Uint32 getpixel(SDL_Surface *map, int x, int y) {
     if (x<0 || y<0 || x>=map->w || y>=map->h) return 0;
     Uint8 *p = (Uint8 *)map->pixels + y*map->pitch + x*map->format->BytesPerPixel;
     return p[0] | p[1] << 8 | p[2] << 16; // TODO if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
 }
+
+void putpixel(int x, int y, Uint32 pixel) {
+    int bpp_ = map->format->BytesPerPixel;
+    if (x<0 || y<0 || x>=map->w || y>=map->h) return;
+    Uint8 *p = (Uint8 *)map->pixels + y*map->pitch + x*bpp_;
+    for (int i=0; i<bpp_; i++) {
+        p[i] = ((Uint8*)&pixel)[i]; // TODO if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+    }
+}
+
 /*
 void chercherchemin(int N, Matrice mat, int ldep,int cdep,int larriv,int carriv, bool trouve, Liste chem)
 {
@@ -82,6 +93,7 @@ void chercherchemin(int N, Matrice mat, int ldep,int cdep,int larriv,int carriv,
 }
 
 */
+void pleinecran();
 void HandleEvent(SDL_Surface *map, SDL_Event event)
 {
 	switch (event.type) {
@@ -107,7 +119,8 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					if (!getpixel(map, rcSprite.x-1, rcSprite.y)) {
 					 	rcSprite.x -= 5;
 					}
-					
+
+					putpixel(rcSprite.x, rcSprite.y, SDL_MapRGB(map->format,255,0,255));
 					
 					break;
 				case SDLK_RIGHT:
@@ -152,7 +165,7 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					}
 					
 					break;
-				/*
+				
 				case SDLK_w:	// LEFT
 					move=1;
 					rcSG1.y = 0;
@@ -194,7 +207,10 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					 rcG1.y += 5;	
 					
 					break;
-				*/
+				case SDLK_b:	
+					pleinecran;					
+					break;
+				
 			}
 			break;
 			
@@ -203,9 +219,13 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 	}
 }
 
+void pleinecran(){
+SDL_WINDOW_FULLSCREEN_DESKTOP(map);
+}
+
 int main(int argc, char* argv[])
 {
-	SDL_Surface *screen, *temp, *sprite, *map, *g1, *g2, *g3; //*candy, *candy2, *candy3, *candy4, 
+	SDL_Surface *screen, *temp, *sprite, *g1, *g2, *g3; //*candy, *candy2, *candy3, *candy4, 
 	SDL_Rect rcmap;
 	int colorkey;
 	int i,j;
