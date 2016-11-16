@@ -10,6 +10,10 @@
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
 
+#define NX 22
+#define NY 23
+
+
 #define G1_WIDTH 32
 #define G1_HEIGHT 34
 
@@ -21,6 +25,7 @@
 int gameover;// previousTime, currentTime entier qui stocke le temps
 int move; //gere le déplacement du pacman
 
+int pos_candy[NY][NX];
 
 float dirX, dirY,x,y;
 
@@ -39,6 +44,20 @@ int Convertir(float nb)
 	return a;
 }
 SDL_Surface *map;
+
+unsigned char green(Uint32 color) {
+	return (color & (255*256))/256;
+} 
+
+unsigned char blue(Uint32 color) {
+	return (color & 255);
+} 
+
+unsigned char red(Uint32 color) {
+	return (color & (255*256*256))/(256*256);
+} 
+
+
 
 Uint32 getpixel(SDL_Surface *map, int x, int y) {
     if (x<0 || y<0 || x>=map->w || y>=map->h) return 0;
@@ -93,7 +112,7 @@ void chercherchemin(int N, Matrice mat, int ldep,int cdep,int larriv,int carriv,
 }
 
 */
-void pleinecran();
+//void pleinecran();
 void HandleEvent(SDL_Surface *map, SDL_Event event)
 {
 	switch (event.type) {
@@ -118,9 +137,9 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					}
 					if (!getpixel(map, rcSprite.x-1, rcSprite.y)) {
 					 	rcSprite.x -= 5;
-						putpixel(rcSprite.x+30, rcSprite.y, SDL_MapRGB(map->format,255,0,255));
-					}
 
+					}
+					
 
 					
 					break;
@@ -231,16 +250,14 @@ int main(int argc, char* argv[])
 	int colorkey;
 	int i,j;
 
-	/* print candy */
-
-	/*
-	for (i=0; i<5; i++) {
-		for (j=0;j<5;j++) {
-		pac_array[i][j] = candy;
-		}	
+		
+	/*for (i=0; i< 22;i++){
+		for (j=0;j<23;j++){
+			pos_candy[i][j]=0;
+			printf("%d", pos_candy[i][j]=);
+		}
 	}
 	*/
-	
 	/*initialize move of pacman */
 	move=0;
 	
@@ -297,7 +314,7 @@ int main(int argc, char* argv[])
 	SDL_FreeSurface(temp);
 */
 	/* setup candy4 colorkey and turn on RLE*/ 
-	/*colorkey = SDL_MapRGB(screen->format, 0,0,0);	
+	/*colorkey = SDL_MapRGB(screen->format, 0,0,0);c
 	SDL_SetColorKey(candy4, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 */
 	/* load G1 */
@@ -383,19 +400,14 @@ int main(int argc, char* argv[])
 	rcmap.y = 0;
 
 	gameover = 0;
-	/*
-	float pos_candy[H][J];
-	for (i=0;i<H;i++){
-		for(j=0;j<J;j++){
-			pos_candy[i][j]=0;
-		}
-	}
-pos_candy[rcCandy.x][rcCandy.y]=1;
+	
+	/*pos_candy[rcCandy.x][rcCandy.y]=1;
 	pos_candy[rcCandy2.x][rcCandy2.y]=1;
 	pos_candy[rcCandy3.x][rcCandy3.y]=1;
 	pos_candy[rcCandy4.x][rcCandy4.y]=1;
-*/
-
+	*/
+		//		putpixel( 5 ,5, SDL_MapRGB(map->format,0,128,0));
+		putpixel( 5 ,5, (255*256*256)+255*256);
 
 	//previousTime = currentTime = 0;
 	/* message pump */
@@ -408,7 +420,7 @@ pos_candy[rcCandy.x][rcCandy.y]=1;
 
 
 			
-		move = 0;
+			move = 0;
 		}
 
 		/* look for an event */
