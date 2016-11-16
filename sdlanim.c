@@ -6,9 +6,10 @@
 //#include <SDL/SDL_mixer.h>
 
 #define SCREEN_WIDTH  768
-#define SCREEN_HEIGHT 576
+#define SCREEN_HEIGHT 640
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
+#define SPRITE_SIZE 32
 #define NY 20
 #define NX 24
 #define G1_WIDTH 32
@@ -241,42 +242,11 @@ int main(int argc, char* argv[])
 	int colorkey;
 	int i,j;
 
-	int pos_walk[NY][NX]= {
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
-	
-
-	if ( pos_walk == 1 ){
-
-	}
-
-
-
-	for (i=0; i< NY;i++){
-		for (j=0;j<NX;j++){
-			printf("%d",pos_walk[i][j]);
-		}
-	}
-
-
+	/*rcBloc.h = 32;
+	rcBloc.w = 32;
+	rcBloc.x = 0;
+	rcBloc.y = 0;
+	*/
 	
 	/*initialize move of pacman */
 	move=0;
@@ -288,7 +258,7 @@ int main(int argc, char* argv[])
 	SDL_WM_SetCaption("Pacman", "Pacman");
 
 	/* create window */
-	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
+	screen = SDL_SetVideoMode(SCREEN_WIDTH, 640, 0, 0);
 
 	/* set keyboard repeat */
 	SDL_EnableKeyRepeat(30,30);
@@ -386,10 +356,8 @@ int main(int argc, char* argv[])
 	rcWalk.x = SCREEN_WIDTH/2 - 16; 
 	rcWalk.y = SCREEN_HEIGHT/2 + 32; 
 	
-	/* set bloc position */
-	rcBloc.x = SCREEN_WIDTH/2 +100; 
-	rcBloc.y = SCREEN_HEIGHT/2 +100;
-
+		
+	
 	/* set sprite position */
 	rcSprite.x = SCREEN_WIDTH/2 - 16; 
 	rcSprite.y = SCREEN_HEIGHT/2 + 32; 
@@ -439,13 +407,30 @@ int main(int argc, char* argv[])
 	rcmap.y = 0;
 
 	gameover = 0;
-	
-	/*pos_candy[rcCandy.x][rcCandy.y]=1;
-	pos_candy[rcCandy2.x][rcCandy2.y]=1;
-	pos_candy[rcCandy3.x][rcCandy3.y]=1;
-	pos_candy[rcCandy4.x][rcCandy4.y]=1;
-	*/
-	
+
+
+	int pos_walk[NY][NX]= {
+	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
+
 	//putpixel( 5 ,5, SDL_MapRGB(map->format,0,128,0));
 	//putpixel( 5 ,5, (255*256*256)+255*256);
 
@@ -456,10 +441,7 @@ int main(int argc, char* argv[])
 		SDL_Event event;
 
 		if (move) {
-			//SDL_FillRect(candy2, NULL , SDL_MapRGB(candy2->format,0,0,0));
-
-
-			
+			//SDL_FillRect(candy2, NULL , SDL_MapRGB(candy2->format,0,0,0));	
 			move = 0;
 		}
 
@@ -479,17 +461,50 @@ int main(int argc, char* argv[])
 		if (rcSprite.y >= SCREEN_HEIGHT - SPRITE_HEIGHT) 
 			rcSprite.y = SCREEN_HEIGHT - SPRITE_HEIGHT;
 
-		/* draw the map */
-		SDL_BlitSurface(map,NULL,screen,&rcmap);
+
+	/* draw the map */
+	SDL_BlitSurface(map,NULL,screen,&rcmap);
+
+	for(i=0; i<NY ; i++){
+		for(j=0;j<NX;j++){
+			//printf("pos_walk[i][j]: %d\n",pos_walk[i][j]);
+			/*if ( pos_walk[i][j] == 0 ){
+				rcBloc.x -= 5;
+				rcBloc.y -= 5;
+				//SDL_BlitSurface(bloc, NULL, screen, &rcBloc);
+			}*/
+			if ( pos_walk[i][j] == 1 ){
+				rcBloc.x = j * 32;
+				rcBloc.y = i * 32;
+				SDL_BlitSurface(bloc, NULL, screen, &rcBloc);
+			}
+			if ( pos_walk[i][j] == 2){
+				rcWalk.x = j * 32;
+				rcWalk.y = i * 32;
+				SDL_BlitSurface(walk, NULL, screen, &rcWalk);
+			}
+			/*if ( pos_walk[i][j] == 3){
+				rcWalk.x = j * 32;
+				rcWalk.y = i * 32;
+				SDL_BlitSurface(walk, NULL, screen, &rcWalk);
+			}*/
+		}
+	}
+
+
+	/*for (i=0; i< NY;i++){
+		for (j=0;j<NX;j++){
+			printf("%d",pos_walk[i][j]);
+		}
+	}
+	*/
+
+		//SDL_BlitSurface(bloc, NULL, screen, &rcBloc);
+
 
 		/* draw the sprite */
 		SDL_BlitSurface(sprite, &rcSrc, screen, &rcSprite);
-	
-		/* draw the walk*/
-		SDL_BlitSurface(walk, NULL, screen, &rcWalk);
-		
-		/* draw the walk*/
-		SDL_BlitSurface(bloc, NULL, screen, &rcBloc);
+			
 
 		/* draw the candy */
 		//SDL_BlitSurface(candy, NULL, screen, &rcCandy);
