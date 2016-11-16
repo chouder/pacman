@@ -118,9 +118,10 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					}
 					if (!getpixel(map, rcSprite.x-1, rcSprite.y)) {
 					 	rcSprite.x -= 5;
+						putpixel(rcSprite.x+30, rcSprite.y, SDL_MapRGB(map->format,255,0,255));
 					}
 
-					putpixel(rcSprite.x, rcSprite.y, SDL_MapRGB(map->format,255,0,255));
+
 					
 					break;
 				case SDLK_RIGHT:
@@ -207,9 +208,9 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					 rcG1.y += 5;	
 					
 					break;
-				case SDLK_b:	
+				/*case SDLK_b:	
 					pleinecran;					
-					break;
+					break;*/
 				
 			}
 			break;
@@ -218,11 +219,11 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 		
 	}
 }
-
+/*
 void pleinecran(){
 SDL_WINDOW_FULLSCREEN_DESKTOP(map);
 }
-
+*/
 int main(int argc, char* argv[])
 {
 	SDL_Surface *screen, *temp, *sprite, *g1, *g2, *g3; //*candy, *candy2, *candy3, *candy4, 
