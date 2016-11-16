@@ -5,33 +5,24 @@
 #include <stdbool.h>
 //#include <SDL/SDL_mixer.h>
 
-#define SCREEN_WIDTH  720	
-#define SCREEN_HEIGHT 797
+#define SCREEN_WIDTH  768
+#define SCREEN_HEIGHT 576
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
-
-#define NX 22
-#define NY 23
-
-
+#define NY 20
+#define NX 24
 #define G1_WIDTH 32
 #define G1_HEIGHT 34
 
-/*
-#define H 797
-#define J 720
-*/
 
 int gameover;// previousTime, currentTime entier qui stocke le temps
 int move; //gere le déplacement du pacman
-
-int pos_candy[NY][NX];
 
 float dirX, dirY,x,y;
 
 /* source and destination rectangles */
 int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color);
-SDL_Rect rcSrc, rcSprite,rcG1, rcSG1, rcG2,rcG3;// rcCandy, rcCandy2, rcCandy3, rcCandy4, 
+SDL_Rect rcSrc,rcWalk, rcBloc, rcSprite,rcG1, rcSG1, rcG2,rcG3;// rcCandy, rcCandy2, rcCandy3, rcCandy4, 
 
 
 		//rcSG1 -> ghost param image
@@ -135,10 +126,10 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					if (rcSrc.x < 0) {
 						rcSrc.x = 5 * SPRITE_WIDTH;
 					}
-					if (!getpixel(map, rcSprite.x-1, rcSprite.y)) {
+					//if (!getpixel(map, rcSprite.x-1, rcSprite.y)) {
 					 	rcSprite.x -= 5;
 
-					}
+					//}
 					
 
 					
@@ -147,16 +138,16 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					move=1;
 					rcSrc.y = 0;
 					//currentTime = SDL_GetTicks();
-					//if(currentTime - previousTime > 50 ){ //temps en ms entre chq animation				
+					//if(currentTime-previousTime>50){//tempsenmsentrechqanimation				
 						rcSrc.x = rcSrc.x + SPRITE_WIDTH;
 						if(rcSrc.x > 5 * SPRITE_WIDTH){
 						rcSrc.x = 0;
 						}
 					//previousTime = currentTime;
 					//}
-					if (!getpixel(map, rcSprite.x+33, rcSprite.y)) {
+					//if (!getpixel(map, rcSprite.x+33, rcSprite.y)) {
 					 	rcSprite.x += 5;
-					}
+					//}
 					
 		        
 					break;
@@ -167,9 +158,9 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					if ( rcSrc.x > 5 * SPRITE_WIDTH) {
 						rcSrc.x = 0;
 					}
-					if (!getpixel(map, rcSprite.x-1, rcSprite.y-1)) {
+					//if (!getpixel(map, rcSprite.x-1, rcSprite.y-1)) {
 					 	rcSprite.y -= 5;
-					}
+					//}
 
 
 					break;
@@ -180,13 +171,13 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					if ( rcSrc.x >= 5 * SPRITE_WIDTH) {
 						rcSrc.x = 0;
 					}
-					if (!getpixel(map, rcSprite.x, rcSprite.y+33)) {
+					//if (!getpixel(map, rcSprite.x, rcSprite.y+33)) {
 					 	rcSprite.y += 5;
-					}
+					//}
 					
 					break;
 				
-				case SDLK_w:	// LEFT
+				/*case SDLK_w:	// LEFT
 					move=1;
 					rcSG1.y = 0;
 					rcSG1.x = rcSG1.x - 32;
@@ -225,7 +216,7 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 						rcSG1.x = 0;
 					}
 					 rcG1.y += 5;	
-					
+					*/
 					break;
 				/*case SDLK_b:	
 					pleinecran;					
@@ -245,19 +236,48 @@ SDL_WINDOW_FULLSCREEN_DESKTOP(map);
 */
 int main(int argc, char* argv[])
 {
-	SDL_Surface *screen, *temp, *sprite, *g1, *g2, *g3; //*candy, *candy2, *candy3, *candy4, 
+	SDL_Surface *screen, *temp, *walk, *bloc, *sprite, *g1, *g2, *g3; //*candy, *candy2, *candy3, *candy4, 
 	SDL_Rect rcmap;
 	int colorkey;
 	int i,j;
 
-		
-	/*for (i=0; i< 22;i++){
-		for (j=0;j<23;j++){
-			pos_candy[i][j]=0;
-			printf("%d", pos_candy[i][j]=);
+	int pos_walk[NY][NX]= {
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+	
+
+	if ( pos_walk == 1 ){
+
+	}
+
+
+
+	for (i=0; i< NY;i++){
+		for (j=0;j<NX;j++){
+			printf("%d",pos_walk[i][j]);
 		}
 	}
-	*/
+
+
+	
 	/*initialize move of pacman */
 	move=0;
 	
@@ -272,7 +292,7 @@ int main(int argc, char* argv[])
 
 	/* set keyboard repeat */
 	SDL_EnableKeyRepeat(30,30);
-
+	
 	/* load sprite */
 	temp   = SDL_LoadBMP("pacman.bmp");
 	sprite = SDL_DisplayFormat(temp);
@@ -280,6 +300,17 @@ int main(int argc, char* argv[])
 	/* setup sprite colorkey and turn on RLE*/ 
 	colorkey = SDL_MapRGB(screen->format, 0,0,0);	
 	SDL_SetColorKey(sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+	
+	/* load walk */
+	temp   = SDL_LoadBMP("walk.bmp");
+	walk = SDL_DisplayFormat(temp);
+	SDL_FreeSurface(temp);
+	
+	/* load bloc */
+	temp   = SDL_LoadBMP("bloc.bmp");
+	bloc = SDL_DisplayFormat(temp);
+	SDL_FreeSurface(temp);
+
 	
 	/* load candy */
 	/*temp   = SDL_LoadBMP("bonbon.bmp");
@@ -347,9 +378,17 @@ int main(int argc, char* argv[])
 	SDL_SetColorKey(g3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	
 	/* load map */
-	temp  = SDL_LoadBMP("map2.bmp");
+	temp  = SDL_LoadBMP("mapb.bmp");
 	map = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
+
+	/* set walk position */
+	rcWalk.x = SCREEN_WIDTH/2 - 16; 
+	rcWalk.y = SCREEN_HEIGHT/2 + 32; 
+	
+	/* set bloc position */
+	rcBloc.x = SCREEN_WIDTH/2 +100; 
+	rcBloc.y = SCREEN_HEIGHT/2 +100;
 
 	/* set sprite position */
 	rcSprite.x = SCREEN_WIDTH/2 - 16; 
@@ -406,8 +445,9 @@ int main(int argc, char* argv[])
 	pos_candy[rcCandy3.x][rcCandy3.y]=1;
 	pos_candy[rcCandy4.x][rcCandy4.y]=1;
 	*/
-		//		putpixel( 5 ,5, SDL_MapRGB(map->format,0,128,0));
-		putpixel( 5 ,5, (255*256*256)+255*256);
+	
+	//putpixel( 5 ,5, SDL_MapRGB(map->format,0,128,0));
+	//putpixel( 5 ,5, (255*256*256)+255*256);
 
 	//previousTime = currentTime = 0;
 	/* message pump */
@@ -444,6 +484,12 @@ int main(int argc, char* argv[])
 
 		/* draw the sprite */
 		SDL_BlitSurface(sprite, &rcSrc, screen, &rcSprite);
+	
+		/* draw the walk*/
+		SDL_BlitSurface(walk, NULL, screen, &rcWalk);
+		
+		/* draw the walk*/
+		SDL_BlitSurface(bloc, NULL, screen, &rcBloc);
 
 		/* draw the candy */
 		//SDL_BlitSurface(candy, NULL, screen, &rcCandy);
@@ -472,6 +518,8 @@ int main(int argc, char* argv[])
 
 	/* clean up */
 	SDL_FreeSurface(sprite);
+	SDL_FreeSurface(walk);
+	SDL_FreeSurface(bloc);
 	/*SDL_FreeSurface(candy);
 	SDL_FreeSurface(candy2);
 	SDL_FreeSurface(candy3);
