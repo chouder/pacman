@@ -529,7 +529,7 @@ int main(int argc, char* argv[])
 		SDL_Event event;
 
 		if (move) {
-			printf("le pacman bouge \n");
+			//printf("le pacman bouge \n");
 			//SDL_FillRect(candy2, NULL , SDL_MapRGB(candy2->format,0,0,0));
 			move = 0;
 		}
@@ -555,9 +555,9 @@ int main(int argc, char* argv[])
 	/* draw the map */
 	SDL_BlitSurface(map,NULL,screen,&rcmap);
 
-	int m = (rcSprite.x)/32;
-        int n = (rcSprite.y)/32;
-	//printf("m= %d n= %d ", m,n);
+	int m = ((rcSprite.x+16)/32) +0.5;
+        int n = ((rcSprite.y+16)/32) +0.5;
+	printf("m= %d n= %d \n", m,n);
 
 	for(i=0; i<NY ; i++){
 		for(j=0;j<NX;j++){
