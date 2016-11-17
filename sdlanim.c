@@ -19,7 +19,7 @@
 #define TIME_BTW_ANIMATIONS 40
 #define TIME_BTW_MOVEMENTS 5
 
-int gameover;// previousTime, currentTime entier qui stocke le temps
+int gameover;
 int moveRight, moveLeft, moveUp, moveDown; //gere le déplacement du pacman
 int move;
 int currentTime, previousTime; //gerer le temps entre les deplacements
@@ -28,10 +28,10 @@ float dirX, dirY,x,y;
 
 /* source and destination rectangles */
 int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color);
-SDL_Rect rcSrc,rcWall,rcWall2, rcBloc, rcSprite,rcG1, rcSG1, rcG2,rcG3, rcCandy;//, rcCandy2, rcCandy3, rcCandy4,
+SDL_Rect rcSrc,rcWall,rcWall2, rcBloc, rcSprite,rcG1, rcSG1, rcG2,rcG3, rcCandy;
 
 
-		//rcSG1 -> ghost param image
+//rcSG1 -> ghost param image
 
 int a;
 int Convertir(float nb)
@@ -72,44 +72,7 @@ void putpixel(int x, int y, Uint32 pixel) {
     }
 }
 
-/*
-void chercherchemin(int N, Matrice mat, int ldep,int cdep,int larriv,int carriv, bool trouve, Liste chem)
-{
-	trouve = false;
-	mat[ldep][cdep]= false;
-	if( ldep == larriv && cdep==c){
-		trouve = true;
-		chem = cons((ldep,cdep),l_vide());
-	}
-	if(cdep != N-1 ) {
-		if ( mat[ldep][cdep+1]){
-			chercherchemin(N,mat,ldep,cdep+1,larriv,carriv,trouve,chem);
-		}
-	}
-	if(ldep != N-1 && !(trouve) ) {
-		if (mat[ldep+1][cdep]) {
-			chercherchemin(N,mat,ldep+1,cdep,larriv,carriv,trouve,chem);
-		}
-	}
-	if(ldep != N-1 && !(trouve) ) {	//gauche
-		if (mat[ldep+1][cdep]) {
-			chercherchemin(N,mat,ldep+1,cdep,larriv,carriv,trouve,chem);
-		}
-	}
-	if(ldep != N-1 && !(trouve) ) {	//dessus
-		if (mat[ldep+1][cdep]) {
-			chercherchemin(N,mat,ldep+1,cdep,larriv,carriv,trouve,chem);
-		}
-	}
 
-	if(trouve){
-		chemin=cons((ldep,cdep),chem);
-	}
-
-
-}
-
-*/
 
 void HandleAnimations();
 
@@ -323,16 +286,11 @@ void HandleAnimations()
 
 int main(int argc, char* argv[])
 {
-	SDL_Surface *screen, *temp, *wall, *wall2, *bloc, *sprite, *g1, *g2, *g3, *candy;// *candy2, *candy3, *candy4,
+	SDL_Surface *screen, *temp, *wall, *wall2, *bloc, *sprite, *g1, *g2, *g3, *candy;
 	SDL_Rect rcmap;
 	int colorkey;
 	int i,j;
 
-	/*rcBloc.h = 32;
-	rcBloc.w = 32;
-	rcBloc.x = 0;
-	rcBloc.y = 0;
-	*/
 
 	/*initialize move of pacman */
 	move=0;
@@ -378,37 +336,6 @@ int main(int argc, char* argv[])
 	candy = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 
-	/* setup candy colorkey and turn on RLE*/
-	/*colorkey = SDL_MapRGB(screen->format, 0,0,0);
-	SDL_SetColorKey(candy, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-*/
-	/* load candy 2*/
-	/*temp   = SDL_LoadBMP("bonbon.bmp");
-	candy2 = SDL_DisplayFormat(temp);
-	SDL_FreeSurface(temp);
-*/
-	/* setup candy2 colorkey and turn on RLE*/
-	/*colorkey = SDL_MapRGB(screen->format, 0,0,0);
-	SDL_SetColorKey(candy2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-	*/
-	/* load candy 3 */
-	/*temp   = SDL_LoadBMP("bonbon.bmp");
-	candy3 = SDL_DisplayFormat(temp);
-	SDL_FreeSurface(temp);
-*/
-	/* setup candy3 colorkey and turn on RLE*/
-	/*colorkey = SDL_MapRGB(screen->format, 0,0,0);
-	SDL_SetColorKey(candy3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-*/
-	/* load candy 4 */
-	/*temp   = SDL_LoadBMP("bonbon.bmp");
-	candy4 = SDL_DisplayFormat(temp);
-	SDL_FreeSurface(temp);
-*/
-	/* setup candy4 colorkey and turn on RLE*/
-	/*colorkey = SDL_MapRGB(screen->format, 0,0,0);c
-	SDL_SetColorKey(candy4, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-*/
 	/* load G1 */
 	temp   = SDL_LoadBMP("g1.bmp");
 	g1 = SDL_DisplayFormat(temp);
@@ -443,38 +370,25 @@ int main(int argc, char* argv[])
 	map = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 
-    /*initialise le temps*/
-    currentTime = 0;
-    previousTime = 0;
-    currentTimeAnim = 0;
-    previousTimeAnim = 0;
+        /*initialise le temps*/
+        currentTime = 0;
+        previousTime = 0;
+        currentTimeAnim = 0;
+        previousTimeAnim = 0;
 
 	/* set sprite position */
 	rcSprite.x = SCREEN_WIDTH/2;
 	rcSprite.y = SCREEN_HEIGHT/2 +32;
 
-
-	/* set candy 2 positon */
-	/*rcCandy2.x = SCREEN_WIDTH/2 - 40;
-	rcCandy2.y = SCREEN_HEIGHT/2 + 40;
-*/
-	/* set candy 3 positon */
-	/*rcCandy3.x = SCREEN_WIDTH/2 + 40;
-	rcCandy3.y = SCREEN_HEIGHT/2 + 40;
-*/
-	/* set candy 4 positon */
-	/*rcCandy4.x = SCREEN_WIDTH/2 + 80;
-	rcCandy4.y = SCREEN_HEIGHT/2 + 40;
-	*/
-	/* set G1 position */		//r
+	/* set G1 position */
 	rcG1.x = SCREEN_WIDTH/2 -32;
 	rcG1.y = SCREEN_HEIGHT/2-32;
 
-	/* set G2 positon */		//b
+	/* set G2 positon */
 	rcG2.x = SCREEN_WIDTH/2;
 	rcG2.y = SCREEN_HEIGHT/2 -31;
 
-	/* set  positon */		//w
+	/* set  positon */
 	rcG3.x = SCREEN_WIDTH/2+32;
 	rcG3.y = SCREEN_HEIGHT/2 -32;
 
@@ -519,18 +433,14 @@ int main(int argc, char* argv[])
 	{1,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,1},
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
 
-	//putpixel( 5 ,5, SDL_MapRGB(map->format,0,128,0));
-	//putpixel( 5 ,5, (255*256*256)+255*256);
-
-	//previousTime = currentTime = 0;
 	/* message pump */
 	while (!gameover)
 	{
 		SDL_Event event;
 
 		if (move) {
-			//printf("le pacman bouge \n");
-			//SDL_FillRect(candy2, NULL , SDL_MapRGB(candy2->format,0,0,0));
+
+
 			move = 0;
 		}
 
@@ -601,24 +511,10 @@ int main(int argc, char* argv[])
 	}
 	*/
 
-		//SDL_BlitSurface(bloc, NULL, screen, &rcBloc);
-
-
 		/* draw the sprite */
 		SDL_BlitSurface(sprite, &rcSrc, screen, &rcSprite);
 
 
-		/* draw the candy */
-		//SDL_BlitSurface(candy, NULL, screen, &rcCandy);
-
-		/* draw the candy 2 */
-		//SDL_BlitSurface(candy2, NULL, screen, &rcCandy2);
-
-		/* draw the candy 3 */
-		//SDL_BlitSurface(candy3, NULL, screen, &rcCandy3);
-
-		/* draw the candy 4 */
-		//SDL_BlitSurface(candy4, NULL, screen, &rcCandy4);
 
 		/* draw the GHOST 1 */
 		SDL_BlitSurface(g1, NULL, screen, &rcG1);
@@ -639,45 +535,11 @@ int main(int argc, char* argv[])
 	SDL_FreeSurface(wall2);
 	SDL_FreeSurface(bloc);
 	SDL_FreeSurface(candy);
-	/*SDL_FreeSurface(candy2);
-	SDL_FreeSurface(candy3);
-	SDL_FreeSurface(candy4);*/
 	SDL_FreeSurface(g1);
 	SDL_FreeSurface(g2);
 	SDL_FreeSurface(g3);
 	SDL_FreeSurface(map);
 	SDL_Quit();
-
 	return 0;
 }
 
-
-/*****************/
-/**Regle du Jeu***/
-/*****************/
-/*
-J'hésite entre faire 2 choses lorsque le pacman meurt :
--soit il clignote et il devient invincible pendant une courte période
--soit il repart à sa place comme au début
-
-
-
-
-
-
-(les fantômes)
-En état "normal" il sont en couleurs et se déplacent de manière à se rapprocher du pacman.
-Si le pacman rencontre un fantôme en état "normal", la partie est perdue.
-Il y a une super-pastille à chaque coin de l'écran. Si le pacman en mange une, les fantômes passent à l'état "effrayé" pendant une durée déterminée.
-Dans cet état les fantômes sont bleus et ralentis.
-Ils se déplacent de manière à s'éloigner du pacman.
-Si le pacman rencontre un fantôme en état "effrayé", le fantôme est mangé.
-Ce fantôme retourne alors au centre (on ne voit que ses yeux durant ce retour) et redevient à l'état "normal".
-La partie est gagnée lorsque le pacman a mangé toutes les pastilles du jeu.
-
-Chaque fantôme a un comportement qui lui est propre :
-
-    Blinky attaque directement Pac Man. Il suit Pac-Man comme son ombre.
-    Pinky a tendance à se mettre en embuscade. Elle vise l'endroit où va se trouver Pac-Man.
-    Inky est capricieux. De temps en temps, il part dans la direction opposée à Pac-Man.
-*/
