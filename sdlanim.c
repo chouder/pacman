@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-//#include <SDL/SDL_mixer.h>
+//musique#include <SDL/SDL_mixer.h>
 
 #define SCREEN_WIDTH  768
 #define SCREEN_HEIGHT 640
@@ -30,6 +30,8 @@ float dirX, dirY,x,y;
 SDL_Rect rcSrc,rcWall,rcWall2, rcBloc, rcSprite,rcG1, rcSG1, rcG2,rcG3, rcCandy;
 int i,j;
 int pos_Wall[NY][NX];
+//musiqueMix_Music *music,*start;
+//musiqueint Mix_OpenAudio(int frequency, Uint16 format, int channels, int chunksize);	
 
 int a;
 int Convertir(float nb)
@@ -163,6 +165,18 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					 rcG1.y += 5;
 
 					break;
+			//musique	case SDLK_m: 
+					/*if(Mix_PausedMusic() == 1)
+					{
+						Mix_ResumeMusic(); 
+						printf("p1");
+					}
+					else
+					{
+						Mix_PauseMusic(); 
+						printf("p2"); 
+					}
+					break;*/
 				
 				}
 			break;
@@ -259,7 +273,7 @@ void HandleAnimations()
 
 int main(int argc, char* argv[])
 {
-	SDL_Surface *screen, *map, *temp, *wall, *wall2, *bloc, *sprite, *g1, *g2, *g3, *candy;
+	SDL_Surface *screen, *map, *temp, *wall, *wall2, *bloc, *sprite, *g1, *g2, *g3, *candy;//musique *menu,
 	SDL_Rect rcmap;
 	int colorkey;
 	int i,j;
@@ -270,6 +284,17 @@ int main(int argc, char* argv[])
 
 	/* initialize SDL */
 	SDL_Init(SDL_INIT_VIDEO);
+	 /* initialize SDL */
+ //musique   	 SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    /*	 Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);  
+    	 Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+    	 music = Mix_LoadMUS("point.mp3");
+	 start = Mix_LoadMUS("start.mp3");
+
+   	  if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
+   	  printf("%s", Mix_GetError());
+   	  }
+  	Mix_PlayMusic(start, 1);*/
 
 	/* set the title bar */
 	SDL_WM_SetCaption("Pacman", "Pacman");
@@ -279,6 +304,11 @@ int main(int argc, char* argv[])
 
 	/* set keyboard repeat */
 	SDL_EnableKeyRepeat(30,30);
+
+ 	/*load menu */ 
+ 	//musique temp=SDL_LoadBMP("1.bmp");
+ 	// menu= SDL_DisplayFormat(temp);
+ 	 //SDL_FreeSurface(temp);
 
 	/* load sprite */
 	temp   = SDL_LoadBMP("pacman.bmp");
@@ -408,20 +438,30 @@ int main(int argc, char* argv[])
 	
 	int cpt=0;
 	int n,m;
+
+	//musique SDL_BlitSurface(menu,NULL,screen,NULL);
+  	/*SDL_Flip(screen);
+  	SDL_Delay(5000);*/
 	/* message pump */
 	while (!gameover)
-	{
+{		
+		
+		
 		SDL_Event event;
+		/* look for an event */
+		if (SDL_PollEvent(&event)) {
+			HandleEvent(map, event);
+		}
+
+
+		
 
 		if (move) {
 		
 			move = 0;
 		}
 
-		/* look for an event */
-		if (SDL_PollEvent(&event)) {
-			HandleEvent(map, event);
-		}
+		
 
        		 HandleMovements();
 		/* collide with edges of screen */
@@ -436,12 +476,12 @@ int main(int argc, char* argv[])
 			rcSprite.y = SCREEN_HEIGHT - SPRITE_HEIGHT;
 
 
-	/* draw the map */
-	SDL_BlitSurface(map,NULL,screen,&rcmap);
+		/* draw the map */
+		SDL_BlitSurface(map,NULL,screen,&rcmap);
 
-	n = ((rcSprite.x+16)/32) +0.5;
-        m = ((rcSprite.y+16)/32) +0.5;
-	//printf("m= %d n= %d \n", m,n);
+		n = ((rcSprite.x+16)/32) +0.5;
+       		 m = ((rcSprite.y+16)/32) +0.5;
+		//printf("m= %d n= %d \n", m,n);
 
 	for(i=0; i<NY ; i++){
 		for(j=0;j<NX;j++){
@@ -504,6 +544,7 @@ int main(int argc, char* argv[])
 		cpt ++;
 		printf("cpt = %d\n",cpt);
 		pos_Wall[m][n]=0;
+		//musiqueMix_PlayMusic(music, 1);
 		if (cpt == 101 ) {
 			printf("VICTORY ");
 		}				
@@ -538,8 +579,8 @@ int main(int argc, char* argv[])
 
 		/* update the screen */
 		SDL_UpdateRect(screen, 0, 0, 0, 0);
-	}
-
+	
+}
 	/* clean up */
 	SDL_FreeSurface(sprite);
 	SDL_FreeSurface(wall);
@@ -550,6 +591,8 @@ int main(int argc, char* argv[])
 	SDL_FreeSurface(g2);
 	SDL_FreeSurface(g3);
 	SDL_FreeSurface(map);
+	//musiqueSDL_FreeSurface(menu);
+   	//musiqueMix_FreeMusic(music);
 	SDL_Quit();
 	return 0;
 }
