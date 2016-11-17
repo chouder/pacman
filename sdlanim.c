@@ -27,12 +27,9 @@ int currentTimeAnim, previousTimeAnim; //gerer le temps entre les animations
 float dirX, dirY,x,y;
 
 /* source and destination rectangles */
-int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color);
 SDL_Rect rcSrc,rcWall,rcWall2, rcBloc, rcSprite,rcG1, rcSG1, rcG2,rcG3, rcCandy;
 int i,j;
 int pos_Wall[NY][NX];
-
-//rcSG1 -> ghost param image
 
 int a;
 int Convertir(float nb)
@@ -41,41 +38,8 @@ int Convertir(float nb)
 	int a = (int) nb;
 	return a;
 }
-SDL_Surface *map;
-
-unsigned char green(Uint32 color) {
-	return (color & (255*256))/256;
-}
-
-unsigned char blue(Uint32 color) {
-	return (color & 255);
-}
-
-unsigned char red(Uint32 color) {
-	return (color & (255*256*256))/(256*256);
-}
-
-
-
-Uint32 getpixel(SDL_Surface *map, int x, int y) {
-    if (x<0 || y<0 || x>=map->w || y>=map->h) return 0;
-    Uint8 *p = (Uint8 *)map->pixels + y*map->pitch + x*map->format->BytesPerPixel;
-    return p[0] | p[1] << 8 | p[2] << 16; // TODO if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-}
-
-void putpixel(int x, int y, Uint32 pixel) {
-    int bpp_ = map->format->BytesPerPixel;
-    if (x<0 || y<0 || x>=map->w || y>=map->h) return;
-    Uint8 *p = (Uint8 *)map->pixels + y*map->pitch + x*bpp_;
-    int i;
-    for (i=0; i<bpp_; i++) {
-        p[i] = ((Uint8*)&pixel)[i]; // TODO if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-    }
-}
 
 void HandleAnimations();
-
-
 
 void HandleEvent(SDL_Surface *map, SDL_Event event)
 {
@@ -95,6 +59,8 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 				case SDLK_q:
 					gameover = 1;
 					break;
+
+
 				case SDLK_LEFT:
 
 				    if(moveUp){
@@ -106,13 +72,9 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 				    if(moveRight){
                       			  moveRight = 0;
 				    }
-				//if (pos_Wall[m-1][n]== 4 || pos_Wall[m-1][n]== 0){
+				
 					moveLeft=1;
-				//
-				//else{
-				//moveLeft=0;
-				//}
-
+				
 					move = 1;
 				
 					break;
@@ -169,10 +131,8 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					if (rcSG1.x <= 0) {
 						rcSG1.x = 32;
 					}
-					if (!getpixel(map, rcG1.x-1, rcG1.y)) {
-					 	rcG1.x -= 5;
-					}
 
+					 	rcG1.x -= 5;
 
 					break;
 				case SDLK_c:	//RIGHT
@@ -299,7 +259,7 @@ void HandleAnimations()
 
 int main(int argc, char* argv[])
 {
-	SDL_Surface *screen, *temp, *wall, *wall2, *bloc, *sprite, *g1, *g2, *g3, *candy;
+	SDL_Surface *screen, *map, *temp, *wall, *wall2, *bloc, *sprite, *g1, *g2, *g3, *candy;
 	SDL_Rect rcmap;
 	int colorkey;
 	int i,j;
@@ -447,15 +407,14 @@ int main(int argc, char* argv[])
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
 	
 	int cpt=0;
-
+	int n,m;
 	/* message pump */
 	while (!gameover)
 	{
 		SDL_Event event;
 
 		if (move) {
-
-
+		
 			move = 0;
 		}
 
@@ -464,7 +423,7 @@ int main(int argc, char* argv[])
 			HandleEvent(map, event);
 		}
 
-        HandleMovements();
+       		 HandleMovements();
 		/* collide with edges of screen */
 		if (rcSprite.x <= 0)
 			rcSprite.x = SCREEN_WIDTH - SPRITE_WIDTH -1;
@@ -480,8 +439,8 @@ int main(int argc, char* argv[])
 	/* draw the map */
 	SDL_BlitSurface(map,NULL,screen,&rcmap);
 
-	int n = ((rcSprite.x+16)/32) +0.5;
-        int m = ((rcSprite.y+16)/32) +0.5;
+	n = ((rcSprite.x+16)/32) +0.5;
+        m = ((rcSprite.y+16)/32) +0.5;
 	//printf("m= %d n= %d \n", m,n);
 
 	for(i=0; i<NY ; i++){
@@ -545,7 +504,7 @@ int main(int argc, char* argv[])
 		cpt ++;
 		printf("cpt = %d\n",cpt);
 		pos_Wall[m][n]=0;
-		if (cpt == 101) {
+		if (cpt == 101 ) {
 			printf("VICTORY ");
 		}				
 	}
