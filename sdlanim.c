@@ -23,7 +23,7 @@ float dirX, dirY,x,y;
 
 /* source and destination rectangles */
 int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color);
-SDL_Rect rcSrc,rcWall,rcWall2, rcBloc, rcSprite,rcG1, rcSG1, rcG2,rcG3;// rcCandy, rcCandy2, rcCandy3, rcCandy4, 
+SDL_Rect rcSrc,rcWall,rcWall2, rcBloc, rcSprite,rcG1, rcSG1, rcG2,rcG3, rcCandy;//, rcCandy2, rcCandy3, rcCandy4, 
 
 
 		//rcSG1 -> ghost param image
@@ -237,7 +237,7 @@ SDL_WINDOW_FULLSCREEN_DESKTOP(map);
 */
 int main(int argc, char* argv[])
 {
-	SDL_Surface *screen, *temp, *wall, *wall2, *bloc, *sprite, *g1, *g2, *g3; //*candy, *candy2, *candy3, *candy4, 
+	SDL_Surface *screen, *temp, *wall, *wall2, *bloc, *sprite, *g1, *g2, *g3, *candy;// *candy2, *candy3, *candy4, 
 	SDL_Rect rcmap;
 	int colorkey;
 	int i,j;
@@ -288,10 +288,10 @@ int main(int argc, char* argv[])
 
 	
 	/* load candy */
-	/*temp   = SDL_LoadBMP("bonbon.bmp");
+	temp   = SDL_LoadBMP("bonbon.bmp");
 	candy = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
-*/
+
 	/* setup candy colorkey and turn on RLE*/ 
 	/*colorkey = SDL_MapRGB(screen->format, 0,0,0);	
 	SDL_SetColorKey(candy, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
@@ -362,10 +362,7 @@ int main(int argc, char* argv[])
 	rcSprite.x = SCREEN_WIDTH/2; 
 	rcSprite.y = SCREEN_HEIGHT/2 +32; 
 
-	/* set candy positon */
-	/*rcCandy.x = SCREEN_WIDTH/2 - 80;
-	rcCandy.y = SCREEN_HEIGHT/2 + 40;
-*/
+
 	/* set candy 2 positon */
 	/*rcCandy2.x = SCREEN_WIDTH/2 - 40;
 	rcCandy2.y = SCREEN_HEIGHT/2 + 40;
@@ -411,23 +408,23 @@ int main(int argc, char* argv[])
 
 	int pos_Wall[NY][NX]= {
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
+	{1,4,0,4,0,4,0,4,0,4,0,4,1,0,4,0,4,0,4,0,4,0,4,1},
 	{1,0,1,1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,0,1,1,0,1},
-	{1,0,1,1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,0,1,1,0,1},
+	{1,4,1,1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,0,1,1,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,1,1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,0,1,1,0,1},
+	{1,4,1,1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,0,1,1,0,1},
 	{1,0,1,1,0,0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,1,1,0,1},
-	{1,0,0,1,0,1,3,1,0,0,0,0,0,0,0,0,1,3,1,0,1,0,0,1},
+	{1,4,0,1,0,1,3,1,0,0,0,0,0,0,0,0,1,3,1,0,1,0,0,1},
 	{1,1,0,1,0,1,0,1,0,0,1,1,0,1,1,0,1,0,1,0,1,0,1,1},
-	{0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0},
+	{0,4,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0},
 	{1,1,0,1,0,1,1,1,0,0,1,1,1,1,1,0,1,1,1,0,1,0,1,1},
-	{1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1},
+	{1,4,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1},
 	{1,0,1,1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,1,0,1},
-	{1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,1},
+	{1,4,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,1},
 	{1,0,1,1,0,1,0,0,1,1,1,1,1,1,1,1,1,0,1,0,1,1,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
+	{1,4,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,0,1},
-	{1,0,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,0,1},
+	{1,4,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
 
@@ -464,21 +461,15 @@ int main(int argc, char* argv[])
 
 	/* draw the map */
 	SDL_BlitSurface(map,NULL,screen,&rcmap);
-	
-        
-       // printf("m= %d n= %d ", m,n);
-        
+
+	int m = (rcSprite.x)/32;
+        int n = (rcSprite.y)/32;
+	printf("m= %d n= %d ", m,n);
+       
 	for(i=0; i<NY ; i++){
 		for(j=0;j<NX;j++){
-		        int m = Convertir(((rcSprite.x)/768)*24);
-                        int n = Convertir(((rcSprite.y)/640)*20);
-
-			if ( pos_Wall[m][n] = 0 ){
-					printf("OUI ");
-
-					rcSprite.y = 32;
-					            move = 0;
-			}
+		         
+			
 			if ( pos_Wall[i][j] == 1 ){
 				rcBloc.x = j * 32;
 				rcBloc.y = i * 32;
@@ -494,7 +485,19 @@ int main(int argc, char* argv[])
 				rcWall2.y = i * 32;
 				SDL_BlitSurface(wall2, NULL, screen, &rcWall2);
 			}
-		}
+			
+			if ( pos_Wall[i][j] == 4 ){
+				//printf("OK");
+				rcCandy.x = j * 32;
+				rcCandy.y = i * 32;
+				SDL_BlitSurface(candy, NULL, screen, &rcCandy);
+			}
+			/*if ( pos_Wall[m][n] != 0 ){
+				//printf("PAS BON");
+				//rcSprite.y = 0;
+		
+			}*/	
+		}	
 	}
 
 
@@ -542,8 +545,8 @@ int main(int argc, char* argv[])
 	SDL_FreeSurface(wall);
 	SDL_FreeSurface(wall2);
 	SDL_FreeSurface(bloc);
-	/*SDL_FreeSurface(candy);
-	SDL_FreeSurface(candy2);
+	SDL_FreeSurface(candy);
+	/*SDL_FreeSurface(candy2);
 	SDL_FreeSurface(candy3);
 	SDL_FreeSurface(candy4);*/
 	SDL_FreeSurface(g1);
