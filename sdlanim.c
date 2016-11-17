@@ -29,7 +29,8 @@ float dirX, dirY,x,y;
 /* source and destination rectangles */
 int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color);
 SDL_Rect rcSrc,rcWall,rcWall2, rcBloc, rcSprite,rcG1, rcSG1, rcG2,rcG3, rcCandy;
-
+int i,j;
+int pos_Wall[NY][NX];
 
 //rcSG1 -> ghost param image
 
@@ -72,14 +73,15 @@ void putpixel(int x, int y, Uint32 pixel) {
     }
 }
 
-
-
 void HandleAnimations();
 
 
 
 void HandleEvent(SDL_Surface *map, SDL_Event event)
 {
+//int n = ((rcSprite.x+16)/32) +0.5;
+//int m = ((rcSprite.y+16)/32) +0.5;
+
 	switch (event.type) {
 		/* close button clicked */
 		case SDL_QUIT:
@@ -94,6 +96,7 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					gameover = 1;
 					break;
 				case SDLK_LEFT:
+
 				    if(moveUp){
                        			 moveUp = 0;
 				    }
@@ -103,10 +106,18 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 				    if(moveRight){
                       			  moveRight = 0;
 				    }
+				//if (pos_Wall[m-1][n]== 4 || pos_Wall[m-1][n]== 0){
 					moveLeft=1;
+				//
+				//else{
+				//moveLeft=0;
+				//}
+
 					move = 1;
+				
 					break;
 				case SDLK_RIGHT:
+
 				    if(moveUp){
                      			   moveUp = 0;
 				    }
@@ -118,8 +129,10 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 				    }
 					moveRight=1;
 					move = 1;
+				 
 					break;
 				case SDLK_UP:
+
 				    if(moveLeft){
                       			  moveLeft = 0;
 				    }
@@ -131,8 +144,10 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 				    }
 					moveUp=1;
 					move = 1;
+				
 					break;
 				case SDLK_DOWN:
+
 				    if(moveUp){
                       			  moveUp = 0;
 				    }
@@ -144,7 +159,7 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 				    }
 					moveDown=1;
 					move = 1;
-
+				
 					break;
 
 				case SDLK_w:	// LEFT
@@ -189,17 +204,14 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 
 					break;
 				
-			}
+				}
 			break;
-
-
-
-	}
+		}
 }
-
 
 void HandleMovements()
 {
+
     if(moveUp){
         currentTime = SDL_GetTicks();
          if(currentTime - previousTime > TIME_BTW_MOVEMENTS){
@@ -234,7 +246,6 @@ void HandleMovements()
     }
 
 }
-
 void HandleAnimations()
 {
     if(moveUp){
@@ -260,6 +271,7 @@ void HandleAnimations()
             rcSrc.x = 0;
         }
     }
+	
     if(moveLeft){
         rcSrc.y = SPRITE_HEIGHT;
         currentTimeAnim = SDL_GetTicks();
@@ -271,6 +283,7 @@ void HandleAnimations()
             rcSrc.x = 5 * SPRITE_WIDTH;
         }
     }
+  
     if(moveRight){
         rcSrc.y = 0;
         currentTimeAnim = SDL_GetTicks();
@@ -432,6 +445,8 @@ int main(int argc, char* argv[])
 	{1,4,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,0,1},
 	{1,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,1},
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
+	
+	int cpt=0;
 
 	/* message pump */
 	while (!gameover)
@@ -465,9 +480,9 @@ int main(int argc, char* argv[])
 	/* draw the map */
 	SDL_BlitSurface(map,NULL,screen,&rcmap);
 
-	int m = ((rcSprite.x+16)/32) +0.5;
-        int n = ((rcSprite.y+16)/32) +0.5;
-	printf("m= %d n= %d \n", m,n);
+	int n = ((rcSprite.x+16)/32) +0.5;
+        int m = ((rcSprite.y+16)/32) +0.5;
+	//printf("m= %d n= %d \n", m,n);
 
 	for(i=0; i<NY ; i++){
 		for(j=0;j<NX;j++){
@@ -491,17 +506,54 @@ int main(int argc, char* argv[])
 
 			if ( pos_Wall[i][j] == 4 ){
 				//printf("OK");
-				rcCandy.x = j * 32;
-				rcCandy.y = i * 32;
+				rcCandy.x = j * 32+8;
+				rcCandy.y = i * 32+8;
 				SDL_BlitSurface(candy, NULL, screen, &rcCandy);
 			}
-			/*if ( pos_Wall[m][n] != 0 ){
+			//if ( pos_Wall[m][n] != 0 ){
 				//printf("PAS BON");
 				//rcSprite.y = 0;
 
-			}*/
+			//}
+			
+
+			
+
 		}
 	}
+
+	
+	
+	/*if ( pos_Wall[m][n] == 4 || pos_Wall[m][n] ==0 ){
+		for(i=0; i<NY ; i++){
+			for(j=0;j<NX;j++){
+				if (pos_Wall[i+1][j]==0 || pos_Wall[i+1][j]==4){
+					if (pos_Wall[i-1][j]==0 || pos_Wall[i-1][j]==4{
+						if (pos_Wall[i][j-1]==0 || pos_Wall[i][j-1]==4){
+							if (pos_Wall[i][j+1]==0 || pos_Wall[i][j+1]==4){
+								printf("ca marche");
+							}
+						}
+					}
+				}	
+
+			}
+		}
+	}*/
+
+	if ( pos_Wall[m][n] == 4 ){
+		cpt ++;
+		printf("cpt = %d\n",cpt);
+		pos_Wall[m][n]=0;
+		if (cpt == 101) {
+			printf("VICTORY ");
+		}				
+	}
+				
+			
+			
+		
+	
 
 
 	/*for (i=0; i< NY;i++){
