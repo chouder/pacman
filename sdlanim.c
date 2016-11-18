@@ -288,8 +288,8 @@ int main(int argc, char* argv[])
  //musique   	 SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     /*	 Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);  
     	 Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
-    	 music = Mix_LoadMUS("point.mp3");
-	 start = Mix_LoadMUS("start.mp3");
+    	 music = Mix_LoadMUS("sons/point.mp3");
+	 start = Mix_LoadMUS("sons/start.mp3");
 
    	  if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
    	  printf("%s", Mix_GetError());
@@ -311,7 +311,7 @@ int main(int argc, char* argv[])
  	 //SDL_FreeSurface(temp);
 
 	/* load sprite */
-	temp   = SDL_LoadBMP("pacman.bmp");
+	temp   = SDL_LoadBMP("images/pacman.bmp");
 	sprite = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 	/* setup sprite colorkey and turn on RLE*/
@@ -319,28 +319,28 @@ int main(int argc, char* argv[])
 	SDL_SetColorKey(sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 
 	/* load Wall */
-	temp   = SDL_LoadBMP("wall.bmp");
+	temp   = SDL_LoadBMP("images/wall.bmp");
 	wall = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 
 	/* load Wall2 */
-	temp   = SDL_LoadBMP("wall2.bmp");
+	temp   = SDL_LoadBMP("images/wall2.bmp");
 	wall2 = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 
 	/* load bloc */
-	temp   = SDL_LoadBMP("bloc.bmp");
+	temp   = SDL_LoadBMP("images/bloc.bmp");
 	bloc = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 
 
 	/* load candy */
-	temp   = SDL_LoadBMP("bonbon.bmp");
+	temp   = SDL_LoadBMP("images/bonbon.bmp");
 	candy = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 
 	/* load G1 */
-	temp   = SDL_LoadBMP("g1.bmp");
+	temp   = SDL_LoadBMP("images/g1.bmp");
 	g1 = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 
@@ -350,7 +350,7 @@ int main(int argc, char* argv[])
 
 
 	/* load g2 */
-	temp   = SDL_LoadBMP("g2.bmp");
+	temp   = SDL_LoadBMP("images/g2.bmp");
 	g2 = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 
@@ -360,7 +360,7 @@ int main(int argc, char* argv[])
 
 
 	/* load g3 */
-	temp   = SDL_LoadBMP("g3.bmp");
+	temp   = SDL_LoadBMP("images/g3.bmp");
 	g3 = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 
@@ -369,7 +369,7 @@ int main(int argc, char* argv[])
 	SDL_SetColorKey(g3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 
 	/* load map */
-	temp  = SDL_LoadBMP("mapb.bmp");
+	temp  = SDL_LoadBMP("images/mapb.bmp");
 	map = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 
