@@ -29,7 +29,7 @@ float dirX, dirY,x,y;
 /* source and destination rectangles */
 SDL_Rect rcSrc,rcWall,rcWall2, rcBloc, rcSprite,rcG1, rcSG1, rcG2,rcG3, rcCandy;
 int i,j;
-int pos_Wall[NY][NX];
+//int pos_Wall[NY][NX];
 //musiqueMix_Music *music,*start;
 //musiqueint Mix_OpenAudio(int frequency, Uint16 format, int channels, int chunksize);	
 
@@ -45,9 +45,6 @@ void HandleAnimations();
 
 void HandleEvent(SDL_Surface *map, SDL_Event event)
 {
-//int n = ((rcSprite.x+16)/32) +0.5;
-//int m = ((rcSprite.y+16)/32) +0.5;
-
 	switch (event.type) {
 		/* close button clicked */
 		case SDL_QUIT:
@@ -74,11 +71,13 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 				    if(moveRight){
                       			  moveRight = 0;
 				    }
-				
+
+
 					moveLeft=1;
-				
-					move = 1;
-				
+
+
+				 	
+					move = 1;			
 					break;
 				case SDLK_RIGHT:
 
@@ -183,10 +182,14 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 		}
 }
 
-void HandleMovements()
+void HandleMovements(int pos_Wall[][NX])
 {
 
+int n = ((rcSprite.x)/32);
+int m = ((rcSprite.y)/32);
+
     if(moveUp){
+	if (pos_Wall[m-1][n] == 0 || pos_Wall[m-1][n] == 4){
         currentTime = SDL_GetTicks();
          if(currentTime - previousTime > TIME_BTW_MOVEMENTS){
             rcSprite.y -= 1;
@@ -194,7 +197,9 @@ void HandleMovements()
          }
          HandleAnimations();
 		}
+	}
     if(moveDown){
+	if (pos_Wall[m+1][n] == 0 || pos_Wall[m+1][n] == 4){
         currentTime = SDL_GetTicks();
         if(currentTime - previousTime > TIME_BTW_MOVEMENTS){
             rcSprite.y += 1;
@@ -202,7 +207,9 @@ void HandleMovements()
          }
         HandleAnimations();
     }
+	}
     if(moveLeft){
+	if (pos_Wall[m][n] == 0 || pos_Wall[m][n] == 4){
         currentTime = SDL_GetTicks();
         if(currentTime - previousTime > TIME_BTW_MOVEMENTS){
             rcSprite.x -= 1;
@@ -210,7 +217,9 @@ void HandleMovements()
          }
          HandleAnimations();
     }
+	}
     if(moveRight){
+	if (pos_Wall[m][n+1] == 0 || pos_Wall[m][n+1] == 4){
         currentTime = SDL_GetTicks();
         if(currentTime - previousTime > TIME_BTW_MOVEMENTS){
             rcSprite.x += 1;
@@ -218,7 +227,7 @@ void HandleMovements()
         }
         HandleAnimations();
     }
-
+	}
 }
 void HandleAnimations()
 {
@@ -463,7 +472,7 @@ int main(int argc, char* argv[])
 
 		
 
-       		 HandleMovements();
+       		 HandleMovements(pos_Wall);
 		/* collide with edges of screen */
 		if (rcSprite.x <= 0)
 			rcSprite.x = SCREEN_WIDTH - SPRITE_WIDTH -1;
@@ -479,7 +488,7 @@ int main(int argc, char* argv[])
 		/* draw the map */
 		SDL_BlitSurface(map,NULL,screen,&rcmap);
 
-		n = ((rcSprite.x+16)/32) +0.5;
+		 n = ((rcSprite.x+16)/32) +0.5;
        		 m = ((rcSprite.y+16)/32) +0.5;
 		//printf("m= %d n= %d \n", m,n);
 
