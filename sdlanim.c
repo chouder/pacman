@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 //musique#include <SDL/SDL_mixer.h>
+#include "liste_point.h"
+//#include "liste_entiers.c"
 
 #define SCREEN_WIDTH  768
 #define SCREEN_HEIGHT 640
@@ -15,7 +17,8 @@
 #define NX 24
 #define G1_WIDTH 32
 #define G1_HEIGHT 34
-
+#define COL 24
+#define LIG 20
 #define TIME_BTW_ANIMATIONS 40
 #define TIME_BTW_MOVEMENTS 5
 
@@ -24,7 +27,7 @@ int moveRight, moveLeft, moveUp, moveDown; //gere le déplacement du pacman
 int move;
 int currentTime, previousTime; //gerer le temps entre les deplacements
 int currentTimeAnim, previousTimeAnim; //gerer le temps entre les animations
-float dirX, dirY,x,y;
+float x,y;
 
 /* source and destination rectangles */
 SDL_Rect rcSrc,rcWall,rcWall2, rcBloc, rcSprite,rcG1, rcSG1, rcG2,rcG3, rcCandy;
@@ -40,6 +43,35 @@ int Convertir(float nb)
 	int a = (int) nb;
 	return a;
 }
+
+
+
+void deplacementFantome ( liste_point L, int m, int n) {
+
+	if (!est_vide(L)){
+ // if( (prem(L).x == a.x) & (prem(L).y == a.y) )
+		if (prem(L).m == m+1 && prem(L).n == m+1) {
+			if ((rcG1.x/32) != m) {
+			m = rcG1.x/32;
+			L = reste(L);
+			}
+			if ((rcG1.y/32) != n) {
+			n = rcG1.y/32;
+			L = reste(L);
+			}
+		}
+	}
+
+
+
+}
+
+
+
+
+
+
+
 
 void HandleAnimations();
 
@@ -182,11 +214,11 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 		}
 }
 
-void HandleMovements(int pos_Wall[][NX])
+void HandleMovements(int pos_Wall[NY][NX])
 {
 
-int n = ((rcSprite.x)/32);
-int m = ((rcSprite.y)/32);
+int n = ((rcSprite.x)/32)+0.5;
+int m = ((rcSprite.y)/32)+0.5;
 
     if(moveUp){
 	if (pos_Wall[m-1][n] == 0 || pos_Wall[m-1][n] == 4){
@@ -432,8 +464,8 @@ int main(int argc, char* argv[])
 	{1,4,1,1,0,1,1,1,1,1,1,4,1,4,1,1,1,1,1,0,1,1,4,1},
 	{1,0,1,1,4,0,4,0,4,0,1,0,1,0,1,4,0,4,0,4,1,1,0,1},
 	{1,4,0,1,0,1,3,1,0,4,0,4,0,4,0,4,1,3,1,0,1,0,4,1},
-	{1,1,0,1,4,1,4,1,4,0,1,1,0,1,1,0,1,4,1,0,1,0,1,1},
-	{0,4,0,4,0,4,0,4,0,4,1,0,0,0,1,4,0,4,0,4,0,4,0,4},
+	{1,1,0,1,4,1,4,1,4,0,1,1,5,1,1,0,1,4,1,0,1,0,1,1},
+	{0,4,0,4,0,4,0,4,0,4,1,5,5,5,1,4,0,4,0,4,0,4,0,4},
 	{1,1,0,1,4,1,1,1,0,0,1,1,1,1,1,0,1,1,1,0,1,0,1,1},
 	{1,4,0,1,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,1,4,0,1},
 	{1,0,1,1,4,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,1,4,1},
@@ -448,6 +480,9 @@ int main(int argc, char* argv[])
 	int cpt=0;
 	int n,m;
 
+	int a,b;
+	a = (rcG1.x/32)+0.5;
+	b = (rcG1.y/32)+0.5;
 	//musique SDL_BlitSurface(menu,NULL,screen,NULL);
   	/*SDL_Flip(screen);
   	SDL_Delay(5000);*/
@@ -464,9 +499,11 @@ int main(int argc, char* argv[])
 
 
 		
+		//pathfinding(map[COL][LIG],a,b,n,m);
+
 
 		if (move) {
-		
+
 			move = 0;
 		}
 
