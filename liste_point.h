@@ -6,7 +6,7 @@
 #define LISTE_POINT_H_
 
 
-typedef struct liste_point *liste_point; // probleme on peut pas déclarer un pointeur à partir d'une structure 
+typedef struct liste_point *liste_point; // probleme niveau compilation du pointeur
 typedef struct point point;
 
 struct point
