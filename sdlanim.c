@@ -10,15 +10,9 @@
 
 #define SCREEN_WIDTH  768
 #define SCREEN_HEIGHT 640
-<<<<<<< HEAD
-#define SPRITE_WIDTH 31
-#define SPRITE_HEIGHT 31
-#define SPRITE_SIZE 31
-=======
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
 #define SPRITE_SIZE 32
->>>>>>> e916898ced726efa77223e21d297016eee47632e
 #define NY 20
 #define NX 24
 #define G1_WIDTH 32
@@ -26,11 +20,7 @@
 #define COL 24
 #define LIG 20
 #define TIME_BTW_ANIMATIONS 40
-<<<<<<< HEAD
-#define TIME_BTW_MOVEMENTS 10
-=======
 #define TIME_BTW_MOVEMENTS 5
->>>>>>> e916898ced726efa77223e21d297016eee47632e
 #define taille 32
 
 int gameover;
@@ -339,19 +329,6 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 		}
 }
 
-<<<<<<< HEAD
-void HandleMovements(int pos_Wall[NY][NX])
-{
-
-    if(moveUp){
-	int n = ((rcSprite.x)/32);
-	int m = ((rcSprite.y-1)/32);
-
-	int n2 = ((rcSprite.x+32)/32);
-	int m2 = ((rcSprite.y-1)/32);
-
-	if ((pos_Wall[m][n] == 0 || pos_Wall[m][n] == 4) && (pos_Wall[m2][n2] == 0 || pos_Wall[m2][n2] == 4)){
-=======
 void HandleMovements(int pos_Wall[][NX])
 {
 
@@ -360,7 +337,6 @@ int m = ((rcSprite.y)/32)+0.5;
 
     if(moveUp){
 	if (pos_Wall[m-1][n] == 0 || pos_Wall[m-1][n] == 4){
->>>>>>> e916898ced726efa77223e21d297016eee47632e
         currentTime = SDL_GetTicks();
          if(currentTime - previousTime > TIME_BTW_MOVEMENTS){
             rcSprite.y -= 1;
@@ -370,17 +346,7 @@ int m = ((rcSprite.y)/32)+0.5;
 		}
 	}
     if(moveDown){
-<<<<<<< HEAD
-	int n = ((rcSprite.x)/32);
-	int m = ((rcSprite.y+32+1)/32);
-
-	int n2 = ((rcSprite.x+32)/32);
-	int m2 = ((rcSprite.y+32+1)/32);
-
-	if ((pos_Wall[m][n] == 0 || pos_Wall[m][n] == 4) && (pos_Wall[m2][n2] == 0 || pos_Wall[m2][n2] == 4)){
-=======
 	if (pos_Wall[m+1][n] == 0 || pos_Wall[m+1][n] == 4){
->>>>>>> e916898ced726efa77223e21d297016eee47632e
         currentTime = SDL_GetTicks();
         if(currentTime - previousTime > TIME_BTW_MOVEMENTS){
             rcSprite.y += 1;
@@ -390,16 +356,7 @@ int m = ((rcSprite.y)/32)+0.5;
     }
 	}
     if(moveLeft){
-<<<<<<< HEAD
-	int n = ((rcSprite.x-1)/32);
-	int m = ((rcSprite.y)/32);
-
-	int n2 = ((rcSprite.x-1)/32);
-	int m2 = ((rcSprite.y+32)/32);
-	if ((pos_Wall[m][n] == 0 || pos_Wall[m][n] == 4) && (pos_Wall[m2][n2] == 0 || pos_Wall[m2][n2] == 4)){
-=======
 	if (pos_Wall[m][n] == 0 || pos_Wall[m][n] == 4){
->>>>>>> e916898ced726efa77223e21d297016eee47632e
         currentTime = SDL_GetTicks();
         if(currentTime - previousTime > TIME_BTW_MOVEMENTS){
             rcSprite.x -= 1;
@@ -409,18 +366,7 @@ int m = ((rcSprite.y)/32)+0.5;
     }
 	}
     if(moveRight){
-<<<<<<< HEAD
-	int n = ((rcSprite.x+1)/32);
-	int m = ((rcSprite.y+1)/32);
-
-	int n2 = ((rcSprite.x+32+1)/32);
-	int m2 = ((rcSprite.y+31)/32);
-
-	printf("pos_Wall[%d][%d] = %d, pos_Wall2[%d][%d] = %d\n",m,n,pos_Wall[m][n],m2,n2,pos_Wall[m2][n2]);
-	if ((pos_Wall[m][n] == 0 || pos_Wall[m][n] == 4) && (pos_Wall[m2][n2] == 0 || pos_Wall[m2][n2] == 4)){
-=======
 	if (pos_Wall[m][n+1] == 0 || pos_Wall[m][n+1] == 4){
->>>>>>> e916898ced726efa77223e21d297016eee47632e
         currentTime = SDL_GetTicks();
         if(currentTime - previousTime > TIME_BTW_MOVEMENTS){
             rcSprite.x += 1;
@@ -523,11 +469,7 @@ int main(int argc, char* argv[])
  	 //SDL_FreeSurface(temp);
 
 	/* load sprite */
-<<<<<<< HEAD
-	temp   = SDL_LoadBMP("images/pacman2.bmp");
-=======
 	temp   = SDL_LoadBMP("images/pacman.bmp");
->>>>>>> e916898ced726efa77223e21d297016eee47632e
 	sprite = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 	/* setup sprite colorkey and turn on RLE*/
@@ -653,46 +595,6 @@ int main(int argc, char* argv[])
 	{1,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,1},
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
 	
-<<<<<<< HEAD
-
-	/*int pos_Wall[NX][NY]= {
-	{1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1},
-	{1,4,0,4,0,4,0,4,1,4,1,4,0,4,0,4,0,4,0,1},
-	{1,0,1,1,0,1,1,0,0,0,0,0,1,1,1,0,1,1,4,1},
-	{1,4,1,1,0,1,1,1,1,4,1,1,1,1,1,4,1,1,0,1},
-	{1,0,0,0,4,0,4,0,4,0,4,0,4,0,4,0,1,1,4,1},
-	{1,4,1,1,0,1,0,3,1,4,1,4,1,1,1,4,1,1,0,1},
-	{1,0,1,1,4,1,4,3,4,0,1,0,1,4,0,0,1,1,4,1},
-	{1,4,1,1,0,1,0,3,1,4,1,4,1,0,0,4,1,1,0,1},
-	{1,0,1,1,4,1,4,0,4,0,0,0,1,4,1,0,1,1,4,1},
-	{1,4,1,1,0,1,0,4,0,4,0,4,0,0,1,4,1,1,0,1},
-	{1,0,1,1,4,1,1,0,1,1,1,0,1,4,1,0,1,1,4,1},
-	{1,4,4,0,0,4,0,4,1,5,1,4,1,0,1,4,0,0,0,1},
-	{1,1,1,1,4,1,1,0,5,5,1,0,1,4,1,1,1,1,4,1},
-	{1,0,4,0,0,4,0,4,1,5,1,4,1,0,1,4,0,0,0,1},
-	{1,4,1,1,4,1,1,0,1,1,1,0,1,4,1,0,1,1,4,1},
-	{1,0,1,1,0,1,4,4,0,4,0,4,0,0,1,4,1,1,0,1},
-	{1,4,1,1,4,1,0,1,1,0,1,0,1,4,1,0,1,1,4,1},
-	{1,0,1,1,0,1,4,3,4,4,1,4,1,0,0,4,1,1,0,1},
-	{1,4,1,1,4,1,0,1,1,0,1,0,1,1,1,0,1,1,4,1},
-	{1,0,0,0,0,0,4,0,0,4,0,4,0,4,0,4,1,1,0,1}};*/
-
-/*
-	
-	int z,y;
-	for(z=0;z<NY;z++)
-	{
-		for(y=0;y<NX;y++)
-			printf(",%d",pos_Wall[z][y]);
-		printf("\n");
-	}
-
-	printf("(6,8)= %d, (6,9)  = %d\n",pos_Wall[6][8],pos_Wall[6][9]);
-
-*/
-	
-=======
->>>>>>> e916898ced726efa77223e21d297016eee47632e
 	int cpt=0;
 	int n,m;
 
@@ -703,10 +605,6 @@ int main(int argc, char* argv[])
   	/*SDL_Flip(screen);
   	SDL_Delay(5000);*/
 	/* message pump */
-<<<<<<< HEAD
-
-=======
->>>>>>> e916898ced726efa77223e21d297016eee47632e
 	while (!gameover)
 {		
 		
@@ -720,15 +618,9 @@ int main(int argc, char* argv[])
 
 		
 		//liste_coord = pathfinding(pos_Wall, rcG1.x, rcG1.y, rcSprite.x, rcSprite.y);
-<<<<<<< HEAD
-
-		//gameover = 1;
-
-=======
 		//gameover = 1;
 
 		printf("voilaaaa\n");
->>>>>>> e916898ced726efa77223e21d297016eee47632e
 		if (move) {
 
 			move = 0;
@@ -738,20 +630,12 @@ int main(int argc, char* argv[])
 
        		 HandleMovements(pos_Wall);
 		/* collide with edges of screen */
-<<<<<<< HEAD
-		if (rcSprite.x < 0)
-=======
 		if (rcSprite.x <= 0)
->>>>>>> e916898ced726efa77223e21d297016eee47632e
 			rcSprite.x = SCREEN_WIDTH - SPRITE_WIDTH -1;
 		if (rcSprite.x >= SCREEN_WIDTH - SPRITE_WIDTH)
 			rcSprite.x = 1;
 
-<<<<<<< HEAD
-		if (rcSprite.y < 0)
-=======
 		if (rcSprite.y <= 0)
->>>>>>> e916898ced726efa77223e21d297016eee47632e
 			rcSprite.y = 0;
 		if (rcSprite.y >= SCREEN_HEIGHT - SPRITE_HEIGHT)
 			rcSprite.y = SCREEN_HEIGHT - SPRITE_HEIGHT;
@@ -760,12 +644,8 @@ int main(int argc, char* argv[])
 		/* draw the map */
 		SDL_BlitSurface(map,NULL,screen,&rcmap);
 
-<<<<<<< HEAD
-
-=======
 		 n = ((rcSprite.x+16)/32) +0.5;
        		 m = ((rcSprite.y+16)/32) +0.5;
->>>>>>> e916898ced726efa77223e21d297016eee47632e
 		//printf("m= %d n= %d \n", m,n);
 
 	for(i=0; i<NY ; i++){
@@ -825,13 +705,6 @@ int main(int argc, char* argv[])
 		}
 	}*/
 
-<<<<<<< HEAD
-
-	 n = ((rcSprite.x+16)/32);
-	 m = ((rcSprite.y+16)/32);
-	//printf("m= %d n= %d \n", m,n);
-=======
->>>>>>> e916898ced726efa77223e21d297016eee47632e
 	if ( pos_Wall[m][n] == 4 ){
 		cpt ++;
 		printf("cpt = %d\n",cpt);
