@@ -3,8 +3,8 @@ CPPFLAGS     = `sdl-config --cflags` -std=c99 -Wall -Wextra -g
 LDFLAGS      =
 LIBS         =  `sdl-config --libs` -lm
 
-DESTDIR = ./obj/Debug/
-TARGET  = project
+DESTDIR = ./
+TARGET  = pacman
 
 OBJECTS := $(addprefix $(DESTDIR),$(patsubst %.c,%.o,$(wildcard *.c)))
 
@@ -19,15 +19,6 @@ $(OBJECTS): $(DESTDIR)%.o: %.c
 clean:
 	-rm -f $(OBJECTS)
 	-rm -f $(TARGET)
-
-
-
-
-
-
-
-
-
 
 
 
