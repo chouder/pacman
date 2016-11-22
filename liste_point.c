@@ -71,7 +71,7 @@ int presenceR(point a, liste_point L)
 }
 
 
-liste_point supprimerR(point a, liste_point L) // MERCI MARCEAU
+liste_point supprimerR(point a, liste_point L)
 {
   if(est_vide(L))
     {

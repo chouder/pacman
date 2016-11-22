@@ -5,22 +5,21 @@
 #ifndef LISTE_POINT_H_
 #define LISTE_POINT_H_
 
-
-typedef struct liste_point *liste_point; // probleme niveau compilation du pointeur
 typedef struct point point;
-
 struct point
 {
     int x;
     int y;
 };
 
+typedef struct liste_point *liste_point;
 struct liste_point
 {
     point premier;
     liste_point reste;
 
 } ;
+
 
 liste_point l_vide () ;
 bool est_vide (liste_point L) ;
