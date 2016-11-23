@@ -54,47 +54,44 @@ void deplacement(SDL_Rect *fant, int x, int y){
 }
 
 liste_point deplacementFantome (liste_point L, SDL_Rect *fant) {
-
 	if (!est_vide(L)){
+		printf("fant.y: %d, fant.y/32: %d,fant.x: %d, fant.x/32: %d,, prem.y: %d, prem.x: %d\n",fant->y,(fant->y/32),fant->x,((fant->x)/32),prem(L).y,prem(L).x);
 		if (prem(L).x == (fant->x / taille) + 1) { // droite
-			printf("coucou\n");
-			deplacement(fant,TIME_BTW_MOVEMENTS,0);
-			if ((fant->x/32) == prem(L).x) {
+			printf("droite\n");
+			deplacement(fant,1,0);
+			if (((fant->x)/32) == prem(L).x) {
 				//m = fant.x/32;
 				L = reste(L);
+				return L;
 			}
-			/*if ((fant.y/32) == prem(L).y) {
-				//n = fant.y/32;
-				L = reste(L);
-			}*/
 		}
 		if (prem(L).x == (fant->x / taille) - 1) { // gauche
-			printf("COUP\n");
-			deplacement(fant,-TIME_BTW_MOVEMENTS,0);
-			if ((fant->x/32) == prem(L).x) {
+			printf("GAUCHE\n");
+			deplacement(fant,-1,0);
+			if (((fant->x)/32) == prem(L).x) {
 				L = reste(L);
+				return L;
 			}
 			
 		}
 		if (prem(L).y == (fant->y / taille) + 1) {	//bas
-			printf("CACA\n");
-			deplacement(fant,0,TIME_BTW_MOVEMENTS);
-			if ((fant->y/32) == prem(L).y) {
+			printf("BAS\n");
+			deplacement(fant,0,1);
+			if (((fant->y)/32) == prem(L).y) {
 				L = reste(L);
+				return L;
 			}
 			
 		}
 		if (prem(L).y == (fant->y / taille) - 1) { // haut
-			printf("chien\n");
-			deplacement(fant,0,-TIME_BTW_MOVEMENTS);
-			if ((fant->y/32) == prem(L).y) {
-
+			printf("haut\n");
+			deplacement(fant,0,-1);
+			if (((fant->y)/32) == prem(L).y) {
 				L = reste(L);
+				return L;
 			}
 		}
 	}
-
-
 	return L;
 }
 
@@ -165,29 +162,30 @@ liste_point pathfinding(int map[NY][NX],int dy, int dx, int fy, int fx)
 	for (;d>0;d--) {
 		if (fy>0 && dist[fy-1][fx] == d-1){
 			fy--;
-			pNode = remplisPoint(fx,fy);
+			pNode = remplisPoint(fy,fx);
 			LF = cons(pNode,LF);
 			continue;
         }
 		if (fx>0 && dist[fy][fx-1] == d-1){
 			fx--;
-			pNode = remplisPoint(fx,fy);
+			pNode = remplisPoint(fy,fx);
 			LF = cons(pNode,LF);
 			continue; }
 		if (fy<NY+1 && dist[fy+1][fx] == d-1) {
 			fy++;
-			pNode = remplisPoint(fx,fy);
+			pNode = remplisPoint(fy,fx);
 			LF = cons(pNode,LF);
 			continue; }
 		if (fx<NX+1  && dist[fy][fx+1] == d-1) {
 			fx++;
-			pNode = remplisPoint(fx,fy);
+			pNode = remplisPoint(fy,fx);
 			LF = cons(pNode,LF);
 			continue; }
 	}
 	
 	
 	LF = reste(LF); // supprime le premier element, car on deja dessus
+	afficher_point_liste(LF);
 	return LF;
 }
 
@@ -284,7 +282,7 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 				
 					break;
 
-				case SDLK_w:	// LEFT
+				/*case SDLK_w:	// LEFT
 					move=1;
 					rcSG1.y = 0;
 					rcSG1.x = rcSG1.x - 32;
@@ -322,7 +320,7 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					}
 					 rcG1.y += 5;
 
-					break;
+					break;*/
 				case SDLK_m: 
 					//musif(Mix_PausedMusic() == 1)
 					//mus{
@@ -621,9 +619,9 @@ int main(int argc, char* argv[])
 	{1,4,1,1,0,1,1,1,1,1,1,4,1,4,1,1,1,1,1,0,1,1,4,1},
 	{1,0,1,1,4,0,4,0,4,0,1,0,1,0,1,4,0,4,0,4,1,1,0,1},
 	{1,4,0,1,0,1,3,1,0,4,0,4,0,4,0,4,1,3,1,0,1,0,4,1},
-	{1,1,0,1,4,1,4,1,4,0,1,1,5,1,1,0,1,4,1,0,1,0,1,1},
-	{0,4,0,4,0,4,0,4,0,4,1,5,5,5,1,4,0,4,0,4,0,4,0,4},
-	{1,1,0,1,4,1,1,1,0,0,1,1,1,1,1,0,1,1,1,0,1,0,1,1},
+	{1,1,0,1,4,1,4,1,4,0,0,0,5,1,1,0,1,4,1,0,1,0,1,1},
+	{0,4,0,4,0,4,0,4,0,4,0,5,5,5,1,4,0,4,0,4,0,4,0,4},
+	{1,1,0,1,4,1,1,1,0,0,0,0,0,0,0,0,1,1,1,0,1,0,1,1},
 	{1,4,0,1,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,1,4,0,1},
 	{1,0,1,1,4,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,1,4,1},
 	{1,4,1,1,0,1,4,0,4,0,4,0,4,0,4,0,4,0,1,4,1,1,0,1},
@@ -673,7 +671,7 @@ int main(int argc, char* argv[])
 	
 	int cpt=0;
 	int n,m;
-
+	int test;
 
 	//musSDL_BlitSurface(menu,NULL,screen,NULL);
   	//musSDL_Flip(screen);
@@ -696,11 +694,16 @@ int main(int argc, char* argv[])
 			HandleEvent(map, event);
 		}
 
-
+		/****************************************/
+		/**********  	 ICI 	*****************/
+		/****************************************/
 		
-
+		test = SDL_GetTicks();
+		if(test % TIME_BTW_ANIMATIONS > 0){
 		liste_coord = pathfinding(pos_Wall, a, b, m, n);
-		liste_coord = deplacementFantome (liste_coord,&rcG1);
+		liste_coord = deplacementFantome (liste_coord, &rcG1);
+		}
+
 		//gameover = 1;
 
 		if (move) {
@@ -850,7 +853,7 @@ int main(int argc, char* argv[])
 }
 	/* clean up */
 
-	afficher_point_liste(liste_coord);
+	
 
 	SDL_FreeSurface(sprite);
 	SDL_FreeSurface(wall);
