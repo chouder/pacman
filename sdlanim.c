@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <SDL/SDL_mixer.h>
+//#include <SDL/SDL_mixer.h>
 
 #include "liste_point.h"
 
@@ -34,8 +34,8 @@ float x,y;
 SDL_Rect rcSrc,rcWall,rcWall2, rcBloc, rcSprite,rcG1, rcSG1, rcG2,rcG3, rcCandy;
 int i,j;
 
-Mix_Music *music,*start, *scream;
-int Mix_OpenAudio(int frequency, Uint16 format, int channels, int chunksize);	
+//musMix_Music *music,*start, *scream;
+//musint Mix_OpenAudio(int frequency, Uint16 format, int channels, int chunksize);	
 
 /*int a;
 int Convertir(float nb)
@@ -312,16 +312,16 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 
 					break;
 				case SDLK_m: 
-					if(Mix_PausedMusic() == 1)
-					{
-						Mix_ResumeMusic(); 
-						printf("p1");
-					}
-					else
-					{
-						Mix_PauseMusic(); 
-						printf("p2"); 
-					}
+					//musif(Mix_PausedMusic() == 1)
+					//mus{
+					//mus	Mix_ResumeMusic(); 
+					//mus	printf("p1");
+					//mus}
+					//muselse
+					//mus{
+					//mus	Mix_PauseMusic(); 
+					//mus	printf("p2"); 
+					//mus}
 					break;
 				
 				}
@@ -462,19 +462,19 @@ int main(int argc, char* argv[])
 	move=0;
 
 	/* initialize SDL */
-	//SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_VIDEO);
 	 /* initialize SDL */
-   	 SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    	 Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);  
-    	 Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
-    	 music = Mix_LoadMUS("sons/point.mp3");
-	 start = Mix_LoadMUS("sons/start.mp3");
-    	 scream = Mix_LoadMUS("scream.wav");
+   	//mus SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    	 //musMix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);  
+    	//mus Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+    	//mus music = Mix_LoadMUS("sons/point.mp3");
+	//mus start = Mix_LoadMUS("sons/start.mp3");
+    	//mus scream = Mix_LoadMUS("scream.wav");
 
-	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
-		printf("%s", Mix_GetError());
-	}
-	Mix_PlayMusic(start, 1);
+	//musif(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
+	//mus	printf("%s", Mix_GetError());
+	//mus}
+	//musMix_PlayMusic(start, 1);
 
 	/* set the title bar */
 	SDL_WM_SetCaption("Pacman", "Pacman");
@@ -665,9 +665,9 @@ int main(int argc, char* argv[])
 	int a,b;
 	b = (rcG1.x/32)+0.5;
 	a = (rcG1.y/32)+0.5;
-	SDL_BlitSurface(menu,NULL,screen,NULL);
-  	SDL_Flip(screen);
-  	SDL_Delay(5000);
+	//musSDL_BlitSurface(menu,NULL,screen,NULL);
+  	//musSDL_Flip(screen);
+  	//musSDL_Delay(5000);
 	 /*message pump */
 
 	while (!gameover)
@@ -777,22 +777,22 @@ int main(int argc, char* argv[])
 		cpt ++;
 		printf("cpt = %d\n",cpt);
 		pos_Wall[m][n]=0;
-		Mix_PlayMusic(music, 1);
+		//musMix_PlayMusic(music, 1);
 		if (cpt >= 100 ) {
 			printf("VICTORY ");
 		}
-		if (cpt == 5 ) {
+		//musif (cpt == 5 ) {
 		/* load screamer */
-	        temp = SDL_LoadBMP("images/scream.bmp");
-		  gover = SDL_DisplayFormat(temp);
-		  SDL_FreeSurface(temp);
+	       //mus temp = SDL_LoadBMP("images/scream.bmp");
+		//mus  gover = SDL_DisplayFormat(temp);
+		//mus  SDL_FreeSurface(temp);
 
 
-		  Mix_PlayMusic(scream, 1); 
-		SDL_BlitSurface(gover,NULL,screen,NULL);
-	     	 SDL_Flip(screen);
-	      	SDL_Delay(2500);
-		}				
+		//mus  Mix_PlayMusic(scream, 1); 
+		//musSDL_BlitSurface(gover,NULL,screen,NULL);
+	     	//mus SDL_Flip(screen);
+	      //mus	SDL_Delay(2500);
+		//mus}				
 	}
 	
 	/*if (pos_Wall[m][n] == pos_Wall[a][b]){
@@ -848,7 +848,7 @@ int main(int argc, char* argv[])
 	SDL_FreeSurface(menu);
 	SDL_FreeSurface(gover);
 	//NO SDL_FreeSurface(scream);
-   	Mix_FreeMusic(music);
+   	//musMix_FreeMusic(music);
 	//Mix_FreeMusic(start);
 	//Mix_FreeMusic(scream);
 	SDL_Quit();
