@@ -15,13 +15,13 @@
 #define SPRITE_SIZE 31
 #define NY 20
 #define NX 24
-#define G1_WIDTH 32
-#define G1_HEIGHT 34
+#define G1_WIDTH 31
+#define G1_HEIGHT 31
 #define COL 24
 #define LIG 20
 #define TIME_BTW_ANIMATIONS 40
 #define TIME_BTW_MOVEMENTS 5
-#define taille 32
+#define taille 31
 
 int gameover;
 int moveRight, moveLeft, moveUp, moveDown; //gere le déplacement du pacman
@@ -53,10 +53,11 @@ void deplacement(SDL_Rect *fant, int x, int y){
 	fant->y += y;
 }
 
-void deplacementFantome (liste_point L, SDL_Rect *fant) {
+liste_point deplacementFantome (liste_point L, SDL_Rect *fant) {
 
 	if (!est_vide(L)){
 		if (prem(L).x == (fant->x / taille) + 1) { // droite
+			printf("coucou\n");
 			deplacement(fant,TIME_BTW_MOVEMENTS,0);
 			if ((fant->x/32) == prem(L).x) {
 				//m = fant.x/32;
@@ -68,6 +69,7 @@ void deplacementFantome (liste_point L, SDL_Rect *fant) {
 			}*/
 		}
 		if (prem(L).x == (fant->x / taille) - 1) { // gauche
+			printf("COUP\n");
 			deplacement(fant,-TIME_BTW_MOVEMENTS,0);
 			if ((fant->x/32) == prem(L).x) {
 				L = reste(L);
@@ -75,6 +77,7 @@ void deplacementFantome (liste_point L, SDL_Rect *fant) {
 			
 		}
 		if (prem(L).y == (fant->y / taille) + 1) {	//bas
+			printf("CACA\n");
 			deplacement(fant,0,TIME_BTW_MOVEMENTS);
 			if ((fant->y/32) == prem(L).y) {
 				L = reste(L);
@@ -82,6 +85,7 @@ void deplacementFantome (liste_point L, SDL_Rect *fant) {
 			
 		}
 		if (prem(L).y == (fant->y / taille) - 1) { // haut
+			printf("chien\n");
 			deplacement(fant,0,-TIME_BTW_MOVEMENTS);
 			if ((fant->y/32) == prem(L).y) {
 
@@ -91,90 +95,98 @@ void deplacementFantome (liste_point L, SDL_Rect *fant) {
 	}
 
 
-//		if((prem(L).x == fant.x) & (prem(L).y == fant.y) )
+	return L;
 }
 
-liste_point pathfinding(int map[NY][NX],int dx, int dy, int fx, int fy)
+liste_point pathfinding(int map[NY][NX],int dy, int dx, int fy, int fx)
 {
 	int i,j;
 
-	liste_point	LF;
+	liste_point LF;
 	point pNode;
 	LF = l_vide();
 
-	int dist[COL][LIG];
+	int dist[NY][NX];
 	int d;
-
-	for (i=0; i<COL; i++)
-		for (j=0; j<LIG; j++)
+	
+	for (i=0; i<NY; i++)
+		for (j=0; j<NX; j++)
         {
 			dist[i][j] = 40000;
 		}
 
-	dist[dx][dy] = 0;
-
-	for (d=0;d<COL*LIG;d++)
+	dist[dy][dx] = 0;
+	
+	for (d=0;d<NY*NX;d++)
 	{
-		for (i=0; i<COL; i++)
+		for (i=0; i<NY; i++)
 		{
-			for (j=0; j<LIG; j++)
+			for (j=0; j<NX; j++)
 			{
 				if(dist[i][j] == d)
-                {
-                    if (i>0 && (map[i-1][j] == 0 || map[i-1][j] == 4) && dist[i-1][j]>d+1)
-                    {
-                        dist[i-1][j] = d+1;
-                    }
-                    if (j>0 && (map[i][j-1] == 0 || map[i][j-1] == 4)&& dist[i][j-1]>d+1)
-                    {
-                        dist[i][j-1] = d+1;
-                    }
-                    if (i<LIG-1 && (map[i+1][j] == 0 || map[i+1][j] == 4) && dist[i+1][j]>d+1)
-                    {
-                        dist[i+1][j] = d+1;
-                    }
-                    if (j<COL -1 && (map[i][j+1] == 0 || map[i][j+1] == 4) && dist[i][j+1]>d+1)
-                    {
-                        dist[i][j+1] = d+1;
-                    }
-                }
+				{
+				    if (i>0 && (map[i-1][j] != 1 && map[i-1][j] != 3) && dist[i-1][j]>d+1)
+				    {
+				        dist[i-1][j] = d+1;
+				    }
+				    if (j>0 && (map[i][j-1] != 1 && map[i][j-1] != 3)&& dist[i][j-1]>d+1)
+				    {
+				        dist[i][j-1] = d+1;
+				    }
+				    if (i<NY-1 && (map[i+1][j] != 1 && map[i+1][j] != 3) && dist[i+1][j]>d+1)
+				    {
+				        dist[i+1][j] = d+1;
+				    }
+				    if (j<NX -1 && (map[i][j+1] != 1 && map[i][j+1] != 3) && dist[i][j+1]>d+1)
+				    {
+				        dist[i][j+1] = d+1;
+				    }
+				}
             }
 		}
-	} // end for
-
-	d = dist[fx][fy];
+	} // end for 
+	
+	/*for(i=0;i<NY;i++)
+	{
+		for(j=0;j<NX;j++)
+			printf(",%d",dist[i][j]);
+		printf("\n");	
+	}*/
+	
+	d = dist[fy][fx];
 
 	if (d>=1000){
 		return l_vide();
 	}
-
-    pNode = remplisPoint(fx,fy); // met l'arrivé dans la liste
+	
+    pNode = remplisPoint(fy,fx); // met l'arrivé dans la liste
     LF = cons(pNode,LF);
-
+	
 	for (;d>0;d--) {
-		if (fy>0 && dist[fx][fy-1] == d-1){
+		if (fy>0 && dist[fy-1][fx] == d-1){
 			fy--;
 			pNode = remplisPoint(fx,fy);
 			LF = cons(pNode,LF);
 			continue;
         }
-		if (fx>0 && dist[fx-1][fy] == d-1){
+		if (fx>0 && dist[fy][fx-1] == d-1){
 			fx--;
 			pNode = remplisPoint(fx,fy);
 			LF = cons(pNode,LF);
 			continue; }
-		if (fy<COL+1 && dist[fx][fy+1] == d-1) {
+		if (fy<NY+1 && dist[fy+1][fx] == d-1) {
 			fy++;
 			pNode = remplisPoint(fx,fy);
 			LF = cons(pNode,LF);
 			continue; }
-		if (fx<LIG+1  && dist[fx+1][fy] == d-1) {
+		if (fx<NX+1  && dist[fy][fx+1] == d-1) {
 			fx++;
 			pNode = remplisPoint(fx,fy);
 			LF = cons(pNode,LF);
 			continue; }
 	}
-
+	
+	
 	LF = reste(LF); // supprime le premier element, car on deja dessus
 	return LF;
 }
@@ -525,7 +537,7 @@ int main(int argc, char* argv[])
 	SDL_FreeSurface(temp);
 
 	/* load G1 */
-	temp   = SDL_LoadBMP("images/g1.bmp");
+	temp   = SDL_LoadBMP("images/g1_f.bmp");
 	g1 = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 
@@ -662,9 +674,7 @@ int main(int argc, char* argv[])
 	int cpt=0;
 	int n,m;
 
-	int a,b;
-	b = (rcG1.x/32)+0.5;
-	a = (rcG1.y/32)+0.5;
+
 	//musSDL_BlitSurface(menu,NULL,screen,NULL);
   	//musSDL_Flip(screen);
   	//musSDL_Delay(5000);
@@ -673,7 +683,13 @@ int main(int argc, char* argv[])
 	while (!gameover)
 {		
 		
-		
+	int a,b;
+	b = (rcG1.x+16)/32;
+	a = (rcG1.y+16)/32;
+	
+	n = ((rcSprite.x+16)/32);
+	m = ((rcSprite.y+16)/32);
+
 		SDL_Event event;
 		/* look for an event */
 		if (SDL_PollEvent(&event)) {
@@ -682,8 +698,9 @@ int main(int argc, char* argv[])
 
 
 		
-		//liste_coord = pathfinding(pos_Wall, rcG1.x, rcG1.y, rcSprite.x, rcSprite.y);
 
+		liste_coord = pathfinding(pos_Wall, a, b, m, n);
+		liste_coord = deplacementFantome (liste_coord,&rcG1);
 		//gameover = 1;
 
 		if (move) {
@@ -770,8 +787,7 @@ int main(int argc, char* argv[])
 	}*/
 
 
-	 n = ((rcSprite.x+16)/32);
-	 m = ((rcSprite.y+16)/32);
+	 
 	//printf("m= %d n= %d \n", m,n);
 	if ( pos_Wall[m][n] == 4 ){
 		cpt ++;
