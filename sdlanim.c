@@ -27,9 +27,10 @@ int TIME_BTW_MOVEMENTS = 5 ;
 int gameover;
 int moveRight, moveLeft, moveUp, moveDown; //gere le déplacement du pacman
 int move;
-int currentTime, previousTime; //gerer le temps entre les deplacements
+int currentTime, previousTime, fant_time; //gerer le temps entre les deplacements
 int currentTimeAnim, previousTimeAnim; //gerer le temps entre les animations
 float x,y;
+int time_game;
 
 /* source and destination rectangles */
 SDL_Rect rcSrc,rcWall,rcWall2, rcBloc, rcSprite,rcG1, rcSG1, rcG2,rcG3, rcCandy, rcCandy2;
@@ -54,20 +55,22 @@ void deplacement(SDL_Rect *fant, int x, int y){
 	fant->y += y;
 }
 
-liste_point deplacementFantome (liste_point L, SDL_Rect *fant) {
+liste_point deplacementFantome (liste_point L, SDL_Rect *fant/*, int *cptDepla*/) {
 	if (!est_vide(L)){
-		//printf("fant.y: %d, fant.y/32: %d,fant.x: %d, fant.x/32: %d,, prem.y: %d, prem.x: %d\n",fant->y,(fant->y/32),fant->x,((fant->x)/32),prem(L).y,prem(L).x);
+		printf("fant.x/32: %d, fant.y/32: %d, prem.x: %d, prem.y: %d\n",(fant->x/32),((fant->y)/32),prem(L).x,prem(L).y);
+		printf("fant.x %d, fant.y %d\n",fant->x,fant->y);
 		if (prem(L).x == (fant->x / taille) + 1) { // droite
-			//printf("DROITE\n");
+			printf("DROITE\n");
 			deplacement(fant,1,0);
-			if (((fant->x)/32) == prem(L).x) {
+			
+			/*if (((fant->x-32)/32) == prem(L).x) {
 				//m = fant.x/32;
 				L = reste(L);
 				return L;
-			}
+			}*/
 		}
 		if (prem(L).x == (fant->x / taille) - 1) { // gauche
-			//printf("GAUCHE\n");
+			printf("GAUCHE\n");
 			deplacement(fant,-1,0);
 			if (((fant->x)/32) == prem(L).x) {
 				L = reste(L);
@@ -76,16 +79,16 @@ liste_point deplacementFantome (liste_point L, SDL_Rect *fant) {
 			
 		}
 		if (prem(L).y == (fant->y / taille) + 1) {	//bas
-			//printf("BAS\n");
+			printf("BAS\n");
 			deplacement(fant,0,1);
-			if (((fant->y)/32) == prem(L).y) {
+			if (((fant->y+16)/32) == prem(L).y) {
 				L = reste(L);
 				return L;
 			}
 			
 		}
 		if (prem(L).y == (fant->y / taille) - 1) { // haut
-			//printf("HAUT\n");
+			printf("HAUT\n");
 			deplacement(fant,0,-1);
 			if (((fant->y)/32) == prem(L).y) {
 				L = reste(L);
@@ -157,36 +160,36 @@ liste_point pathfinding(int map[NY][NX],int dy, int dx, int fy, int fx)
 		return l_vide();
 	}
 	
-    pNode = remplisPoint(fy,fx); // met l'arrivé dans la liste
+    pNode = remplisPoint(fx,fy); // met l'arrivé dans la liste
     LF = cons(pNode,LF);
 	
 	for (;d>0;d--) {
 		if (fy>0 && dist[fy-1][fx] == d-1){
 			fy--;
-			pNode = remplisPoint(fy,fx);
+			pNode = remplisPoint(fx,fy);
 			LF = cons(pNode,LF);
 			continue;
         }
 		if (fx>0 && dist[fy][fx-1] == d-1){
 			fx--;
-			pNode = remplisPoint(fy,fx);
+			pNode = remplisPoint(fx,fy);
 			LF = cons(pNode,LF);
 			continue; }
 		if (fy<NY+1 && dist[fy+1][fx] == d-1) {
 			fy++;
-			pNode = remplisPoint(fy,fx);
+			pNode = remplisPoint(fx,fy);
 			LF = cons(pNode,LF);
 			continue; }
 		if (fx<NX+1  && dist[fy][fx+1] == d-1) {
 			fx++;
-			pNode = remplisPoint(fy,fx);
+			pNode = remplisPoint(fx,fy);
 			LF = cons(pNode,LF);
 			continue; }
 	}
 	
 	
 	LF = reste(LF); // supprime le premier element, car on deja dessus
-	//afficher_point_liste(LF);
+
 	return LF;
 }
 
@@ -283,7 +286,7 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 				
 					break;
 
-				/*case SDLK_w:	// LEFT
+				case SDLK_w:	// LEFT
 					move=1;
 					rcSG1.y = 0;
 					rcSG1.x = rcSG1.x - 32;
@@ -321,7 +324,7 @@ void HandleEvent(SDL_Surface *map, SDL_Event event)
 					}
 					 rcG1.y += 5;
 
-					break;*/
+					break;
 				case SDLK_m: 
 					//musif(Mix_PausedMusic() == 1)
 					//mus{
@@ -579,6 +582,7 @@ int main()
         previousTime = 0;
         currentTimeAnim = 0;
         previousTimeAnim = 0;
+	fant_time = 0;
 
 	/* set sprite position */
 	rcSprite.x = SCREEN_WIDTH/2;
@@ -625,9 +629,9 @@ int main()
 	{1,4,1,1,0,1,1,1,1,1,1,4,1,4,1,1,1,1,1,0,1,1,4,1},
 	{1,0,1,1,4,0,4,0,4,0,1,0,1,0,1,4,0,4,0,4,1,1,0,1},
 	{1,4,0,1,0,1,3,1,0,4,0,4,0,4,0,4,1,3,1,0,1,0,4,1},
-	{1,1,0,1,4,1,4,1,4,0,0,0,5,1,1,0,1,4,1,0,1,0,1,1},
-	{0,4,0,4,0,4,0,4,0,4,0,5,5,5,1,4,0,4,0,4,0,4,0,4},
-	{1,1,0,1,4,1,1,1,0,0,0,0,0,0,0,0,1,1,1,0,1,0,1,1},
+	{1,1,0,1,4,1,4,1,4,0,0,0,0,1,1,0,1,4,1,0,1,0,1,1},
+	{0,4,0,4,0,4,0,4,0,4,0,0,0,0,1,4,0,4,0,4,0,4,0,4},
+	{1,1,0,1,4,1,1,1,0,0,0,0,0,0,1,0,1,1,1,0,1,0,1,1},
 	{1,4,0,1,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,1,4,0,1},
 	{1,0,1,1,4,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,1,4,1},
 	{1,4,1,1,0,1,4,0,4,0,4,0,4,0,4,0,4,0,1,4,1,1,0,1},
@@ -678,22 +682,31 @@ int main()
 	int cpt=0;
 	int n,m;
 	int a,b;
-	int c,d;
-	int test;
+	//int c,d;
+
 
 	//musSDL_BlitSurface(menu,NULL,screen,NULL);
   	//musSDL_Flip(screen);
   	//musSDL_Delay(5000);
 	 /*message pump */
+	b = (rcG1.x+16)/32;
+	a = (rcG1.y+16)/32;
+	/*d = (rcG2.x+16)/32;
+	c = (rcG2.y+16)/32;*/
+	
+	n = ((rcSprite.x+16)/32);
+	m = ((rcSprite.y+16)/32);
 
+	liste_coord = pathfinding(pos_Wall, a, b, m, n);
+	afficher_point_liste(liste_coord);
 	while (!gameover)
 {		
 		
 
 	b = (rcG1.x+16)/32;
 	a = (rcG1.y+16)/32;
-	d = (rcG2.x+16)/32;
-	c = (rcG2.y+16)/32;
+	/*d = (rcG2.x+16)/32;
+	c = (rcG2.y+16)/32;*/
 	
 	n = ((rcSprite.x+16)/32);
 	m = ((rcSprite.y+16)/32);
@@ -708,23 +721,32 @@ int main()
 		/**********  	 ICI 	*****************/
 		/****************************************/
 		
-		test = SDL_GetTicks();
-		if(test % TIME_BTW_ANIMATIONS > 0){
-			liste_coord = pathfinding(pos_Wall, a, b, m, n);
-			liste_coord = deplacementFantome (liste_coord, &rcG1);
-			liste_coord = pathfinding(pos_Wall, c, d, m, n);
-			liste_coord = deplacementFantome (liste_coord, &rcG2);
-		}
-		liste_coord = deplacementFantome (liste_coord, &rcG3);
+		time_game = SDL_GetTicks();
 
+		if(time_game == 200 ||time_game %200 == 0){
+			printf("la\n");
+			//liste_coord = pathfinding(pos_Wall, a, b, m, n);
+			liste_coord = deplacementFantome(liste_coord, &rcG1);
+ 
+		}
+		
+		//if ( time_game == 2000 || time_game %2000 == 0) {
+		//	printf("2 sec\n");
+		//}
+		
+
+
+
+
+
+		//liste_coord = deplacementFantome (liste_coord, &rcG3);
 		//gameover = 1;
 
 		if (move) {
 
 			move = 0;
 		}
-
-		
+	
 
        		 HandleMovements(pos_Wall);
 		/* collide with edges of screen */
@@ -813,7 +835,7 @@ int main()
 	//printf("m= %d n= %d \n", m,n);
 	if ( pos_Wall[m][n] == 4 || pos_Wall[m][n] == 6 ){
 		if (pos_Wall[m][n]==6) {
-			TIME_BTW_MOVEMENTS = 1;
+			//TIME_BTW_MOVEMENTS -= 1;
 			cpt = cpt + 10;
 		}
 		cpt ++;
@@ -838,7 +860,7 @@ int main()
 	}
 	
 	if (pos_Wall[m][n] == pos_Wall[a][b]){
-		printf("GAMEOVER");
+		//printf("GAMEOVER");
 		//gameover = 1;
 		//lancer la musique (die)
 	}
