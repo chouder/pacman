@@ -55,24 +55,31 @@ void deplacement(SDL_Rect *fant, int x, int y){
 	fant->y += y;
 }
 
-liste_point deplacementFantome (liste_point L, SDL_Rect *fant/*, int *cptDepla*/) {
+liste_point deplacementFantome (liste_point L, SDL_Rect *fant) {
 	if (!est_vide(L)){
-		printf("fant.x/32: %d, fant.y/32: %d, prem.x: %d, prem.y: %d\n",(fant->x/32),((fant->y)/32),prem(L).x,prem(L).y);
-		printf("fant.x %d, fant.y %d\n",fant->x,fant->y);
+		//printf("fant.x/32: %d, fant.y/32: %d, prem.x: %d, prem.y: %d\n",(fant->x/32),((fant->y)/32),prem(L).x,prem(L).y);
+		//printf("fant.x %d, fant.y %d\n",fant->x,fant->y);
+
 		if (prem(L).x == (fant->x / taille) + 1) { // droite
 			printf("DROITE\n");
 			deplacement(fant,1,0);
 			
-			/*if (((fant->x-32)/32) == prem(L).x) {
+			if (((fant->x)/31) == prem(L).x) {
 				//m = fant.x/32;
+			printf("NIQUE TA MERE");
 				L = reste(L);
 				return L;
-			}*/
+				printf("RETURN LA LIIIISTE");
+			}
+		}
+		else
+		{
+			afficher_point_liste(L);
 		}
 		if (prem(L).x == (fant->x / taille) - 1) { // gauche
 			printf("GAUCHE\n");
 			deplacement(fant,-1,0);
-			if (((fant->x)/32) == prem(L).x) {
+			if (((fant->x)/31) == prem(L).x) {
 				L = reste(L);
 				return L;
 			}
@@ -81,7 +88,7 @@ liste_point deplacementFantome (liste_point L, SDL_Rect *fant/*, int *cptDepla*/
 		if (prem(L).y == (fant->y / taille) + 1) {	//bas
 			printf("BAS\n");
 			deplacement(fant,0,1);
-			if (((fant->y+16)/32) == prem(L).y) {
+			if (((fant->y)/31) == prem(L).y) {
 				L = reste(L);
 				return L;
 			}
@@ -90,7 +97,7 @@ liste_point deplacementFantome (liste_point L, SDL_Rect *fant/*, int *cptDepla*/
 		if (prem(L).y == (fant->y / taille) - 1) { // haut
 			printf("HAUT\n");
 			deplacement(fant,0,-1);
-			if (((fant->y)/32) == prem(L).y) {
+			if (((fant->y)/31) == prem(L).y) {
 				L = reste(L);
 				return L;
 			}
@@ -469,8 +476,22 @@ int main()
 	int colorkey;
 	int i,j;
 	liste_point liste_coord;
-	
-
+	/*
+	liste_point L;
+	L = l_vide();
+	point ptemp;
+	for( i=1 ; i < 3 ; i++ )
+	{
+		ptemp.x = i;
+		ptemp.y = i;
+		L = cons(ptemp,L);
+	}
+	for( i=1 ; i < 3 ; i++ )
+	{
+		printf("(%d,%d)\n", (L->premier).x , (L->premier).y);
+		L = reste(L);
+		//printf("(%d,%d)", L);
+	}*/
 
 	/*initialize move of pacman */
 	move=0;
@@ -689,26 +710,29 @@ int main()
   	//musSDL_Flip(screen);
   	//musSDL_Delay(5000);
 	 /*message pump */
-	b = (rcG1.x+16)/32;
-	a = (rcG1.y+16)/32;
-	/*d = (rcG2.x+16)/32;
-	c = (rcG2.y+16)/32;*/
+
+
+	/*b = (rcG1.x)/32;
+	a = (rcG1.y)/32;
+	d = (rcG2.x+16)/32;
+	c = (rcG2.y+16)/32;
 	
 	n = ((rcSprite.x+16)/32);
-	m = ((rcSprite.y+16)/32);
+	m = ((rcSprite.y+16)/32);*/
 
-	liste_coord = pathfinding(pos_Wall, a, b, m, n);
-	afficher_point_liste(liste_coord);
+	//liste_coord = pathfinding(pos_Wall, a, b, m, n);
+	//afficher_point_liste(liste_coord);
 	while (!gameover)
-{		
+{
 		
 
-	b = (rcG1.x+16)/32;
+	b = (rcG1.x+16)/32;	//red
 	a = (rcG1.y+16)/32;
-	/*d = (rcG2.x+16)/32;
-	c = (rcG2.y+16)/32;*/
+
+	//d = (rcG2.x+16)/32;
+	//c = (rcG2.y+16)/32;
 	
-	n = ((rcSprite.x+16)/32);
+	n = ((rcSprite.x+16)/32);	//pac
 	m = ((rcSprite.y+16)/32);
 
 		SDL_Event event;
@@ -718,17 +742,20 @@ int main()
 		}
 
 		/****************************************/
-		/**********  	 ICI 	*****************/
+		/************  	 ICI 	*****************/
 		/****************************************/
 		
-		time_game = SDL_GetTicks();
+		//time_game = SDL_GetTicks();
 
-		if(time_game == 200 ||time_game %200 == 0){
-			printf("la\n");
-			//liste_coord = pathfinding(pos_Wall, a, b, m, n);
-			liste_coord = deplacementFantome(liste_coord, &rcG1);
+		//if(time_game == 200 ||time_game % 200 == 0){
+			liste_coord = pathfinding(pos_Wall, a, b, m, n);
+			//printf("Nouvelle Liste\n");
+			//liste_coord = deplacementFantome(liste_coord, &rcG1);
+		//printf("pac.x= %d pac.y= %d \n", n,m);
+		//printf("fant.x= %d fant.y= %d \n", b,a);
  
-		}
+		//}
+		liste_coord = deplacementFantome(liste_coord, &rcG1);
 		
 		//if ( time_game == 2000 || time_game %2000 == 0) {
 		//	printf("2 sec\n");
@@ -740,7 +767,7 @@ int main()
 
 
 		//liste_coord = deplacementFantome (liste_coord, &rcG3);
-		//gameover = 1;
+		//
 
 		if (move) {
 
@@ -765,8 +792,7 @@ int main()
 		SDL_BlitSurface(map,NULL,screen,&rcmap);
 
 
-		//printf("m= %d n= %d \n", m,n);
-
+		
 	for(i=0; i<NY ; i++){
 		for(j=0;j<NX;j++){
 
