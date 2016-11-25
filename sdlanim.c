@@ -44,11 +44,90 @@ void deplacement(SDL_Rect *fant, int x, int y){
 	fant->y += y;
 }
 
-liste_point deplacementFantome (liste_point L, SDL_Rect *fant) {
+void deplacementFantomeBlanc(int tab[NY][NX],SDL_Rect *fant, int *a, int *b)
+{
+	if(*a == 0){
+		
+		if(moveLeft){
+			if(tab[fant->y/32][fant->x / 32 + 1] != 1 && tab[fant->y/32][fant->x / 32 +1] != 3)
+				*a = 1;
+		}
+		if(moveRight){
+			if(tab[fant->y/32][fant->x/32 - 1] != 1 && tab[fant->y/32][fant->x/32 - 1] != 3)
+				*a = 2;
+		}
+		if(moveUp){
+			if(tab[fant->y/32 + 1][fant->x/32] != 1 && tab[fant->y/32 + 1][fant->x/32] != 3)
+				*a = 3;
+		}
+		if(moveDown){
+			if(tab[fant->y/32 - 1][fant->x/32] != 1 && tab[fant->y/32 - 1][fant->x/32] != 3)
+				*a = 4;
+		}
+	}
+
+	if(*a == 1){
+		deplacement(fant,1,0);
+		*b += 1;
+	}
+	if(*a == 2){
+		deplacement(fant,-1,0);
+		*b += 1;
+	}
+	if(*a == 3){
+		deplacement(fant,0,1);
+		*b += 1;
+	}
+	if(*a == 4){
+		deplacement(fant,0,-1);
+		*b += 1;
+	}
+	if(*b == 32){
+		*a = 0;
+		*b = 0;
+	}
+}
+
+liste_point deplacementFantomeR(liste_point L, SDL_Rect *fant, int *a, int *b) {
 	if (!est_vide(L)){
-		if (prem(L).x == (fant->x / taille) + 1) { // droite
-			//printf("DROITE\n");
+		if(*a == 0){
+			if (prem(L).x == ((fant->x) / taille) + 1) { // droite
+				*a = 1;
+			}
+			if (prem(L).x == ((fant->x) / taille) - 1) { // gauche
+				*a = 2;
+			}
+			if (prem(L).y == ((fant->y) / taille) + 1) {	//bas
+				*a = 3;
+			}
+			if (prem(L).y == ((fant->y) / taille) - 1) { // haut
+				*a = 4;
+			}
+		}
+		if(*a == 1){
 			deplacement(fant,1,0);
+			*b += 1;
+		}
+		if(*a == 2){
+			deplacement(fant,-1,0);
+			*b += 1;
+		}
+		if(*a == 3){
+			deplacement(fant,0,1);
+			*b += 1;
+		}
+		if(*a == 4){
+			deplacement(fant,0,-1);
+			*b += 1;
+		}
+		if(*b == 32){
+			*a = 0;
+			*b = 0;
+			 L = reste(L);
+		}
+		/*if (prem(L).x == (fant->x / taille) + 1) { // droite
+			//printf("DROITE\n");
+			deplacement(fant,32,0);
 			
 			if (((fant->x)/31) == prem(L).x) {
 				//m = fant.x/32;
@@ -58,7 +137,7 @@ liste_point deplacementFantome (liste_point L, SDL_Rect *fant) {
 		}
 		if (prem(L).x == (fant->x / taille) - 1) { // gauche
 			//printf("GAUCHE\n");
-			deplacement(fant,-1,0);
+			deplacement(fant,-32,0);
 			if (((fant->x)/31) == prem(L).x) {
 				L = reste(L);
 				return L;
@@ -67,7 +146,7 @@ liste_point deplacementFantome (liste_point L, SDL_Rect *fant) {
 		}
 		if (prem(L).y == (fant->y / taille) + 1) {	//bas
 			//printf("BAS\n");
-			deplacement(fant,0,1);
+			deplacement(fant,0,32);
 			if (((fant->y)/31) == prem(L).y) {
 				L = reste(L);
 				return L;
@@ -76,12 +155,12 @@ liste_point deplacementFantome (liste_point L, SDL_Rect *fant) {
 		}
 		if (prem(L).y == (fant->y / taille) - 1) { // haut
 			//printf("HAUT\n");
-			deplacement(fant,0,-1);
+			deplacement(fant,0,-32);
 			if (((fant->y)/31) == prem(L).y) {
 				L = reste(L);
 				return L;
 			}
-		}
+		}*/
 	}
 	return L;
 }
@@ -434,6 +513,7 @@ int main()
 	SDL_Rect rcmap;
 	int colorkey;
 	int i,j;
+	int deplaSG1,deplaCG1,deplaSG2,deplaCG2;
 	liste_point liste_coord;
 
 	/*initialize move of pacman */
@@ -593,9 +673,9 @@ int main()
 	{1,4,1,1,0,1,1,1,1,1,1,4,1,4,1,1,1,1,1,0,1,1,4,1},
 	{1,0,1,1,4,0,4,0,4,0,1,0,1,0,1,4,0,4,0,4,1,1,0,1},
 	{1,4,0,1,0,1,3,1,0,4,0,4,0,4,0,4,1,3,1,0,1,0,4,1},
-	{1,1,0,1,4,1,4,1,4,0,0,0,0,1,1,0,1,4,1,0,1,0,1,1},
-	{0,4,0,4,0,4,0,4,0,4,0,0,0,0,1,4,0,4,0,4,0,4,0,4},
-	{1,1,0,1,4,1,1,1,0,0,0,0,0,0,1,0,1,1,1,0,1,0,1,1},
+	{1,1,0,1,4,1,4,1,4,0,1,1,5,1,1,0,1,4,1,0,1,0,1,1},
+	{0,4,0,4,0,4,0,4,0,4,1,7,8,9,1,4,0,4,0,4,0,4,0,4},
+	{1,1,0,1,4,1,1,1,0,0,1,1,1,1,1,0,1,1,1,0,1,0,1,1},
 	{1,4,0,1,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,1,4,0,1},
 	{1,0,1,1,4,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,1,4,1},
 	{1,4,1,1,0,1,4,0,4,0,4,0,4,0,4,0,4,0,1,4,1,1,0,1},
@@ -610,6 +690,11 @@ int main()
 	int n,m;
 	int a,b;
 	//int c,d;
+
+	deplaSG1 = 0;
+	deplaCG1 = 0;
+	deplaSG2 = 0;
+	deplaCG2 = 0;
 
 
 	//musSDL_BlitSurface(menu,NULL,screen,NULL);
@@ -638,19 +723,11 @@ int main()
 
 		time_game = SDL_GetTicks();
 
-		//if(time_game == 200 ||time_game % 200 == 0){
+		if(time_game == 5 ||time_game % 5 == 0){
 			liste_coord = pathfinding(pos_Wall, a, b, m, n);
-			//printf("Nouvelle Liste\n");
-			//liste_coord = deplacementFantome(liste_coord, &rcG1);
-		//printf("pac.x= %d pac.y= %d \n", n,m);
-		//printf("fant.x= %d fant.y= %d \n", b,a);
- 
-		//}
-		liste_coord = deplacementFantome(liste_coord, &rcG1);
-		
-		//if ( time_game == 2000 || time_game %2000 == 0) {
-		//	printf("2 sec\n");
-		//}
+			liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
+ 			deplacementFantomeBlanc(pos_Wall,&rcG3, &deplaSG2,&deplaCG2);
+		}
 		
 		if (move) {
 
@@ -706,6 +783,7 @@ int main()
 				rcCandy2.y = i * 32+8;
 				SDL_BlitSurface(candy2, NULL, screen, &rcCandy2);
 			}
+			
 		}
 	}
 
