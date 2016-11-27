@@ -486,15 +486,15 @@ int main()
 
 	 /* initialize SDL */
 
-   	 SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    	 Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);  
-    	 Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
-    	 music = Mix_LoadMUS("sons/point.mp3");
-	 start = Mix_LoadMUS("sons/start.mp3");
-    	 scream = Mix_LoadMUS("sons/scream.wav");
-    	 pilule = Mix_LoadMUS("sons/pilule.wav");
-    	 die = Mix_LoadMUS("sons/die.mp3");
-    	 siren = Mix_LoadMUS("sons/siren.mp3");
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);  
+	Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+	music = Mix_LoadMUS("sons/point.mp3");
+	start = Mix_LoadMUS("sons/start.mp3");
+	scream = Mix_LoadMUS("sons/scream.wav");
+	pilule = Mix_LoadMUS("sons/pilule.wav");
+	die = Mix_LoadMUS("sons/die.mp3");
+	siren = Mix_LoadMUS("sons/siren.mp3");
 
 	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
 		printf("%s", Mix_GetError());
@@ -656,12 +656,12 @@ int main()
 
 	int pos_Wall[NY][NX]= {
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-	{1,6,0,4,0,4,0,4,0,4,0,4,1,0,4,0,4,0,4,0,4,0,6,1},
+	{1,6,0,4,0,4,0,4,0,4,0,4,6,0,4,0,4,0,4,0,4,0,6,1},
 	{1,0,1,1,0,1,1,1,1,1,1,4,1,4,1,1,1,1,1,0,1,1,0,1},
 	{1,4,1,1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,0,1,1,4,1},
 	{1,0,0,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,0,1},
 	{1,4,1,1,0,1,1,1,1,1,1,4,1,4,1,1,1,1,1,0,1,1,4,1},
-	{1,0,1,1,4,0,4,0,4,0,1,0,1,0,1,4,0,4,0,4,1,1,0,1},
+	{1,0,1,1,4,0,4,0,4,0,0,0,1,0,1,4,0,4,0,4,1,1,0,1},
 	{1,4,0,1,0,1,3,1,1,4,0,4,0,4,0,4,1,3,1,0,1,0,4,1},
 	{1,0,0,1,4,1,4,0,1,0,1,1,5,1,1,0,1,4,0,0,1,0,1,1},
 	{0,4,0,4,0,4,0,4,0,4,1,7,8,9,1,4,0,4,0,4,0,4,0,4},
@@ -677,9 +677,17 @@ int main()
 	{1,1,10,10,10,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
 
 	int cpt=0;
-	int n,m;
-	int a,b;
-	//int c,d;
+	int pac_y;
+	int pac_x;
+	int fant_rouge_x;
+	int fant_rouge_y;
+
+	int fant_bleu_x;
+	int fant_bleu_y;
+
+	/*int fant_blanc_x;
+	int fant_blanc_y;*/
+
 	int eat;
 	eat = 0;
 
@@ -695,11 +703,11 @@ int main()
 	deplaSG2 = 0;
 	deplaCG2 = 0;
 
-	Mix_PlayMusic(start, 1);
+	/*Mix_PlayMusic(start, 1);
 	SDL_BlitSurface(menu,NULL,screen,NULL);
   	SDL_Flip(screen);
   	SDL_Delay(5000);
-	
+	*/
 
 	deplacementBleu(&rcG2);
 
@@ -707,14 +715,14 @@ int main()
 	 /*message pump */
 	while (!gameover)	// ------------------- BOUCLE ICI -------------------- //
 {
-	b = (rcG1.x+16)/32;
-	a = (rcG1.y+16)/32;
+	fant_rouge_x = (rcG1.x+16)/32;
+	fant_rouge_y = (rcG1.y+16)/32;
 
-	//d = (rcG2.x+16)/32;
-	//c = (rcG2.y+16)/32;
+	fant_bleu_x = (rcG2.x+16)/32;
+	fant_bleu_y = (rcG2.y+16)/32;
 	
-	n = ((rcSprite.x+16)/32);
-	m = ((rcSprite.y+16)/32);
+	pac_x = ((rcSprite.x+16)/32);
+	pac_y = ((rcSprite.y+16)/32);
 
 		SDL_Event event;
 		/* look for an event */
@@ -722,14 +730,13 @@ int main()
 			HandleEvent(event);
 		}
 
-
-
 		time_game = SDL_GetTicks();
 
-
 		if((time_game == 3 || time_game % 3 == 0) && (eat == 0) && (home == 0)){
-			liste_coord = pathfinding(pos_Wall, a, b, m, n);
+
+			liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, pac_y, pac_x);
 			liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
+
  			deplacementFantomeBlanc(pos_Wall,&rcG3, &deplaSG2,&deplaCG2);
 
 			/*deplacement(&rcG2,0,32);
@@ -819,10 +826,10 @@ int main()
 	}
 
 
-	if ( pos_Wall[m][n] == 4){
+	if ( pos_Wall[pac_y][pac_x] == 4){
 		cpt ++;
 		printf("cpt = %d\n",cpt);
-		pos_Wall[m][n]=0;
+		pos_Wall[pac_y][pac_x]=0;
 		Mix_PlayMusic(music, 1);
 		//if (cpt == 5 ) {
 		/* load screamer */
@@ -838,12 +845,12 @@ int main()
 		//}				
 	}
 
-	if (pos_Wall[m][n] == 6) {
+	if (pos_Wall[pac_y][pac_x] == 6) {
 
 		eat = 1;
 		time_game_eat =  time_game;
 		
-		pos_Wall[m][n] = 0;
+		pos_Wall[pac_y][pac_x] = 0;
 		cpt += 10;
 		TIME_BTW_MOVEMENTS -= 4;
 		printf("vitesse pacman augmente");
@@ -854,7 +861,7 @@ int main()
 		printf("Siren OK\n");
 
 		liste_coord = l_vide();
-		liste_coord = pathfinding(pos_Wall, a, b, 9, 11);
+		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 9, 11);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
 
 		/* load g1 eat*/
@@ -886,7 +893,7 @@ int main()
 		//printf("vitesse pacman diminue \n");
 	}
 
-	if (cpt == 137) {
+	if (cpt == 136) {
 		printf("VICTORY ");
 		SDL_BlitSurface(victory,NULL,screen,NULL);
   		SDL_Flip(screen);
@@ -899,12 +906,12 @@ int main()
 		Mix_PlayMusic(pilule, 1);
 	}*/
 
-	if ((a == m && b == n) && (eat == 1 )){
+	if ((fant_rouge_y == pac_y && fant_rouge_x == pac_x) && (eat == 1 )){
 
 		home = 1;
 
 		
-		liste_coord = pathfinding(pos_Wall, a, b, m, n);
+		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, pac_y, pac_x);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
 
 		printf("je rentre chez moi \n");
@@ -928,19 +935,20 @@ int main()
 		}*/
 	}
 
-	if ((a != m && b != n) && (eat == 1 ) && (home == 0 )){
+	if ((fant_rouge_y != pac_y && fant_rouge_x != pac_x) && (eat == 1 ) && (home == 0 )){
 
-		liste_coord = pathfinding(pos_Wall, a, b, 1, 1);
+		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 1, 1);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
 	}
 
 
 	if (home == 1){
-		liste_coord = pathfinding(pos_Wall, a, b, 9, 11);
+		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 9, 11);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
 		//home = 0;
 	}
-	if (a == 9 && b == 11){
+	if (fant_rouge_y == 9 && fant_rouge_x == 11){
+	//if pos_Wall[a][b] == 5
 		home = 0;
 		/* load ghost */
 		temp   = SDL_LoadBMP("images/g1_f.bmp");
@@ -955,7 +963,7 @@ int main()
 
 
 
-	if ((a == m && b == n) && (eat == 0 )){
+	if( (((fant_rouge_y == pac_y) && (fant_rouge_x == pac_x)) && (eat == 0) )|| (((fant_bleu_y == pac_y) && (fant_bleu_x == pac_x)) && (eat == 0))){
 		
 		printf("GAMEOVER");
 		//gameover = 1;
@@ -1051,7 +1059,7 @@ int main()
 	SDL_FreeSurface(g3);
 	SDL_FreeSurface(map);
 	SDL_FreeSurface(menu);
-	SDL_FreeSurface(gover);
+	//SDL_FreeSurface(gover);
 	SDL_FreeSurface(victory);
 	//NO SDL_FreeSurface(scream);
    	Mix_FreeMusic(music);
