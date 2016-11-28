@@ -4,7 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+<<<<<<< HEAD
+//mus#include <SDL/SDL_mixer.h>
+=======
 #include <SDL/SDL_mixer.h>
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 
 #include "liste_point.h"
 
@@ -21,7 +25,11 @@
 #define LIG 20
 #define TIME_BTW_ANIMATIONS 40
 //#define TIME_BTW_MOVEMENTS 10
+<<<<<<< HEAD
+int TIME_BTW_MOVEMENTS = 5 ;
+=======
 int TIME_BTW_MOVEMENTS = 3 ;
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 #define taille 31
 
 int gameover;
@@ -37,8 +45,13 @@ int time_game_eat;
 SDL_Rect rcSrc,rcWall,rcWall2, rcBloc, rcCoeur, rcSprite,rcG1, rcSG1, rcG2,rcG3, rcCandy, rcCandy2;
 int i,j;
 
+<<<<<<< HEAD
+//musMix_Music *music, *start, *scream, *pilule, *die, *siren;
+//musint Mix_OpenAudio(int frequency, Uint16 format, int channels, int chunksize);	
+=======
 Mix_Music *music, *start, *scream, *pilule, *die, *siren;
 int Mix_OpenAudio(int frequency, Uint16 format, int channels, int chunksize);	
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 
 void deplacement(SDL_Rect *fant, int x, int y){
 	fant->x += x;
@@ -336,16 +349,26 @@ void HandleEvent(SDL_Event event)
 					moveDown=1;				
 					break;
 				case SDLK_m: 
+<<<<<<< HEAD
+					//mus/*if(Mix_PausedMusic() == 1)
+					/*{
+=======
 					if(Mix_PausedMusic() == 1)
 					{
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 						Mix_ResumeMusic(); 
 						printf("p1");
 					}
 					else
 					{
 						Mix_PauseMusic(); 
+<<<<<<< HEAD
+						printf("p2");*/
+					//}
+=======
 						printf("p2"); 
 					}
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 					break;
 				
 				}
@@ -475,13 +498,36 @@ int main()
 	SDL_Rect rcmap;
 	int colorkey;
 	int i,j;
+<<<<<<< HEAD
+	int deplaSG1,deplaCG1,deplaSG2,deplaCG2,deplaSG3,deplaCG3;
+=======
 	int deplaSG1,deplaCG1,deplaSG2,deplaCG2;
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 	liste_point liste_coord;
 
 	/*initialize move of pacman */
 	move=0;
 
 	/* initialize SDL */
+<<<<<<< HEAD
+	SDL_Init(SDL_INIT_VIDEO);
+
+	 /* initialize SDL */
+
+	//musSDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	//musMix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);  
+	//musMix_VolumeMusic(MIX_MAX_VOLUME / 2);
+	//musmusic = Mix_LoadMUS("sons/point.mp3");
+	//musstart = Mix_LoadMUS("sons/start.mp3");
+	//musscream = Mix_LoadMUS("sons/scream.wav");
+	//muspilule = Mix_LoadMUS("sons/pilule.wav");
+	//musdie = Mix_LoadMUS("sons/die.mp3");
+	//mussiren = Mix_LoadMUS("sons/siren.mp3");
+
+	//musif(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
+	//mus	printf("%s", Mix_GetError());
+	//mus}
+=======
 	//SDL_Init(SDL_INIT_VIDEO);
 
 	 /* initialize SDL */
@@ -499,16 +545,25 @@ int main()
 	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
 		printf("%s", Mix_GetError());
 	}
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 
 	//SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO /*SDL_INIT_TIMER)*/);
 
 
 	/*test if the beginning of SDL is correct*/
+<<<<<<< HEAD
+	//musif (SDL_Init(SDL_INIT_VIDEO) == -1) // Démarrage de la SDL. Si erreur :
+	//mus{
+	//mus fprintf(stderr, "Erreur d'initialisation de la SDL : %s\n", SDL_GetError()); // Écriture de l'erreur
+	//mus exit(EXIT_FAILURE); // On quitte le programme
+	//mus}
+=======
 	if (SDL_Init(SDL_INIT_VIDEO) == -1) // Démarrage de la SDL. Si erreur :
 	{
 	 fprintf(stderr, "Erreur d'initialisation de la SDL : %s\n", SDL_GetError()); // Écriture de l'erreur
 	 exit(EXIT_FAILURE); // On quitte le programme
 	}
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 
 	/* Icon */
 	SDL_WM_SetIcon(SDL_LoadBMP("images/pac_ico.bmp"), NULL);
@@ -685,6 +740,12 @@ int main()
 	int fant_bleu_x;
 	int fant_bleu_y;
 
+<<<<<<< HEAD
+	int fant_blanc_x;
+	int fant_blanc_y;
+
+=======
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 	/*int fant_blanc_x;
 	int fant_blanc_y;*/
 
@@ -702,6 +763,11 @@ int main()
 	deplaCG1 = 0;
 	deplaSG2 = 0;
 	deplaCG2 = 0;
+<<<<<<< HEAD
+	deplaSG3 = 0;
+	deplaCG3 = 0;
+=======
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 
 	/*Mix_PlayMusic(start, 1);
 	SDL_BlitSurface(menu,NULL,screen,NULL);
@@ -720,6 +786,12 @@ int main()
 
 	fant_bleu_x = (rcG2.x+16)/32;
 	fant_bleu_y = (rcG2.y+16)/32;
+<<<<<<< HEAD
+
+	fant_blanc_x = (rcG3.x+16)/32;
+	fant_blanc_y = (rcG3.y+16)/32;
+=======
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 	
 	pac_x = ((rcSprite.x+16)/32);
 	pac_y = ((rcSprite.y+16)/32);
@@ -732,7 +804,11 @@ int main()
 
 		time_game = SDL_GetTicks();
 
+<<<<<<< HEAD
+		if((time_game == 5 || time_game % 5 == 0) && (eat == 0) && (home == 0)){
+=======
 		if((time_game == 3 || time_game % 3 == 0) && (eat == 0) && (home == 0)){
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 
 			liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, pac_y, pac_x);
 			liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
@@ -830,7 +906,11 @@ int main()
 		cpt ++;
 		printf("cpt = %d\n",cpt);
 		pos_Wall[pac_y][pac_x]=0;
+<<<<<<< HEAD
+		//musMix_PlayMusic(music, 1);
+=======
 		Mix_PlayMusic(music, 1);
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 		//if (cpt == 5 ) {
 		/* load screamer */
 	       // temp = SDL_LoadBMP("images/scream.bmp");
@@ -852,6 +932,22 @@ int main()
 		
 		pos_Wall[pac_y][pac_x] = 0;
 		cpt += 10;
+<<<<<<< HEAD
+		//TIME_BTW_MOVEMENTS -= 4;
+		printf("cpt = %d\n",cpt);
+		//musMix_PlayMusic(siren, 2);
+		printf("Siren OK\n");
+
+		//liste_coord = l_vide();
+		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 9, 11);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
+
+		
+		
+	}
+
+	if (eat){
+=======
 		TIME_BTW_MOVEMENTS -= 4;
 		printf("vitesse pacman augmente");
 		//printf(" Le pacman ++++\n");
@@ -864,15 +960,60 @@ int main()
 		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 9, 11);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
 
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 		/* load g1 eat*/
 		temp = SDL_LoadBMP("images/g1_eat.bmp");
 		g1 = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
 
+<<<<<<< HEAD
+		/* ------------ durée de 5 ms pour les 2 fantomes ------------*/
+
+		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 1, 1);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
+
+=======
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 		/* setup g1 colorkey and turn on RLE*/
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
 		SDL_SetColorKey(g1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 
+<<<<<<< HEAD
+		/* load g2 eat*/
+		temp = SDL_LoadBMP("images/g2_eat.bmp");
+		g2 = SDL_DisplayFormat(temp);
+		SDL_FreeSurface(temp);
+
+		/* setup g2 colorkey and turn on RLE*/
+		colorkey = SDL_MapRGB(screen->format, 0,0,0);
+		SDL_SetColorKey(g2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+		
+		liste_coord = pathfinding(pos_Wall, fant_bleu_y, fant_bleu_x, 1, 1);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG2, &deplaSG2,&deplaCG2);
+
+		/* load g3 eat*/
+		temp = SDL_LoadBMP("images/g3_eat.bmp");
+		g3 = SDL_DisplayFormat(temp);
+		SDL_FreeSurface(temp);
+
+		/* setup g2 colorkey and turn on RLE*/
+		colorkey = SDL_MapRGB(screen->format, 0,0,0);
+		SDL_SetColorKey(g3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+
+		liste_coord = pathfinding(pos_Wall, fant_blanc_y, fant_blanc_x, 1, 1);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG3, &deplaSG3,&deplaCG3);
+
+	}
+
+	if (time_game - time_game_eat >= 8000){
+		eat = 0;
+
+		/*temp   = SDL_LoadBMP("images/g1_f.bmp");
+		g1 = SDL_DisplayFormat(temp);
+		SDL_FreeSurface(temp);
+		colorkey = SDL_MapRGB(screen->format, 0,0,0);
+		SDL_SetColorKey(g1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);*/
+=======
 		/*if(time_game_eat == 2000 ||time_game_eat % 2000 == 0){
 			TIME_BTW_MOVEMENTS = 10;
 			printf(" Le pacman ------ \n");
@@ -888,6 +1029,7 @@ int main()
 		SDL_FreeSurface(temp);
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
 		SDL_SetColorKey(g1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 
 		//TIME_BTW_MOVEMENTS = 9;
 		//printf("vitesse pacman diminue \n");
@@ -906,6 +1048,54 @@ int main()
 		Mix_PlayMusic(pilule, 1);
 	}*/
 
+<<<<<<< HEAD
+	if ((fant_rouge_y == pac_y && fant_rouge_x == pac_x) && (eat == 1 ) && (home == 0)) {
+	
+		home = 1;		
+		printf("je rentre chez moi rouge \n");
+		
+		/* load eye */
+		temp = SDL_LoadBMP("images/eye_rouge.bmp");
+		g1 = SDL_DisplayFormat(temp);
+		SDL_FreeSurface(temp);
+
+		/* setup g1 colorkey and turn on RLE*/
+		colorkey = SDL_MapRGB(screen->format, 0,0,0);
+		SDL_SetColorKey(g1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+		
+		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 9, 11);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
+
+	}
+
+	if ((fant_bleu_y == pac_y && fant_bleu_x == pac_x) && (eat == 1 )&& (home == 0)){
+
+		home = 2;
+
+		/* load eye */
+		temp = SDL_LoadBMP("images/eye_bleu.bmp");
+		g2= SDL_DisplayFormat(temp);
+		SDL_FreeSurface(temp);
+
+		/* setup g1 colorkey and turn on RLE*/
+		colorkey = SDL_MapRGB(screen->format, 0,0,0);
+		SDL_SetColorKey(g2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+
+
+		liste_coord = pathfinding(pos_Wall, fant_bleu_y, fant_bleu_x, 10, 11);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG2, &deplaSG2,&deplaCG2);
+
+		printf("je rentre chez moi bleu \n");
+	}
+
+	if ((fant_blanc_y == pac_y && fant_blanc_x == pac_x) && (eat == 1 )&& (home == 0)){
+
+		home = 3;
+		
+		/* load eye */
+		temp = SDL_LoadBMP("images/eye_blanc.bmp");
+		g2= SDL_DisplayFormat(temp);
+=======
 	if ((fant_rouge_y == pac_y && fant_rouge_x == pac_x) && (eat == 1 )){
 
 		home = 1;
@@ -920,10 +1110,19 @@ int main()
 		/* load eye */
 		temp = SDL_LoadBMP("images/eye.bmp");
 		g1 = SDL_DisplayFormat(temp);
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 		SDL_FreeSurface(temp);
 
 		/* setup g1 colorkey and turn on RLE*/
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
+<<<<<<< HEAD
+		SDL_SetColorKey(g2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+		
+		liste_coord = pathfinding(pos_Wall, fant_blanc_y, fant_blanc_x, 11, 11);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG3, &deplaSG3,&deplaCG3);
+
+		printf("je rentre chez moi blanc\n");
+=======
 		SDL_SetColorKey(g1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 
 			
@@ -933,6 +1132,7 @@ int main()
 			SDL_FreeSurface(temp);
 			printf("Ghost OK  !\n");
 		}*/
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 	}
 
 	if ((fant_rouge_y != pac_y && fant_rouge_x != pac_x) && (eat == 1 ) && (home == 0 )){
@@ -941,6 +1141,39 @@ int main()
 		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
 	}
 
+<<<<<<< HEAD
+	if ((fant_bleu_y != pac_y && fant_bleu_x != pac_x) && (eat == 1 ) && (home == 0 )){
+
+		liste_coord = pathfinding(pos_Wall, fant_bleu_y, fant_bleu_x, 1, 1);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG2, &deplaSG2,&deplaCG2);
+	}
+
+	if ((fant_blanc_y != pac_y && fant_blanc_x != pac_x) && (eat == 1 ) && (home == 0 )){
+
+		liste_coord = pathfinding(pos_Wall, fant_blanc_y, fant_blanc_x, 1, 1);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG3, &deplaSG3,&deplaCG3);
+	}
+
+	if ((home == 1) && ((fant_rouge_y == pac_y) && (fant_rouge_x == pac_x))){
+		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 9, 11);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
+	}
+
+	if ((home == 1) && ((fant_bleu_y == pac_y) && (fant_bleu_x == pac_x))){
+		liste_coord = pathfinding(pos_Wall, fant_bleu_y, fant_bleu_x, 9, 11);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG2, &deplaSG2,&deplaCG2);
+	}
+
+	if ((home == 1) && ((fant_blanc_y == pac_y) && (fant_blanc_x == pac_x))){
+		liste_coord = pathfinding(pos_Wall, fant_blanc_y, fant_blanc_x, 9, 11);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG3, &deplaSG3,&deplaCG3);
+	}
+
+	if ((fant_rouge_y == 9) && (fant_rouge_x == 11) && (home ==1)){
+	//if pos_Wall[a][b] == 5
+		home = 0;
+		eat = 0;
+=======
 
 	if (home == 1){
 		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 9, 11);
@@ -950,6 +1183,7 @@ int main()
 	if (fant_rouge_y == 9 && fant_rouge_x == 11){
 	//if pos_Wall[a][b] == 5
 		home = 0;
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 		/* load ghost */
 		temp   = SDL_LoadBMP("images/g1_f.bmp");
 		g1 = SDL_DisplayFormat(temp);
@@ -959,16 +1193,51 @@ int main()
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
 		SDL_SetColorKey(g1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	}
+<<<<<<< HEAD
+	if ((fant_bleu_y == 9) && (fant_bleu_x == 11) && (home ==2)){
+		home = 0;
+		eat = 0;
+		/* load ghost */
+		temp   = SDL_LoadBMP("images/g2_f.bmp");
+		g2 = SDL_DisplayFormat(temp);
+		SDL_FreeSurface(temp);
+
+		/* setup g1 colorkey and turn on RLE*/
+		colorkey = SDL_MapRGB(screen->format, 0,0,0);
+		SDL_SetColorKey(g2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+	}
+	if ((fant_blanc_y == 9) && (fant_blanc_x == 11) && (home ==3)){
+		home = 0;
+		eat = 0;
+		/* load ghost */
+		temp   = SDL_LoadBMP("images/g3_f.bmp");
+		g3 = SDL_DisplayFormat(temp);
+		SDL_FreeSurface(temp);
+
+		/* setup g1 colorkey and turn on RLE*/
+		colorkey = SDL_MapRGB(screen->format, 0,0,0);
+		SDL_SetColorKey(g3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+	}
+=======
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 	
 
 
 
+<<<<<<< HEAD
+	if( (((fant_rouge_y == pac_y) && (fant_rouge_x == pac_x)) && (eat == 0))|| (((fant_bleu_y == pac_y) && (fant_bleu_x == pac_x)) && (eat == 0)) || (((fant_blanc_y == pac_y) && (fant_blanc_x == pac_x)) && (eat == 0))){
+		printf("GAMEOVER");
+		//gameover = 1;
+		//aficher game over;
+		//musMix_PlayMusic(die, 1);
+=======
 	if( (((fant_rouge_y == pac_y) && (fant_rouge_x == pac_x)) && (eat == 0) )|| (((fant_bleu_y == pac_y) && (fant_bleu_x == pac_x)) && (eat == 0))){
 		
 		printf("GAMEOVER");
 		//gameover = 1;
 		//aficher game over;
 		Mix_PlayMusic(die, 1);
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 
 		life --;
 		compte_life = 1;
@@ -979,13 +1248,22 @@ int main()
 		moveDown = 0;
 		moveLeft = 0;
 		moveRight = 0;
+<<<<<<< HEAD
+
+		liste_coord = l_vide();
+=======
 		//liste_coord = l_vide();
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 
 		rcSprite.x = SCREEN_WIDTH/2;
 		rcSprite.y = SCREEN_HEIGHT/2 +32;
 
 		/*rcG1.x = SCREEN_WIDTH/2 -32;
+<<<<<<< HEAD
+		rcG1.y = SCREEN_HEIGHT/2-32;
+=======
 		rcG1.y = SCREEN_HEIGHT/2-32;	
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 
 		rcG2.x = SCREEN_WIDTH/2;
 		rcG2.y = SCREEN_HEIGHT/2 -31;
@@ -993,6 +1271,10 @@ int main()
 		rcG3.x = SCREEN_WIDTH/2+32;
 		rcG3.y = SCREEN_HEIGHT/2 -32;	*/
 	}
+<<<<<<< HEAD
+
+=======
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 	if ((life == 3 )&& (compte_life == 1)){
 		pos_Wall[19][4] = 1;
 		printf("3 vies\n");
@@ -1024,7 +1306,11 @@ int main()
 		temp = SDL_LoadBMP("images/scream.bmp");
 		gover = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
+<<<<<<< HEAD
+		//musMix_PlayMusic(scream, 1); 
+=======
 		Mix_PlayMusic(scream, 1); 
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 		SDL_BlitSurface(gover,NULL,screen,NULL);
 		SDL_Flip(screen);
 		SDL_Delay(2500);
@@ -1045,7 +1331,11 @@ int main()
 	
 }
 	/* On libère le matériel */
+<<<<<<< HEAD
+	//musMix_CloseAudio();
+=======
 	Mix_CloseAudio();
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 
 	/* clean up */
 	SDL_FreeSurface(sprite);
@@ -1062,12 +1352,20 @@ int main()
 	//SDL_FreeSurface(gover);
 	SDL_FreeSurface(victory);
 	//NO SDL_FreeSurface(scream);
+<<<<<<< HEAD
+   	/*Mix_FreeMusic(music);
+=======
    	Mix_FreeMusic(music);
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 	Mix_FreeMusic(start);
 	Mix_FreeMusic(scream);
 	Mix_FreeMusic(pilule);
 	Mix_FreeMusic(die);
+<<<<<<< HEAD
+	Mix_FreeMusic(siren);*/
+=======
 	Mix_FreeMusic(siren);
+>>>>>>> ea9c5e60142e9473883c0dda9e8107a34dcbba09
 	SDL_Quit();
 	return 0;
 }
