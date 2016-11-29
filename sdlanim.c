@@ -28,7 +28,7 @@ int TIME_BTW_MOVEMENTS = 3 ;
 
 int gameover;
 int moveRight, moveLeft, moveUp, moveDown; //gere le déplacement du pacman
-int move;
+int wantRight, wantLeft, wantUp, wantDown;
 int currentTime, previousTime, fant_time; //gerer le temps entre les deplacements
 int currentTimeAnim, previousTimeAnim; //gerer le temps entre les animations
 float x,y;
@@ -42,6 +42,12 @@ int i,j;
 //musMix_Music *music, *start, *scream, *pilule, *die, *siren;
 //musint Mix_OpenAudio(int frequency, Uint16 format, int channels, int chunksize);	
 
+enum direction{
+	right,
+	left,
+	up,
+	down,
+};
 
 void deplacement(SDL_Rect *fant, int x, int y){
 	fant->x += x;
@@ -262,11 +268,93 @@ liste_point pathfinding(int map[NY][NX],int dy, int dx, int fy, int fx)
 
 	return LF;
 }
+void SetMovementBooleans(enum direction dir)
+{
+	switch(dir){
+	case left:
+		if(moveUp){
+                      	 moveUp = 0;
+		}
+		if(moveDown){
+              		moveDown = 0;
+		}
+		if(moveRight){
+                 	moveRight = 0;
+		}
+		moveLeft=1;		
+	break;
+	case right:
+		if(moveUp){
+			moveUp = 0;
+		}
+		if(moveDown){
+			moveDown = 0;
+		}
+		if(moveLeft){
+			moveLeft = 0;
+		}
+		moveRight = 1;
+	break;
+	case up:
+		if(moveLeft){
+                   	moveLeft = 0;
+		}
+		if(moveDown){
+                      	moveDown = 0;
+		}
+		if(moveRight){
+                     	moveRight = 0;
+		}
+		moveUp=1;
+	break;
+	case down:
+		 if(moveUp){
+                      	moveUp = 0;
+		 }
+		 if(moveLeft){
+                    	moveLeft = 0;
+		 }
+		 if(moveRight){
+                       	moveRight = 0;
+		 }
+		 moveDown=1;
+	break;
+	default:
+	break;
+	}
+}
+
+int bonne_case(int m, int n, int pos_Wall[NY][NX])
+{
+	return (pos_Wall[m][n] == 0 || pos_Wall[m][n] == 4 || pos_Wall[m][n] == 6);
+}
 
 void HandleAnimations();
 
-void HandleEvent(SDL_Event event)
+void HandleEvent(SDL_Event event, int pos_Wall[NY][NX])
 {
+	int nL,mL,n1L,m1L,nR,mR,n1R,m1R,nU,mU,n1U,m1U,nD,mD,n1D,m1D;
+
+
+	nU = ((rcSprite.x)/32);
+	mU = ((rcSprite.y-1)/32); 
+	n1U = ((rcSprite.x+31)/32);
+	m1U = ((rcSprite.y-1)/32);
+
+	nD = ((rcSprite.x)/32);
+	mD = ((rcSprite.y+31+1)/32);
+	n1D = ((rcSprite.x+31)/32);
+	m1D = ((rcSprite.y+31+1)/32);
+
+	nR = ((rcSprite.x+31+1)/32);
+	mR = ((rcSprite.y)/32);
+	n1R = ((rcSprite.x+31+1)/32);
+	m1R = ((rcSprite.y+31)/32);
+
+	nL = ((rcSprite.x-1)/32);
+	mL = ((rcSprite.y)/32);
+	n1L = ((rcSprite.x-1)/32);
+	m1L = ((rcSprite.y+31)/32);
 	switch (event.type) {
 		default:
 			break;
@@ -284,59 +372,36 @@ void HandleEvent(SDL_Event event)
 				case SDLK_q:
 					gameover = 1;
 					break;
-
-
 				case SDLK_LEFT:
-
-				    if(moveUp){
-                       			 moveUp = 0;
-				    }
-				    if(moveDown){
-                        		moveDown = 0;
-				    }
-				    if(moveRight){
-                      			  moveRight = 0;
-				    }
-					moveLeft=1;		 	
+					if(bonne_case(mL,nL,pos_Wall) && bonne_case(m1L,n1L,pos_Wall)){
+						SetMovementBooleans(left);
+					} else {
+						wantLeft = 1;					
+					}
 					break;
 				case SDLK_RIGHT:
-
-				    if(moveUp){
-                     			   moveUp = 0;
-				    }
-				    if(moveDown){
-                     			   moveDown = 0;
-				    }
-				    if(moveLeft){
-                     			   moveLeft = 0;
-				    }
-					moveRight=1;		 
-					break;
+					
+					if(bonne_case(mR,nR,pos_Wall) && bonne_case(m1R,n1R,pos_Wall)){
+						SetMovementBooleans(right);
+					} else {
+						wantRight = 1;
+					}
+				    	break;
 				case SDLK_UP:
-
-				    if(moveLeft){
-                      			  moveLeft = 0;
-				    }
-				    if(moveDown){
-                      			  moveDown = 0;
-				    }
-				    if(moveRight){
-                      			  moveRight = 0;
-				    }
-					moveUp=1;
+					
+					if(bonne_case(m1U,n1U,pos_Wall) && bonne_case(mU,nU,pos_Wall)){
+						SetMovementBooleans(up);
+					} else {
+						wantUp = 1;
+					}
 					break;
 				case SDLK_DOWN:
-
-				    if(moveUp){
-                      			  moveUp = 0;
-				    }
-				    if(moveLeft){
-                       			 moveLeft = 0;
-				    }
-				    if(moveRight){
-                       			 moveRight = 0;
-				    }
-					moveDown=1;				
+					
+					if(bonne_case(mD,nD,pos_Wall) && bonne_case(m1D,n1D,pos_Wall)){
+						SetMovementBooleans(down);
+					} else {
+						wantDown = 1;
+					}			
 					break;
 				//mus				
 				/*case SDLK_m: 
@@ -486,9 +551,6 @@ int main()
 
 	int deplaSG1,deplaCG1,deplaSG2,deplaCG2,deplaSG3,deplaCG3;
 	liste_point liste_coord;
-
-	/*initialize move of pacman */
-	move=0;
 
 	/* initialize SDL */
 
@@ -750,17 +812,17 @@ int main()
 		SDL_Event event;
 		/* look for an event */
 		if (SDL_PollEvent(&event)) {
-			HandleEvent(event);
+			HandleEvent(event,pos_Wall);
 		}
 
 		time_game = SDL_GetTicks();
 
-		if((time_game == 3 || time_game % 3 == 0) && (eat == 0) && (home == 0)){
+		if((time_game == 5 || time_game % 5 == 0) && (eat == 0) && (home == 0)){
 
 			liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, pac_y, pac_x);
 			liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
 
- 			deplacementFantomeBlanc(pos_Wall,&rcG3, &deplaSG2,&deplaCG2);
+ 			deplacementFantomeBlanc(pos_Wall,&rcG3, &deplaSG3,&deplaCG3);
 
 			/*deplacement(&rcG2,0,32);
 			deplacement(&rcG2,32,0);
@@ -872,7 +934,7 @@ int main()
 	if (pos_Wall[pac_y][pac_x] == 6) {
 
 		eat = 1;
-		time_game_eat =  time_game;
+		time_game_eat = time_game;
 		
 		pos_Wall[pac_y][pac_x] = 0;
 		cpt += 10;
@@ -882,91 +944,58 @@ int main()
 		printf("Siren OK\n");
 
 		//liste_coord = l_vide();
-		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 9, 11);
-		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
+		//liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 9, 11);
+		//liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
+		
+		/* ------------ durée de 5 ms pour les 2 fantomes ------------*/
 
-		//TIME_BTW_MOVEMENTS -= 4;
-		//printf("vitesse pacman augmente");
-		//printf(" Le pacman ++++\n");
-
-		printf("cpt = %d\n",cpt);
-		//musMix_PlayMusic(siren, 2);
-		printf("Siren OK\n");
-
-		liste_coord = l_vide();
-		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 9, 11);
-		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
-
-
-		/* load g1 eat*/
 		temp = SDL_LoadBMP("images/g1_eat.bmp");
 		g1 = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
-
-
-		/* ------------ durée de 5 ms pour les 2 fantomes ------------*/
-
 		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 1, 1);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
-
-		/* setup g1 colorkey and turn on RLE*/
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
 		SDL_SetColorKey(g1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 
-		/* load g2 eat*/
 		temp = SDL_LoadBMP("images/g2_eat.bmp");
 		g2 = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
-
-		/* setup g2 colorkey and turn on RLE*/
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
-		SDL_SetColorKey(g2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-		
-		liste_coord = pathfinding(pos_Wall, fant_bleu_y, fant_bleu_x, 1, 1);
+		SDL_SetColorKey(g2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);		
+		liste_coord = pathfinding(pos_Wall, fant_bleu_y, fant_bleu_x, 5, 1);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG2, &deplaSG2,&deplaCG2);
 
-		/* load g3 eat*/
+
 		temp = SDL_LoadBMP("images/g3_eat.bmp");
 		g3 = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
-
-		/* setup g2 colorkey and turn on RLE*/
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
 		SDL_SetColorKey(g3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-
-		liste_coord = pathfinding(pos_Wall, fant_blanc_y, fant_blanc_x, 1, 1);
+		liste_coord = pathfinding(pos_Wall, fant_blanc_y, fant_blanc_x, 10, 1);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG3, &deplaSG3,&deplaCG3);
-
-		
 	}
 
-	if (time_game - time_game_eat >= 8000){
-		eat = 0;
-
-		/*temp   = SDL_LoadBMP("images/g1_f.bmp");
-		g1 = SDL_DisplayFormat(temp);
-		SDL_FreeSurface(temp);
-		colorkey = SDL_MapRGB(screen->format, 0,0,0);
-		SDL_SetColorKey(g1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);*/
-		/*if(time_game_eat == 2000 ||time_game_eat % 2000 == 0){
-			TIME_BTW_MOVEMENTS = 10;
-			printf(" Le pacman ------ \n");
-
-		}*/
-	}
 
 	if (time_game - time_game_eat >= 6000){
 		eat = 0;
-
+		/************ G1 ******/
 		temp   = SDL_LoadBMP("images/g1_f.bmp");
 		g1 = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
 		SDL_SetColorKey(g1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-
-
-		//TIME_BTW_MOVEMENTS = 9;
-		//printf("vitesse pacman diminue \n");
+		/************ G12******/
+		temp   = SDL_LoadBMP("images/g2_f.bmp");
+		g2 = SDL_DisplayFormat(temp);
+		SDL_FreeSurface(temp);
+		colorkey = SDL_MapRGB(screen->format, 0,0,0);
+		SDL_SetColorKey(g2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
+		/************ G2 ******/
+		temp   = SDL_LoadBMP("images/g3_f.bmp");
+		g3 = SDL_DisplayFormat(temp);
+		SDL_FreeSurface(temp);
+		colorkey = SDL_MapRGB(screen->format, 0,0,0);
+		SDL_SetColorKey(g3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	}
 
 	if (cpt == 136) {
@@ -976,177 +1005,124 @@ int main()
   		SDL_Delay(5000);
 		cpt ++;
 	}
-
-	/*
-	if (cpt == 68 ) {	//moitié du jeu
-		Mix_PlayMusic(pilule, 1);
-	}*/
-
-
-	if ((fant_rouge_y == pac_y && fant_rouge_x == pac_x) && (eat == 1 ) && (home == 0)) {
 	
-		home = 1;		
-		printf("je rentre chez moi rouge \n");
-		
+	/********************** fantome rouge ************************/
+	if ((fant_rouge_y == pac_y && fant_rouge_x == pac_x) && (eat == 1 )){
+
+		home = 1;
+	
 		/* load eye */
 		temp = SDL_LoadBMP("images/eye_rouge.bmp");
 		g1 = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
-
-		/* setup g1 colorkey and turn on RLE*/
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
 		SDL_SetColorKey(g1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-		
-		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 9, 11);
-		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
-
 	}
 
-	if ((fant_bleu_y == pac_y && fant_bleu_x == pac_x) && (eat == 1 )&& (home == 0)){
+	if ((fant_bleu_y == pac_y && fant_bleu_x == pac_x) && (eat == 1 )){
 
 		home = 2;
-
+	
 		/* load eye */
 		temp = SDL_LoadBMP("images/eye_bleu.bmp");
-		g2= SDL_DisplayFormat(temp);
+		g2 = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
-
-		/* setup g1 colorkey and turn on RLE*/
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
 		SDL_SetColorKey(g2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-
-
-		liste_coord = pathfinding(pos_Wall, fant_bleu_y, fant_bleu_x, 10, 11);
-		liste_coord = deplacementFantomeR(liste_coord, &rcG2, &deplaSG2,&deplaCG2);
-
-		printf("je rentre chez moi bleu \n");
 	}
 
-	if ((fant_blanc_y == pac_y && fant_blanc_x == pac_x) && (eat == 1 )&& (home == 0)){
+	if ((fant_blanc_y == pac_y && fant_blanc_x == pac_x) && (eat == 1 )){
 
 		home = 3;
-		
+	
 		/* load eye */
 		temp = SDL_LoadBMP("images/eye_blanc.bmp");
-		g2= SDL_DisplayFormat(temp);
-	}
-
-	if ((fant_rouge_y == pac_y && fant_rouge_x == pac_x) && (eat == 1 )){
-
-		home = 1;
-
-		
-		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, pac_y, pac_x);
-		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
-
-		printf("je rentre chez moi \n");
-		
-		/* load eye */
-		temp = SDL_LoadBMP("images/eye.bmp");
-		g1 = SDL_DisplayFormat(temp);
-
+		g3 = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
-
-		/* setup g1 colorkey and turn on RLE*/
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
-
-		SDL_SetColorKey(g2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-		
-		liste_coord = pathfinding(pos_Wall, fant_blanc_y, fant_blanc_x, 11, 11);
-		liste_coord = deplacementFantomeR(liste_coord, &rcG3, &deplaSG3,&deplaCG3);
-
-		printf("je rentre chez moi blanc\n");
-		SDL_SetColorKey(g1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
-
-			
-		/*if (pos_Wall[a][b] == pos_Wall[9][11]){
-			temp = SDL_LoadBMP("images/g1_f.bmp");
-			g1 = SDL_DisplayFormat(temp);
-			SDL_FreeSurface(temp);
-			printf("Ghost OK  !\n");
-		}*/
-
+		SDL_SetColorKey(g3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	}
 
+	/********************** fantome rouge ************************/
 	if ((fant_rouge_y != pac_y && fant_rouge_x != pac_x) && (eat == 1 ) && (home == 0 )){
 
-		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 1, 1);
+		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 10, 1);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
 	}
-
+	/********************** fantome bleu ************************/
 	if ((fant_bleu_y != pac_y && fant_bleu_x != pac_x) && (eat == 1 ) && (home == 0 )){
 
-		liste_coord = pathfinding(pos_Wall, fant_bleu_y, fant_bleu_x, 1, 1);
+		liste_coord = pathfinding(pos_Wall, fant_bleu_y, fant_bleu_x, 1, 5);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG2, &deplaSG2,&deplaCG2);
 	}
-
+	/********************** fantome blanc ************************/
 	if ((fant_blanc_y != pac_y && fant_blanc_x != pac_x) && (eat == 1 ) && (home == 0 )){
 
 		liste_coord = pathfinding(pos_Wall, fant_blanc_y, fant_blanc_x, 1, 1);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG3, &deplaSG3,&deplaCG3);
 	}
 
+
+
+	/********************** fantome rouge ************************/
 	if ((home == 1) && ((fant_rouge_y == pac_y) && (fant_rouge_x == pac_x))){
 		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 9, 11);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
 	}
-
-	if ((home == 1) && ((fant_bleu_y == pac_y) && (fant_bleu_x == pac_x))){
+	/********************** fantome BLEU ************************/
+	if ((home == 2) && ((fant_bleu_y == pac_y) && (fant_bleu_x == pac_x))){
 		liste_coord = pathfinding(pos_Wall, fant_bleu_y, fant_bleu_x, 9, 11);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG2, &deplaSG2,&deplaCG2);
 	}
-
-	if ((home == 1) && ((fant_blanc_y == pac_y) && (fant_blanc_x == pac_x))){
+	/********************** fantome blanc ************************/
+	if ((home == 3) && ((fant_blanc_y == pac_y) && (fant_blanc_x == pac_x))){
 		liste_coord = pathfinding(pos_Wall, fant_blanc_y, fant_blanc_x, 9, 11);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG3, &deplaSG3,&deplaCG3);
 	}
 
-	if ((fant_rouge_y == 9) && (fant_rouge_x == 11) && (home ==1)){
-	//if pos_Wall[a][b] == 5
-		home = 0;
-		eat = 0;
-	}
 
 	if (home == 1){
 		liste_coord = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 9, 11);
 		liste_coord = deplacementFantomeR(liste_coord, &rcG1, &deplaSG1,&deplaCG1);
-		//home = 0;
+	}
+	if (home == 2){
+		liste_coord = pathfinding(pos_Wall, fant_bleu_y, fant_bleu_x, 9, 12);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG2, &deplaSG2,&deplaCG2);
+	}
+	if (home == 3){
+		liste_coord = pathfinding(pos_Wall, fant_blanc_y, fant_blanc_x, 9, 13);
+		liste_coord = deplacementFantomeR(liste_coord, &rcG3, &deplaSG3,&deplaCG3);
 	}
 
 	if (fant_rouge_y == 9 && fant_rouge_x == 11){
 		home = 0;
-		/* load ghost */
+		eat = 0;
+
 		temp   = SDL_LoadBMP("images/g1_f.bmp");
 		g1 = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
-
-		/* setup g1 colorkey and turn on RLE*/
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
 		SDL_SetColorKey(g1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	}
 
-	if ((fant_bleu_y == 9) && (fant_bleu_x == 11) && (home ==2)){
+	if (fant_bleu_y == 9 && fant_bleu_x == 12){
 		home = 0;
 		eat = 0;
-		/* load ghost */
+
 		temp   = SDL_LoadBMP("images/g2_f.bmp");
 		g2 = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
-
-		/* setup g1 colorkey and turn on RLE*/
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
 		SDL_SetColorKey(g2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	}
 
-	if ((fant_blanc_y == 9) && (fant_blanc_x == 11) && (home ==3)){
+	if (fant_blanc_y == 9 && fant_blanc_x == 13) {
 		home = 0;
 		eat = 0;
-		/* load ghost */
+
 		temp   = SDL_LoadBMP("images/g3_f.bmp");
 		g3 = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
-
-		/* setup g1 colorkey and turn on RLE*/
 		colorkey = SDL_MapRGB(screen->format, 0,0,0);
 		SDL_SetColorKey(g3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	}
@@ -1159,15 +1135,6 @@ int main()
 		//gameover = 1;
 		//aficher game over;
 		//musMix_PlayMusic(die, 1);
-	}
-
-	if( (((fant_rouge_y == pac_y) && (fant_rouge_x == pac_x)) && (eat == 0) )|| (((fant_bleu_y == pac_y) && (fant_bleu_x == pac_x)) && (eat == 0))){
-		
-		printf("GAMEOVER");
-		//gameover = 1;
-		//aficher game over;
-		//musMix_PlayMusic(die, 1);
-
 
 		life --;
 		compte_life = 1;
@@ -1179,8 +1146,6 @@ int main()
 		moveLeft = 0;
 		moveRight = 0;
 
-		liste_coord = l_vide();
-
 		//liste_coord = l_vide();
 
 
@@ -1188,9 +1153,6 @@ int main()
 		rcSprite.y = SCREEN_HEIGHT/2 +32;
 
 		/*rcG1.x = SCREEN_WIDTH/2 -32;
-
-		rcG1.y = SCREEN_HEIGHT/2-32;
-
 		rcG1.y = SCREEN_HEIGHT/2-32;	
 
 
