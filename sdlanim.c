@@ -7,6 +7,7 @@
 //#include <SDL/SDL_mixer.h>
 #include "liste_point.h"
 
+
 #define SCREEN_WIDTH  768
 #define SCREEN_HEIGHT 640
 #define SPRITE_WIDTH 31
@@ -71,6 +72,8 @@ void deplacementBleu(int tab[NY][NX], SDL_Rect *fant, int *a, int *b){
 			case 3: // bas
 				if(tab[fant->y/32 + 1][fant->x/32] != 1 && tab[fant->y/32 + 1][fant->x/32] != 3)
 					*a = 4;
+				break;
+			default : // case 1 ou 3
 				break;
 		}
 		if(*a == 0)
@@ -850,6 +853,16 @@ int main()
 
 	//deplacementBleu(&rcG2);
 
+	SDL_SetVideoMode(768, 680, 32, SDL_HWSURFACE | SDL_FULLSCREEN);
+
+	/*  Game Rules   */
+	temp   = SDL_LoadBMP("images/versionen.bmp");
+	gover = SDL_DisplayFormat(temp);
+	SDL_FreeSurface(temp);
+
+	SDL_BlitSurface(gover,NULL,screen,NULL);
+	SDL_Flip(screen);
+	SDL_Delay(5000);
 
 	 /*message pump */
 	while (!gameover)	// ------------------- BOUCLE ICI -------------------- //
@@ -1087,13 +1100,20 @@ int main()
 		SDL_SetColorKey(g3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	}
 
-	if (cpt == 136) {
+
+	if (cpt == 146 ) {
 		printf("VICTORY ");
 		SDL_BlitSurface(victory,NULL,screen,NULL);
   		SDL_Flip(screen);
   		SDL_Delay(5000);
-		cpt ++;
+		cpt = 0;
+	
+
 	}
+
+
+		
+        
 	
 	/********************** fantome rouge ************************/
 	if ((fant_rouge_y == pac_y && fant_rouge_x == pac_x) && (eat == 1 ) && (g_rouge_back_home == 0)){
@@ -1133,7 +1153,7 @@ int main()
 		SDL_SetColorKey(g3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	}
 
-/*
+
 	if ((fant_rouge_y != pac_y && fant_rouge_x != pac_x) && (eat == 1 ) && (home == 0 )){
 
 		liste_coord_rouge = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, 1, 1);
@@ -1183,7 +1203,7 @@ int main()
 		liste_coord_blanc = pathfinding(pos_Wall, fant_blanc_y, fant_blanc_x, 9, 13);
 		liste_coord_blanc = deplacementFantomeR(liste_coord_blanc, &rcG3, &deplaSG3,&deplaCG3);
 	}
-*/
+
 	if (fant_rouge_y == 9 && fant_rouge_x == 11 && g_rouge_back_home ==1 ){
 
 		temp   = SDL_LoadBMP("images/g1_f.bmp");
@@ -1215,9 +1235,9 @@ int main()
 		g_blanc_back_home =0;
 	}
 
-/**********/
 
-/*	if (fant_bleu_y == 9 && fant_bleu_x == 12){
+
+	if (fant_bleu_y == 9 && fant_bleu_x == 12){
 		home = 0;
 
 		temp   = SDL_LoadBMP("images/g2_f.bmp");
@@ -1237,7 +1257,7 @@ int main()
 		SDL_SetColorKey(g3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	}
 
-*/
+
 	
 
 	if( (((fant_rouge_y == pac_y) && (fant_rouge_x == pac_x)) && (eat == 0))|| (((fant_bleu_y == pac_y) && (fant_bleu_x == pac_x)) && (eat == 0)) || (((fant_blanc_y == pac_y) && (fant_blanc_x == pac_x)) && (eat == 0))){
