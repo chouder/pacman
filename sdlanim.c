@@ -51,12 +51,61 @@ void deplacement(SDL_Rect *fant, int x, int y){
 	fant->y += y;
 }
 
-void deplacementBleu(SDL_Rect *fant){
-	deplacement(fant,0,-64);
+void deplacementBleu(int tab[NY][NX], SDL_Rect *fant, int *a, int *b){
+	if(*a == 0){
+		int temp;
+		temp = rand()%4;
+		switch(temp){
+			case 0: //gauche 
+				if(tab[fant->y/32][fant->x / 32 - 1] != 1 && tab[fant->y/32][fant->x / 32 -1] != 3)
+					*a = 1;
+				break;
+			case 1: // droite 
+				if(tab[fant->y/32][fant->x / 32 + 1] != 1 && tab[fant->y/32][fant->x / 32 +1] != 3)
+					*a = 2;
+				break;
+			case 2: // haut
+				if(tab[fant->y/32 - 1][fant->x/32] != 1 && tab[fant->y/32 - 1][fant->x/32] != 3)
+					*a = 3;
+				break;
+			case 3: // bas
+				if(tab[fant->y/32 + 1][fant->x/32] != 1 && tab[fant->y/32 + 1][fant->x/32] != 3)
+					*a = 4;
+				break;
+		}
+		if(*a == 0)
+			return deplacementBleu(tab,fant,a,b);
+	}
+	
+	if(*a == 1){
+		deplacement(fant,-1,0);
+		*b += 1;
+	}
+	if(*a == 2){
+		deplacement(fant,-1,0);
+		*b += 1;
+	}
+	if(*a == 3){
+		deplacement(fant,0,1);
+		*b += 1;
+	}
+	if(*a == 4){
+		deplacement(fant,0,1);
+		*b += 1;
+	}
+	
+	if(*b == 32){
+		*b = 0;
+		*a = 0;
+	}
+	
 
-	deplacement(fant,32,0);
-	deplacement(fant,0,-32);
-	deplacement(fant,-32,0);
+	/*deplacement(fant,0,-2*32);
+	deplacement(fant,4*32,0);
+	deplacement(fant,0,4*32);
+	deplacement(fant,6*-32,0);
+	deplacement(fant,0,-4*32);
+	deplacement(fant,2*32,0);*/
 }
 
 
@@ -550,8 +599,10 @@ int main()
 	int deplaSG1,deplaCG1,deplaSG2,deplaCG2,deplaSG3,deplaCG3;
 	liste_point liste_coord_rouge,liste_coord_bleu,liste_coord_blanc ;
 
-	/* initialize SDL */
+	srand(time(NULL));
 
+	/* initialize SDL */
+	srand(time(NULL));
 	SDL_Init(SDL_INIT_VIDEO);
 
 	 /* initialize SDL */
@@ -825,13 +876,16 @@ int main()
 
 		if((time_game == 5 || time_game % 5 == 0) && (eat == 0) && (home == 0)){
 
-			liste_coord_blanc = pathfinding(pos_Wall, fant_blanc_y, fant_blanc_x,  pac_y, pac_x );
-			liste_coord_blanc = deplacementFantomeR(liste_coord_blanc , &rcG3, &deplaSG3,&deplaCG3);
+			/*liste_coord_blanc = pathfinding(pos_Wall, fant_blanc_y, fant_blanc_x,  pac_y, pac_x );
+			liste_coord_blanc = deplacementFantomeR(liste_coord_blanc , &rcG3, &deplaSG3,&deplaCG3);*/
 			liste_coord_rouge = pathfinding(pos_Wall, fant_rouge_y, fant_rouge_x, pac_y, pac_x);
 			liste_coord_rouge = deplacementFantomeR(liste_coord_rouge, &rcG1, &deplaSG1,&deplaCG1);	
 				
 
- 			//deplacementFantomeBlanc(pos_Wall,&rcG3, &deplaSG3,&deplaCG3);
+ 			deplacementFantomeBlanc(pos_Wall,&rcG3, &deplaSG3,&deplaCG3);
+
+
+			deplacementBleu(pos_Wall,&rcG2,&deplaSG2,&deplaCG2);
 
 			/*deplacement(&rcG2,0,32);
 			deplacement(&rcG2,32,0);
