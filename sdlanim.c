@@ -20,7 +20,7 @@
 #define LIG 20
 #define TIME_BTW_ANIMATIONS 40
 //#define TIME_BTW_MOVEMENTS 10
-int TIME_BTW_MOVEMENTS = 3 ;
+int TIME_BTW_MOVEMENTS = 5 ;
 
 #define taille 31
 
@@ -473,15 +473,44 @@ void HandleEvent(SDL_Event event, int pos_Wall[NY][NX])
 
 void HandleMovements(int pos_Wall[NY][NX])
 {
+int fant_x_U = ((rcSprite.x)/32);
+int fant_y_U = ((rcSprite.y-1)/32); 
+int fant_x_U1 = ((rcSprite.x+31)/32);
+int fant_y_U1 = ((rcSprite.y-1)/32);
+
+int fant_x_D = ((rcSprite.x)/32);
+int fant_y_D = ((rcSprite.y+31+1)/32);
+int fant_x_D1 = ((rcSprite.x+31)/32);
+int fant_y_D1 = ((rcSprite.y+31+1)/32);
+
+int fant_x_L = ((rcSprite.x-1)/32);
+int fant_y_L = ((rcSprite.y)/32);
+int fant_x_L1 = ((rcSprite.x-1)/32);
+int fant_y_L1 = ((rcSprite.y+31)/32);
+
+
+int fant_x_R = ((rcSprite.x+31+1)/32);
+int fant_y_R = ((rcSprite.y)/32);
+int fant_x_R1 = ((rcSprite.x+31+1)/32);
+int fant_y_R1 = ((rcSprite.y+31)/32);
 
     if(moveUp){
-	int n = ((rcSprite.x)/32);
-	int m = ((rcSprite.y-1)/32); 
+	if(wantLeft){
+		if (bonne_case(fant_y_L,fant_x_L,pos_Wall) && bonne_case(fant_y_L1,fant_x_L1,pos_Wall)){
+			wantLeft = 0;
+			SetMovementBooleans(left);
+			return HandleMovements(pos_Wall);
+		}
+	}
+	if(wantRight){
+		if (bonne_case(fant_y_R,fant_x_R,pos_Wall) && bonne_case(fant_y_R1,fant_x_R1,pos_Wall)){
+			wantRight = 0;
+			SetMovementBooleans(right);
+			return HandleMovements(pos_Wall);
+		}
+	}
 
-	int n2 = ((rcSprite.x+31)/32);
-	int m2 = ((rcSprite.y-1)/32);
-
-	if ((pos_Wall[m][n] == 0 || pos_Wall[m][n] == 4 || pos_Wall[m][n] == 6) && (pos_Wall[m2][n2] == 0 || pos_Wall[m2][n2] == 4 || pos_Wall[m2][n2] == 6)){
+	if ((pos_Wall[fant_y_U][fant_x_U] == 0 || pos_Wall[fant_y_U][fant_x_U] == 4 || pos_Wall[fant_y_U][fant_x_U] == 6) && (pos_Wall[fant_y_U1][fant_x_U1] == 0 || pos_Wall[fant_y_U1][fant_x_U1] == 4 || pos_Wall[fant_y_U1][fant_x_U1] == 6)){
         currentTime = SDL_GetTicks();
          if(currentTime - previousTime > TIME_BTW_MOVEMENTS){
             rcSprite.y -= 1;
@@ -491,12 +520,22 @@ void HandleMovements(int pos_Wall[NY][NX])
 		}
 	}
     if(moveDown){
-	int n = ((rcSprite.x)/32);
-	int m = ((rcSprite.y+31+1)/32);
+	if(wantLeft){
+		if (bonne_case(fant_y_L,fant_x_L,pos_Wall) && bonne_case(fant_y_L1,fant_x_L1,pos_Wall)){
+			wantLeft = 0;
+			SetMovementBooleans(left);
+			return HandleMovements(pos_Wall);
+		}
+	}
+	if(wantRight){
+		if (bonne_case(fant_y_R,fant_x_R,pos_Wall) && bonne_case(fant_y_R1,fant_x_R1,pos_Wall)){
+			wantRight = 0;
+			SetMovementBooleans(right);
+			return HandleMovements(pos_Wall);
+		}
+	}
 
-	int n2 = ((rcSprite.x+31)/32);
-	int m2 = ((rcSprite.y+31+1)/32);
-	if ((pos_Wall[m][n] == 0 || pos_Wall[m][n] == 4|| pos_Wall[m2][n2] == 6) && (pos_Wall[m2][n2] == 0 || pos_Wall[m2][n2] == 4 || pos_Wall[m2][n2] == 6)){
+	if ((pos_Wall[fant_y_D][fant_x_D] == 0 || pos_Wall[fant_y_D][fant_x_D] == 4|| pos_Wall[fant_y_D1][fant_x_D1] == 6) && (pos_Wall[fant_y_D1][fant_x_D1] == 0 || pos_Wall[fant_y_D1][fant_x_D1] == 4 || pos_Wall[fant_y_D1][fant_x_D1] == 6)){
         currentTime = SDL_GetTicks();
         if(currentTime - previousTime > TIME_BTW_MOVEMENTS){
             rcSprite.y += 1;
@@ -505,13 +544,24 @@ void HandleMovements(int pos_Wall[NY][NX])
         HandleAnimations();
     }
 	}
-    if(moveLeft){
-	int n = ((rcSprite.x-1)/32);
-	int m = ((rcSprite.y)/32);
+	if(moveLeft){
+		if (wantUp){
+			if ((bonne_case(fant_y_U1,fant_x_U1,pos_Wall) && bonne_case(fant_y_U,fant_x_U,pos_Wall))){
+				wantUp = 0;
+				SetMovementBooleans(up);
+				return HandleMovements(pos_Wall);
+			}
+		}
+	if(wantDown){
+		if ((bonne_case(fant_y_D,fant_x_D,pos_Wall) && bonne_case(fant_y_D1,fant_x_D1,pos_Wall))){
+			wantDown = 0;
+			SetMovementBooleans(down);
+			return HandleMovements(pos_Wall);
+		}
+	}
+	
 
-	int n2 = ((rcSprite.x-1)/32);
-	int m2 = ((rcSprite.y+31)/32);
-	if ((pos_Wall[m][n] == 0 || pos_Wall[m][n] == 4 || pos_Wall[m2][n2] == 6) && (pos_Wall[m2][n2] == 0 || pos_Wall[m2][n2] == 4 || pos_Wall[m2][n2] == 6)){
+	if ((pos_Wall[fant_y_L][fant_x_L] == 0 || pos_Wall[fant_y_L][fant_x_L] == 4 || pos_Wall[fant_y_L1][fant_x_L1] == 6) && (pos_Wall[fant_y_L1][fant_x_L1] == 0 || pos_Wall[fant_y_L1][fant_x_L1] == 4 || pos_Wall[fant_y_L1][fant_x_L1] == 6)){
         currentTime = SDL_GetTicks();
         if(currentTime - previousTime > TIME_BTW_MOVEMENTS){
             rcSprite.x -= 1;
@@ -521,12 +571,22 @@ void HandleMovements(int pos_Wall[NY][NX])
     }
 	}
     if(moveRight){
-	int n = ((rcSprite.x+31+1)/32);
-	int m = ((rcSprite.y)/32);
+	if (wantUp){
+			if ((bonne_case(fant_y_U1,fant_x_U1,pos_Wall) && bonne_case(fant_y_U,fant_x_U,pos_Wall))){
+				wantUp = 0;
+				SetMovementBooleans(up);
+				return HandleMovements(pos_Wall);
+			}
+		}
+	if(wantDown){
+		if ((bonne_case(fant_y_D,fant_x_D,pos_Wall) && bonne_case(fant_y_D1,fant_x_D1,pos_Wall))){
+			wantDown = 0;
+			SetMovementBooleans(down);
+			return HandleMovements(pos_Wall);
+		}
+	}
 
-	int n2 = ((rcSprite.x+31+1)/32);
-	int m2 = ((rcSprite.y+31)/32);
-	if ((pos_Wall[m][n] == 0 || pos_Wall[m][n] == 4 || pos_Wall[m2][n2] == 6) && (pos_Wall[m2][n2] == 0 || pos_Wall[m2][n2] == 4 || pos_Wall[m2][n2] == 6)){
+	if ((pos_Wall[fant_y_R][fant_x_R] == 0 || pos_Wall[fant_y_R][fant_x_R] == 4 || pos_Wall[fant_y_R1][fant_x_R1] == 6) && (pos_Wall[fant_y_R1][fant_x_R1] == 0 || pos_Wall[fant_y_R1][fant_x_R1] == 4 || pos_Wall[fant_y_R1][fant_x_R1] == 6)){
         currentTime = SDL_GetTicks();
         if(currentTime - previousTime > TIME_BTW_MOVEMENTS){
             rcSprite.x += 1;
@@ -838,12 +898,7 @@ int main()
 	int eat;
 	eat = 0;
 
-	int home; /*_rouge, home_bleu, home_blanc;
-	home_rouge =0;
-	home_bleu =0;
-	home_blanc =0;*/
 
-	home =0;
 	int life = 4;
 
 	int compte_life = 0;
@@ -1146,12 +1201,54 @@ int main()
 		SDL_SetColorKey(g3, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorkey);
 	}
 
-	if (cpt == 136) {
+	if (cpt == 10) {
 		printf("VICTORY ");
 		SDL_BlitSurface(victory,NULL,screen,NULL);
   		SDL_Flip(screen);
-  		SDL_Delay(5000);
+  		SDL_Delay(3000);
 		cpt ++;
+
+		int pos_Wall_lvl2[NY][NX]= {
+		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+		{1,6,0,4,0,4,0,4,0,4,0,4,0,0,4,0,4,0,4,0,4,0,6,1},
+		{1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1},
+		{1,4,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1},
+		{1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1},
+		{1,4,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1},
+		{1,0,1,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,0,1},
+		{1,4,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1},
+		{1,0,1,1,0,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,0,1,0,1},
+		{1,4,1,1,0,1,0,1,0,1,0,0,0,0,0,1,0,1,0,1,0,1,0,1},
+		{1,0,1,1,0,1,0,1,0,1,0,1,1,1,6,1,0,1,0,1,0,1,0,1},
+		{1,4,1,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1},
+		{1,0,1,1,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1},
+		{1,4,1,1,0,1,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,1,0,1},
+		{1,0,1,1,0,1,0,1,0,1,1,1,0,1,1,1,1,1,0,1,0,1,0,1},
+		{1,4,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1},
+		{1,0,1,1,0,1,0,1,1,1,1,1,0,1,1,1,1,1,1,1,0,1,0,1},
+		{1,4,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1},
+		{1,0,6,0,0,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,0,1},
+		{1,1,10,10,10,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
+
+
+		for(i = 0; i < NY; i ++){
+			for(j = 0; j < NX; j ++){
+				pos_Wall[i][j] = pos_Wall_lvl2[i][j];
+			}
+		}
+
+		rcSprite.x = SCREEN_WIDTH/2;
+		rcSprite.y = SCREEN_HEIGHT/2 +32;
+
+		rcG1.x = SCREEN_WIDTH/2 -32;
+		rcG1.y = SCREEN_HEIGHT/2-32;	
+
+
+		rcG2.x = SCREEN_WIDTH/2;
+		rcG2.y = SCREEN_HEIGHT/2 -31;
+
+		rcG3.x = SCREEN_WIDTH/2+32;
+		rcG3.y = SCREEN_HEIGHT/2 -32;
 	}
 	
 	if ((fant_rouge_y == pac_y && fant_rouge_x == pac_x) && (eat == 1 ) && (g_rouge_back_home == 0)){
@@ -1407,6 +1504,10 @@ int main()
 	SDL_FreeSurface(victory);
 	//NO SDL_FreeSurface(scream);
 
+// liberer les listes
+	liste_coord_rouge = l_vide();
+	liste_coord_blanc = l_vide();
+	liste_coord_bleu = l_vide();
    	
 	//musiqueMix_FreeMusic(music);
 	//musiqueMix_FreeMusic(start);
