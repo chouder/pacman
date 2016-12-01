@@ -1,7 +1,7 @@
 SYSCONF_LINK = gcc
 CPPFLAGS     = `sdl-config --cflags` -std=c99 -Wall -Wextra -g 
 LDFLAGS      =
-LIBS         =  `sdl-config --libs` -lm #-lSDL_mixer
+LIBS         =  `sdl-config --libs` -lm -lSDL_mixer
 
 DESTDIR = ./
 TARGET  = pacman
