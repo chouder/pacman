@@ -1308,12 +1308,12 @@ int main()
 	SDL_FreeSurface(g3);
 	SDL_FreeSurface(map);
 	SDL_FreeSurface(menu);
-	SDL_FreeSurface(gover);
+	//SDL_FreeSurface(gover);
 	SDL_FreeSurface(victory);
 	SDL_FreeSurface(victoire);
+	//NO SDL_FreeSurface(scream);
 
-
-	// liberer les listes
+// liberer les listes
 	liste_coord_rouge = l_vide();
 	liste_coord_blanc = l_vide();
 	liste_coord_bleu = l_vide();
